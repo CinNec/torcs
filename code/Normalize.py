@@ -37,6 +37,9 @@ class Normalize:
 					data[18].append( float(row["TRACK_EDGE_15"]))
 					data[19].append( float(row["TRACK_EDGE_16"]))
 					data[20].append( float(row["TRACK_EDGE_17"]))
+					data[21].append( float(row["ACCELERATION"]))
+					data[22].append( float(row["BRAKE"]))
+					data[23].append( float(row["STEERING"]))
 
 		while (i < len(data)):
 			maxv = max(data[i])
