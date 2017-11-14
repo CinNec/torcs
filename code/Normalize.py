@@ -6,7 +6,7 @@ class Normalize:
 	def __init__(self):
 		data = []
 		n = 0
-		while(n <= 20 ):
+		while(n <= 23 ):
 			data.append([])
 			n += 1
 		i = 0

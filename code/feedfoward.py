@@ -9,8 +9,6 @@ from Normalize import Normalize
 
 BIAS = 1
 
-
-
 class Layer:
     def __init__(self, neurons, inputs_per_neuron):
         self.weights = 2 * np.random.random((inputs_per_neuron, neurons)) - 1
@@ -60,7 +58,7 @@ class NeuralNetwork:
         for i in reversed(range(len(self.layers) - 1)): 
             layer_error = layer_delta.dot(self.layers[i + 1].weights.T)
             layer_delta = layer_error * self.sigmoid_derivative(self.layers[i].activation)
-            print(i)
+#            print(i)
             if i == 0:
                 self.layers[i].weights -= L_rate * x.T.dot(layer_delta)
                 self.layers[i].bias -= L_rate * np.sum(layer_delta, axis = 0)
@@ -147,31 +145,31 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Increase learning rate by a small amount if cost went down
     if post_error < pre_error:
         print("Error went down")
-#        L_rate *= 1.01
+        L_rate *= 1.01
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
         print("Error went up")
-#        L_rate *= 0.98
+        L_rate *= 0.95
     return L_rate
  
 
-## Create layers(number of neurons, number of inputs)
-#layer1 = Layer(4, 2)
-#layer2 = Layer(2, 4)
-#layer3 = Layer(1, 2)
-#
-#nn = NeuralNetwork()
-#nn.add_layer(layer1)
-#nn.add_layer(layer2)
-#nn.add_layer(layer3)
-
 # Create layers(number of neurons, number of inputs)
 layer1 = Layer(4, 2)
-layer2 = Layer(1, 4)
+layer2 = Layer(2, 4)
+layer3 = Layer(1, 2)
 
 nn = NeuralNetwork()
 nn.add_layer(layer1)
 nn.add_layer(layer2)
+nn.add_layer(layer3)
+
+# Create layers(number of neurons, number of inputs)
+#layer1 = Layer(4, 2)
+#layer2 = Layer(1, 4)
+#
+#nn = NeuralNetwork()
+#nn.add_layer(layer1)
+#nn.add_layer(layer2)
 
 L_rate = 0.05
 error = 1000000
@@ -185,7 +183,7 @@ error = 1000000
 #    print("i + 1:", x[i + 1])
 #    print("i - 1:", x[i - 1])
 
-for i in range(10000):
+for i in range(180):
     
     print("\nIteration:", i)
     pred_y = nn.forward_propagation(X)
@@ -203,11 +201,6 @@ for i in range(10000):
     L_rate = adapt_L_rate(L_rate, previous_error, error)
     print("L_rate:", L_rate)
     nn.backward_propagation(X, pred_y, Y, L_rate)
-    
-    
-x = np.array([6.9, 4.6])
-x = preprocessing.scale(x)
 
-print(x[-1])
+    
 
-print(nn.forward_propagation(x))
