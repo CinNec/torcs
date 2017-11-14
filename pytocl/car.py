@@ -99,7 +99,6 @@ class State(Value):
             sensor_dict,
             'focus'
         )
-        print (self.distance_from_center)
 
     @property
     def distances_from_egde_valid(self):

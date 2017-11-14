@@ -14,10 +14,10 @@ class MyDriver(Driver):
     	# command.steering,
     	# carstate.speed_x,
     	# carstate.distance_from_center,
-    	# carstate.accelerator,
-    	# carstate.accelerator,
-    	# carstate.accelerator,
-    	# carstate.accelerator
-    	# ]
+    	# carstate.angle
+    	# ] + list(carstate.distances_from_edge)
+    	# command.acceleration = nn_output[0]
+    	# command.brake = nn_output[1]
+    	# command.steering = nn_output[2]
     #     return command
     	
