@@ -67,8 +67,6 @@ class State(Value):
 
     def __init__(self, sensor_dict):
         """Creates decoded car state from sensor value dictionary."""
-        # print ()
-        # print (self.floats_value(sensor_dict, 'track'))
         self.angle = self.float_value(sensor_dict, 'angle') * \
             DEGREE_PER_RADIANS
         self.current_lap_time = self.float_value(sensor_dict, 'curLapTime')
@@ -101,6 +99,7 @@ class State(Value):
             sensor_dict,
             'focus'
         )
+        print (self.distance_from_center)
 
     @property
     def distances_from_egde_valid(self):
