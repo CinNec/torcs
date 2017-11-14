@@ -89,11 +89,6 @@ class NeuralNetwork:
 ############# TEST DATASET ###############
 from sklearn import preprocessing
 
-# Make random numbers predictable
-np.random.seed(1)
- 
-maxError = 0.0001
-
 # Set inputs
 # Each row is (x1, x2)
 X = np.array([
@@ -112,42 +107,44 @@ X = np.array([
 # Normalize the inputs
 X = preprocessing.scale(X)
 
-# Set goals
-# Each row is (y1)
-#Y = np.array([
-#            [-0.3],
-#            [0.1],
-#            [0.0],
-#            [1.0],
-#            [0.7],
-#            [0.0],
-#            [0.2],
-#            [-1.0],
-#            [-0.4],
-#            [0.8]
-#            ])
-
+ Set goals
+ Each row is (y1)
 Y = np.array([
-                [0],
-                [1],
-                [0],
-                [1],
-                [1],
-                [0],
-                [0],
-                [1],
-                [0],
-                [1]
-                ])
+            [-0.3],
+            [0.1],
+            [0.0],
+            [1.0],
+            [0.7],
+            [0.0],
+            [0.2],
+            [-1.0],
+            [-0.4],
+            [0.8]
+            ])
+
+#Y = np.array([
+#                [0],
+#                [1],
+#                [0],
+#                [1],
+#                [1],
+#                [0],
+#                [0],
+#                [1],
+#                [0],
+#                [1]
+#                ])
 
 #%%
+
+# Grabbing the actual dataset
 data = Normalize().data
 data = np.array(data)
 
 
 #%%
 
-# Simple adaptive learning rate to 
+# Simple adaptive learning rate to speed up, # Gets stuck in "error went up" sometimes
 def adapt_L_rate(L_rate, pre_error, post_error):
     print("difference:", post_error - pre_error)
     # Increase learning rate by a small amount if cost went down
@@ -162,11 +159,13 @@ def adapt_L_rate(L_rate, pre_error, post_error):
  
 
 # Create layers(number of neurons, number of inputs)
+# Three hidden layer network
 layer1 = Layer(4, 2)
 layer2 = Layer(3, 4)
 layer3 = Layer(2, 3)
 layer4 = Layer(1, 2)
 
+# Add the layers
 #
 nn = NeuralNetwork()
 nn.add_layer(layer1)
@@ -174,6 +173,8 @@ nn.add_layer(layer2)
 nn.add_layer(layer3)
 nn.add_layer(layer4)
 
+
+# One hidden layer
 # Create layers(number of neurons, number of inputs)
 #layer1 = Layer(4, 2)
 #layer2 = Layer(1, 4)
@@ -182,18 +183,15 @@ nn.add_layer(layer4)
 #nn.add_layer(layer1)
 #nn.add_layer(layer2)
 
-L_rate = 0.05
-error = 1000000
-#x = ["hidden1", "hidden2", "output"]
-#
-#for i in reversed(range(len(x) - 1)):
-#    if i == 0:
-#        break
-#            
-#    print("i:", x[i])
-#    print("i + 1:", x[i + 1])
-#    print("i - 1:", x[i - 1])
 
+
+# Make random numbers predictable
+np.random.seed(1)
+ 
+maxError = 0.0001
+
+
+# Quick function to train a neural network until maxError is reached.
 for i in range(100000):
     
 #    print("\nIteration:", i)
@@ -209,8 +207,8 @@ for i in range(100000):
         print("Predicted Y:", pred_y)
         break
     
-    L_rate = adapt_L_rate(L_rate, previous_error, error)
-    print("L_rate:", L_rate)
+#    L_rate = adapt_L_rate(L_rate, previous_error, error)
+#    print("L_rate:", L_rate)
     nn.backward_propagation(X, pred_y, Y, L_rate)
 
     
