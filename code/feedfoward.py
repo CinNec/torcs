@@ -77,6 +77,8 @@ class NeuralNetwork:
 
         
         # Update weights and bias of output layer
+        print(y)
+        print(output_delta)
         self.layers[-1].weights -= L_rate * y.T.dot(output_delta)
         self.layers[-1].bias -= L_rate * np.sum(output_delta, axis = 0)
         return
@@ -91,36 +93,15 @@ from sklearn import preprocessing
 
 # Set inputs
 # Each row is (x1, x2)
-X = np.array([
-            [7, 4.7],
-            [6.3, 6],
-            [6.9, 4.9],
-            [6.4, 5.3],
-            [5.8, 5.1],
-            [5.5, 4],
-            [7.1, 5.9],
-            [6.3, 5.6],
-            [6.4, 4.5],
-            [7.7, 6.7]
-            ])
+Ndata = Normalize()
+X = Ndata.inputdata
 
 # Normalize the inputs
 X = preprocessing.scale(X)
 
 # Set goals
 # Each row is (y1)
-Y = np.array([
-            [-0.3],
-            [0.1],
-            [0.0],
-            [1.0],
-            [0.7],
-            [0.0],
-            [0.2],
-            [-1.0],
-            [-0.4],
-            [0.8]
-            ])
+Y = Ndata.outputdata
 
 #Y = np.array([
 #                [0],
@@ -138,8 +119,6 @@ Y = np.array([
 #%%
 
 # Grabbing the actual dataset
-data = Normalize().data
-data = np.array(data)
 
 
 #%%
@@ -160,10 +139,10 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 
 # Create layers(number of neurons, number of inputs)
 # Three hidden layer network
-layer1 = Layer(4, 2)
-layer2 = Layer(3, 4)
-layer3 = Layer(2, 3)
-layer4 = Layer(1, 2)
+layer1 = Layer(15, 21)
+layer2 = Layer(10, 15)
+layer3 = Layer(5, 10)
+layer4 = Layer(3, 5)
 
 # Add the layers
 #

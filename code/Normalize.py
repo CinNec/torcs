@@ -85,7 +85,7 @@ class Normalize:
 								])
 		self.outputdata = np.swapaxes(outputdata,0,1)
 		print(self.outputdata)
-Ndata = Normalize()
+
 
 
 
