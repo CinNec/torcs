@@ -1,5 +1,7 @@
 import csv
 from os import listdir
+from random import shuffle
+import numpy as np
 
 class Normalize:
 
@@ -45,32 +47,67 @@ class Normalize:
 			maxv = max(data[i])
 			minv = min(data[i])
 			j = 0
-			while(j < len(data[i])):
+			while(j < 20):
 				data[i][j] = (data[i][j] - minv)/(maxv-minv)
 				j += 1
+			shuffle(data[i])
 			i += 1
 
 		# To get a full data matrix
-		self.data = data
+		inputdata = np.array([
+								data[0],
+								data[1],
+								data[2],
+								data[3],
+								data[4],
+								data[5],
+								data[6],
+								data[7],
+								data[8],
+								data[9],
+								data[10],
+								data[11],
+								data[12],
+								data[13],
+								data[14],
+								data[15],
+								data[16],
+								data[17],
+								data[18],
+								data[19],
+								data[20]
+								])
+		self.inputdata = np.swapaxes(inputdata,0,1)
+		outputdata = np.array([
+								data[21],
+								data[22],
+								data[23]
+								])
+		self.outputdata = np.swapaxes(outputdata,0,1)
+		print(self.outputdata)
+Ndata = Normalize()
 
-		self.speed = data[0]
-		self.track_position = data[1]
-		self.angle_to_track_axis = data[2]
-		self.track_edge_0 = data[3]
-		self.track_edge_1 = data[4]
-		self.track_edge_2 = data[5]
-		self.track_edge_3 = data[6]
-		self.track_edge_4 = data[7]
-		self.track_edge_5 = data[8]
-		self.track_edge_6 = data[9]
-		self.track_edge_7 = data[10]
-		self.track_edge_8 = data[11]
-		self.track_edge_9 = data[12]
-		self.track_edge_10 = data[13]
-		self.track_edge_11 = data[14]
-		self.track_edge_12 = data[15]
-		self.track_edge_13 = data[16]
-		self.track_edge_14 = data[17]
-		self.track_edge_15 = data[18]
-		self.track_edge_16 = data[19]
-		self.track_edge_16 = data[20]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
