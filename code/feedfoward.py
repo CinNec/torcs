@@ -77,13 +77,47 @@ class NeuralNetwork:
 
         
         # Update weights and bias of output layer
-        print(y)
-        print(output_delta)
-        self.layers[-1].weights -= L_rate * y.T.dot(output_delta)
+        self.layers[-1].weights -= L_rate * self.layers[-2].activation.T.dot(output_delta)
         self.layers[-1].bias -= L_rate * np.sum(output_delta, axis = 0)
         return
 # Implement mini-batch training function that uses forward and back propagation to train the function      
-#    def train(self, X, Y, L_rate, epochs):
+    def train(self, X, Y, L_rate, epochs):
+        Position = 0
+        PositionEnd = epochs
+        while(PositionEnd < len(X)):
+            XBatch = X[Position:PositionEnd]
+            YBatch = Y[Position:PositionEnd]
+            pred_yBatch = nn.forward_propagation(XBatch)
+
+            nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
+            
+            error = nn.error(pred_yBatch, YBatch, len(XBatch))
+    
+            #print("error:", error)
+            if error < maxError:
+                print("Converged after %d iterations" % i)
+                print("Predicted Y:", pred_yBatch)
+                return True
+            
+            Position += epochs
+            PositionEnd += epochs
+        XBatch = X[Position:-1]
+        YBatch = Y[Position:-1]
+        pred_yBatch = nn.forward_propagation(XBatch)
+
+        nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
+        
+        error = nn.error(pred_yBatch, YBatch, len(XBatch))
+    
+        #print("error:", error)
+        if error < maxError:
+            print("Converged after %d iterations" % i)
+            print("Predicted Y:", pred_yBatch)
+            return True
+        return False
+            
+
+    
     
         
 #%%   
@@ -133,16 +167,16 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
         print("Error went up")
-        L_rate *= 0.90
+        L_rate *= 0.9
     return L_rate
  
 
 # Create layers(number of neurons, number of inputs)
 # Three hidden layer network
-layer1 = Layer(15, 21)
-layer2 = Layer(10, 15)
-layer3 = Layer(5, 10)
-layer4 = Layer(3, 5)
+layer1 = Layer(20, 21)
+layer2 = Layer(15, 20)
+layer3 = Layer(10, 15)
+layer4 = Layer(3, 10)
 
 # Add the layers
 #
@@ -174,22 +208,15 @@ L_rate = 0.05
 # Quick function to train a neural network until maxError is reached.
 for i in range(100000):
     
-#    print("\nIteration:", i)
-    pred_y = nn.forward_propagation(X)
-#    print("pred_y:", pred_y)
-    
+    print("\nIteration:", i)
+    if(nn.train(X,Y,L_rate,32)):
+        break
     previous_error = error
+    pred_y = nn.forward_propagation(X)
     error = nn.error(pred_y, Y, len(X))
     
-#    print("error:", error)
-    if error < maxError:
-        print("Converged after %d iterations" % i)
-        print("Predicted Y:", pred_y)
-        break
-    
-#    L_rate = adapt_L_rate(L_rate, previous_error, error)
-#    print("L_rate:", L_rate)
-    nn.backward_propagation(X, pred_y, Y, L_rate)
+    L_rate = adapt_L_rate(L_rate, previous_error, error)
+    print("L_rate:", L_rate)
 
     
 
