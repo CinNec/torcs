@@ -107,8 +107,8 @@ X = np.array([
 # Normalize the inputs
 X = preprocessing.scale(X)
 
- Set goals
- Each row is (y1)
+# Set goals
+# Each row is (y1)
 Y = np.array([
             [-0.3],
             [0.1],
@@ -189,7 +189,8 @@ nn.add_layer(layer4)
 np.random.seed(1)
  
 maxError = 0.0001
-
+error = 1000000
+L_rate = 0.05
 
 # Quick function to train a neural network until maxError is reached.
 for i in range(100000):
