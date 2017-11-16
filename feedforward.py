@@ -216,7 +216,7 @@ def main():
     L_rate = 0.005
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(10000):
+    for i in range(100):
         
         print("\nIteration:", i)
         if(nn.train(X,Y,L_rate,64)):

@@ -2,6 +2,7 @@ import csv
 from os import listdir
 import numpy as np
 
+
 class Normalize:
 
 	def __init__(self):
@@ -41,10 +42,13 @@ class Normalize:
 					data[21].append( float(row["ACCELERATION"]))
 					data[22].append( float(row["BRAKE"]))
 					data[23].append( float(row["STEERING"]))
-
+		self.minarray = []
+		self.maxarray = []
 		while (i <= 20):
 			maxv = max(data[i])
+			self.maxarray.append(maxv)
 			minv = min(data[i])
+			self.minarray.append(minv)
 			j = 0
 			while(j < len(data[i])):
 				data[i][j] = (data[i][j] - minv)/(maxv-minv)
@@ -83,8 +87,6 @@ class Normalize:
 		npdata = np.swapaxes(npdata,0,1)
 		self.inputdata = np.swapaxes(npdata[0:21],0,1)
 		self.outputdata = np.swapaxes(npdata[20:23],0,1)
-		
-x = Normalize()
 
 
 
