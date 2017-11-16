@@ -127,7 +127,7 @@ class NeuralNetwork:
 #%%   
 
 ############# TEST DATASET ###############
-from sklearn import preprocessing
+# from sklearn import preprocessing
 
 # Set inputs
 # Each row is (x1, x2)
@@ -135,7 +135,11 @@ Ndata = Normalize()
 X = Ndata.inputdata
 
 # Normalize the inputs
+<<<<<<< HEAD:feedfoward.py
 #X = preprocessing.scale(X)
+=======
+# X = preprocessing.scale(X)
+>>>>>>> e491bf0165a651cd04e443be4b981060a1d282e9:feedforward.py
 
 # Set goals
 # Each row is (y1)
@@ -190,43 +194,43 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 #nn.add_layer(layer3)
 #nn.add_layer(layer4)
 
+def main():
+    # One hidden layer
+    # Create layers(number of neurons, number of inputs)
+    layer1 = Layer(30, 21)
+    layer2 = Layer(3, 30)
 
-# One hidden layer
-# Create layers(number of neurons, number of inputs)
-layer1 = Layer(30, 21)
-layer2 = Layer(3, 30)
-
-nn = NeuralNetwork()
-nn.add_layer(layer1)
-nn.add_layer(layer2)
+    nn = NeuralNetwork()
+    nn.add_layer(layer1)
+    nn.add_layer(layer2)
 
 
 
-# Make random numbers predictable
-#np.random.seed(1)
- 
-maxError = 0.0001
-error = 1000000
-L_rate = 0.01
+    # Make random numbers predictable
+    #np.random.seed(1)
+     
+    maxError = 0.0001
+    error = 1000000
+    L_rate = 0.01
 
-# Quick function to train a neural network until maxError is reached.
-for i in range(1000):
-    
-    print("\nIteration:", i)
-    if(nn.train(X,Y,L_rate,64)):
-        break
-    previous_error = error
-    pred_y = nn.forward_propagation(X)
+    # Quick function to train a neural network until maxError is reached.
+    for i in range(1000):
+        
+        print("\nIteration:", i)
+        if(nn.train(X,Y,L_rate,64)):
+            break
+        previous_error = error
+        pred_y = nn.forward_propagation(X)
+        error = nn.error(pred_y, Y, len(X))
+        print("error:", error)
+    #    L_rate = adapt_L_rate(L_rate, previous_error, error)
+        print("L_rate:", L_rate)
+
     error = nn.error(pred_y, Y, len(X))
     print("error:", error)
-#    L_rate = adapt_L_rate(L_rate, previous_error, error)
-    print("L_rate:", L_rate)
 
-error = nn.error(pred_y, Y, len(X))
-print("error:", error)
-
-with open("pickled_nn.txt", "wb") as pickle_file:
-    pickle.dump(nn, pickle_file)
+    with open("pickled_nn.txt", "wb") as pickle_file:
+        pickle.dump(nn, pickle_file)
 
 
     
