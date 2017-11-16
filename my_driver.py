@@ -4,6 +4,8 @@ import pickle
 # from feedforward import NeuralNetwork, Layer
 import feedforward
 
+class NeuralNetwork:
+
 nn = type('NeuralNetwork', (object,),{})()
 print(feedforward.NeuralNetwork)
 with open("pickled_nn.txt", "rb") as pickle_file:
