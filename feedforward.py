@@ -127,7 +127,7 @@ class NeuralNetwork:
 #%%   
 
 ############# TEST DATASET ###############
-from sklearn import preprocessing
+# from sklearn import preprocessing
 
 # Set inputs
 # Each row is (x1, x2)
@@ -135,7 +135,7 @@ Ndata = Normalize()
 X = Ndata.inputdata
 
 # Normalize the inputs
-X = preprocessing.scale(X)
+# X = preprocessing.scale(X)
 
 # Set goals
 # Each row is (y1)
