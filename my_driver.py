@@ -4,8 +4,8 @@ import pickle
 # from feedforward import NeuralNetwork, Layer
 import feedforward
 
+print(feedforward)
 with open("pickled_nn.txt", "rb") as pickle_file:
-    print(feedforward)
     nn = pickle.load(pickle_file)
 
 class MyDriver(Driver):
