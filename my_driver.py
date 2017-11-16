@@ -1,6 +1,9 @@
 from pytocl.driver import Driver
 from pytocl.car import State, Command
+import pickle
 
+with open("pickled_nn.txt", "rb") as pickle_file:
+    nn = pickle.load(pickle_file)
 
 class MyDriver(Driver):
     # Override the `drive` method to create your own driver
@@ -17,4 +20,3 @@ class MyDriver(Driver):
     	# command.brake = nn_output[1]
     	# command.steering = nn_output[2]
     #     return command
-    	
