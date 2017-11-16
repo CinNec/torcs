@@ -25,7 +25,9 @@ class MyDriver(Driver):
             nn_input[i] = nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
         nn_output = nn.forward_propagation(nn_input)
-        command.acceleration = round(nn_output[0])
-        command.brake = round(nn_output[1])
+        print(nn_output[1])
+        command.accelerator= round(nn_output[1])
+        command.brake = round(nn_output[0])
         command.steering = nn_output[2]
+        command.gear = carstate.gear +1
         return command
