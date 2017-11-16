@@ -135,11 +135,10 @@ Ndata = Normalize()
 X = Ndata.inputdata
 
 # Normalize the inputs
-<<<<<<< HEAD:feedfoward.py
+
 #X = preprocessing.scale(X)
-=======
 # X = preprocessing.scale(X)
->>>>>>> e491bf0165a651cd04e443be4b981060a1d282e9:feedforward.py
+
 
 # Set goals
 # Each row is (y1)
@@ -200,6 +199,7 @@ def main():
     layer1 = Layer(30, 21)
     layer2 = Layer(3, 30)
 
+    global nn
     nn = NeuralNetwork()
     nn.add_layer(layer1)
     nn.add_layer(layer2)
@@ -209,6 +209,7 @@ def main():
     # Make random numbers predictable
     #np.random.seed(1)
      
+    global maxError
     maxError = 0.0001
     error = 1000000
     L_rate = 0.01
@@ -223,7 +224,7 @@ def main():
         pred_y = nn.forward_propagation(X)
         error = nn.error(pred_y, Y, len(X))
         print("error:", error)
-    #    L_rate = adapt_L_rate(L_rate, previous_error, error)
+        L_rate = adapt_L_rate(L_rate, previous_error, error)
         print("L_rate:", L_rate)
 
     error = nn.error(pred_y, Y, len(X))
