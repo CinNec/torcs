@@ -5,8 +5,9 @@ import pickle
 import feedforward
 
 class NeuralNetwork:
+    def __init__():
+        print('thing')
 
-nn = type('NeuralNetwork', (object,),{})()
 print(feedforward.NeuralNetwork)
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
