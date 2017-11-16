@@ -197,8 +197,8 @@ def main():
     np.random.seed(1)
     # One hidden layer
     # Create layers(number of neurons, number of inputs)
-    layer1 = Layer(30, 21)
-    layer2 = Layer(3, 30)
+    layer1 = Layer(7, 21)
+    layer2 = Layer(3, 7)
 
     global nn
     nn = NeuralNetwork()
@@ -213,10 +213,10 @@ def main():
     global maxError
     maxError = 0.0001
     error = 1000000
-    L_rate = 0.01
+    L_rate = 0.005
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(50):
+    for i in range(10000):
         
         print("\nIteration:", i)
         if(nn.train(X,Y,L_rate,64)):
