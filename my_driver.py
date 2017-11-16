@@ -1,7 +1,8 @@
 from pytocl.driver import Driver
 from pytocl.car import State, Command
 import pickle
-from feedforward import NeuralNetwork, Layer
+# from feedforward import NeuralNetwork, Layer
+import feedforward
 
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
