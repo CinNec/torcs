@@ -9,9 +9,6 @@ class MyDriver(Driver):
     # def drive(self, carstate: State) -> Command:
     #     command = Command(...)
     	# nn_input = [
-    	# command.accelerator,
-    	# command.brake,
-    	# command.steering,
     	# carstate.speed_x,
     	# carstate.distance_from_center,
     	# carstate.angle
