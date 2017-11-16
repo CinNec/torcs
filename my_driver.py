@@ -4,12 +4,12 @@ import pickle
 # from feedforward import NeuralNetwork, Layer
 import feedforward
 
-class NeuralNetwork:
-    def __init__():
-        print('thing')
+# class NeuralNetwork:
+#     def __init__():
+#         print('thing')
 
-print(feedforward.NeuralNetwork)
-with open("pickled_nn.txt", "rb") as pickle_file:
+# print(feedforward.NeuralNetwork)
+with open("pickled_nn.txt", "r") as pickle_file:
     nn = pickle.load(pickle_file)
 
 class MyDriver(Driver):
