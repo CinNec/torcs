@@ -1,6 +1,5 @@
 import csv
 from os import listdir
-from random import shuffle
 import numpy as np
 
 class Normalize:
@@ -43,18 +42,17 @@ class Normalize:
 					data[22].append( float(row["BRAKE"]))
 					data[23].append( float(row["STEERING"]))
 
-		while (i < len(data)):
+		while (i <= 20):
 			maxv = max(data[i])
 			minv = min(data[i])
 			j = 0
-			while(j < 20):
+			while(j < len(data[i])):
 				data[i][j] = (data[i][j] - minv)/(maxv-minv)
 				j += 1
-			shuffle(data[i])
 			i += 1
 
 		# To get a full data matrix
-		inputdata = np.array([
+		npdata = np.array([
 								data[0],
 								data[1],
 								data[2],
@@ -75,16 +73,18 @@ class Normalize:
 								data[17],
 								data[18],
 								data[19],
-								data[20]
-								])
-		self.inputdata = np.swapaxes(inputdata,0,1)
-		outputdata = np.array([
+								data[20],
 								data[21],
 								data[22],
-								data[23]
+								data[23],
 								])
-		self.outputdata = np.swapaxes(outputdata,0,1)
-
+		npdata = np.swapaxes(npdata,0,1)
+		np.random.shuffle(npdata)
+		npdata = np.swapaxes(npdata,0,1)
+		self.inputdata = np.swapaxes(npdata[0:21],0,1)
+		self.outputdata = np.swapaxes(npdata[20:23],0,1)
+		
+x = Normalize()
 
 
 

@@ -135,7 +135,7 @@ Ndata = Normalize()
 X = Ndata.inputdata
 
 # Normalize the inputs
-X = preprocessing.scale(X)
+#X = preprocessing.scale(X)
 
 # Set goals
 # Each row is (y1)
