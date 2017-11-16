@@ -80,6 +80,7 @@ class NeuralNetwork:
         self.layers[-1].weights -= L_rate * self.layers[-2].activation.T.dot(output_delta)
         self.layers[-1].bias -= L_rate * np.sum(output_delta, axis = 0)
         return
+    
 # Implement mini-batch training function that uses forward and back propagation to train the function      
     def train(self, X, Y, L_rate, epochs):
         Position = 0
@@ -108,7 +109,9 @@ class NeuralNetwork:
         nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
         
         error = nn.error(pred_yBatch, YBatch, len(XBatch))
-    
+        print("error:", error)
+        
+        
         #print("error:", error)
         if error < maxError:
             print("Converged after %d iterations" % i)
@@ -203,7 +206,7 @@ np.random.seed(1)
  
 maxError = 0.0001
 error = 1000000
-L_rate = 0.05
+L_rate = 0.01
 
 # Quick function to train a neural network until maxError is reached.
 for i in range(100000):
