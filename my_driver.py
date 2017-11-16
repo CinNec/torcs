@@ -11,11 +11,7 @@ class MyDriver(Driver):
     ...
     def drive(self, carstate: State) -> Command:
         command = Command()
-    	nn_input = [
-    	carstate.speed_x,
-    	carstate.distance_from_center,
-    	carstate.angle
-    	] + list(carstate.distances_from_edge)
+    	nn_input = [carstate.speed_x, carstate.distance_from_center, carstate.angle] + list(carstate.distances_from_edge)
         nn_output = nn.forward_propagation(nn_input)
     	command.acceleration = nn_output[0]
     	command.brake = nn_output[1]
