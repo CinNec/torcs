@@ -170,11 +170,11 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Increase learning rate by a small amount if cost went down
     if post_error < pre_error:
 #        print("Error went down")
-        L_rate *= 1.04
+        L_rate *= 1.05
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
 #        print("Error went up")
-        L_rate *= 0.93
+        L_rate *= 0.85
     return L_rate
  
 
@@ -194,6 +194,7 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 #nn.add_layer(layer4)
 
 def main():
+    np.random.seed(1)
     # One hidden layer
     # Create layers(number of neurons, number of inputs)
     layer1 = Layer(30, 21)
@@ -215,7 +216,7 @@ def main():
     L_rate = 0.01
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(1000):
+    for i in range(50):
         
         print("\nIteration:", i)
         if(nn.train(X,Y,L_rate,64)):
