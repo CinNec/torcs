@@ -178,45 +178,43 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     return L_rate
  
 
-# Create layers(number of neurons, number of inputs)
-# Three hidden layer network
-#layer1 = Layer(20, 21)
-#layer2 = Layer(15, 20)
-#layer3 = Layer(10, 15)
-#layer4 = Layer(3, 10)
-##
-### Add the layers
-###
-#nn = NeuralNetwork()
-#nn.add_layer(layer1)
-#nn.add_layer(layer2)
-#nn.add_layer(layer3)
-#nn.add_layer(layer4)
+
 
 def main():
-    np.random.seed(1)
-    # One hidden layer
-    # Create layers(number of neurons, number of inputs)
-    layer1 = Layer(7, 21)
-    layer2 = Layer(3, 7)
+#    np.random.seed(12)
 
+    # Create layers(number of neurons, number of inputs)
+    # Three hidden layer network
+    layer1 = Layer(30, 21)
+    layer2 = Layer(30, 30)
+    layer3 = Layer(3, 30)
+    #
+    ## Add the layers
+    ##
     global nn
     nn = NeuralNetwork()
     nn.add_layer(layer1)
     nn.add_layer(layer2)
+    nn.add_layer(layer3)
 
 
+    # One hidden layer
+    # Create layers(number of neurons, number of inputs)
+#    layer1 = Layer(4, 21)
+#    layer2 = Layer(3, 4)
+#
+#    global nn
+#    nn = NeuralNetwork()
+#    nn.add_layer(layer1)
+#    nn.add_layer(layer2)
 
-    # Make random numbers predictable
-    #np.random.seed(1)
-     
     global maxError
     maxError = 0.0001
     error = 1000000
     L_rate = 0.005
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(100):
+    for i in range(10000):
         
         print("\nIteration:", i)
         if(nn.train(X,Y,L_rate,64)):
@@ -231,7 +229,7 @@ def main():
     error = nn.error(pred_y, Y, len(X))
     print("error:", error)
 
-    with open("pickled_nn.txt", "wb") as pickle_file:
+    with open("pickled_nn_10k.txt", "wb") as pickle_file:
         pickle.dump(nn, pickle_file)
 
 

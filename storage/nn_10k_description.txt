@@ -1,0 +1,6 @@
+    layer1 = Layer(30, 21)
+    layer2 = Layer(30, 30)
+    layer3 = Layer(3, 30)
+
+After 10k iterations: error: 0.0482086549041
+	
