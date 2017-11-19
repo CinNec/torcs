@@ -86,7 +86,7 @@ class Normalize:
 		np.random.shuffle(npdata)
 		npdata = np.swapaxes(npdata,0,1)
 		self.inputdata = np.swapaxes(npdata[0:21],0,1)
-		self.outputdata = np.swapaxes(npdata[20:23],0,1)
+		self.outputdata = np.swapaxes(npdata[21:],0,1)
 
 
 

@@ -25,9 +25,34 @@ class MyDriver(Driver):
             nn_input[i] = nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
         nn_output = nn.forward_propagation(nn_input)
-        print(nn_output[1])
-        command.accelerator= round(nn_output[1])
-        command.brake = round(nn_output[0])
+
+
+
+
+
+
+        command.accelerator= round(nn_output[0])
+        command.brake = round(nn_output[1])
         command.steering = nn_output[2]
-        command.gear = carstate.gear +1
+        
+        acceleration = command.accelerator 
+        
+        if acceleration > 0:
+            if abs(carstate.distance_from_center) >= 1:
+                # off track, reduced grip:
+                acceleration = min(0.4, acceleration)
+
+            command.accelerator = min(acceleration, 1)
+
+            if carstate.rpm > 8000:
+                command.gear = carstate.gear + 1
+
+
+
+        if carstate.rpm < 4000:
+            command.gear = carstate.gear - 1
+
+        if not command.gear:
+            command.gear = carstate.gear or 1
+            
         return command

@@ -170,7 +170,7 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Increase learning rate by a small amount if cost went down
     if post_error < pre_error:
 #        print("Error went down")
-        L_rate *= 1.05
+        L_rate *= 1.005
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
 #        print("Error went up")
@@ -183,30 +183,30 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 def main():
 #    np.random.seed(12)
 
-    # Create layers(number of neurons, number of inputs)
-    # Three hidden layer network
-    layer1 = Layer(30, 21)
-    layer2 = Layer(30, 30)
-    layer3 = Layer(3, 30)
-    #
-    ## Add the layers
-    ##
-    global nn
-    nn = NeuralNetwork()
-    nn.add_layer(layer1)
-    nn.add_layer(layer2)
-    nn.add_layer(layer3)
-
-
-    # One hidden layer
-    # Create layers(number of neurons, number of inputs)
-#    layer1 = Layer(4, 21)
-#    layer2 = Layer(3, 4)
-#
+#    # Create layers(number of neurons, number of inputs)
+#    # Three hidden layer network
+#    layer1 = Layer(30, 21)
+#    layer2 = Layer(30, 30)
+#    layer3 = Layer(3, 30)
+#    #
+#    ## Add the layers
+#    ##
 #    global nn
 #    nn = NeuralNetwork()
 #    nn.add_layer(layer1)
 #    nn.add_layer(layer2)
+#    nn.add_layer(layer3)
+
+
+#     One hidden layer
+#     Create layers(number of neurons, number of inputs)
+    layer1 = Layer(10, 21)
+    layer2 = Layer(3, 10)
+
+    global nn
+    nn = NeuralNetwork()
+    nn.add_layer(layer1)
+    nn.add_layer(layer2)
 
     global maxError
     maxError = 0.0001
@@ -214,7 +214,7 @@ def main():
     L_rate = 0.005
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(10000):
+    for i in range(1000):
         
         print("\nIteration:", i)
         if(nn.train(X,Y,L_rate,64)):
