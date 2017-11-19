@@ -200,8 +200,8 @@ def main():
 
 #     One hidden layer
 #     Create layers(number of neurons, number of inputs)
-    layer1 = Layer(10, 21)
-    layer2 = Layer(3, 10)
+    layer1 = Layer(14, 21)
+    layer2 = Layer(3, 14)
 
     global nn
     nn = NeuralNetwork()
@@ -214,7 +214,7 @@ def main():
     L_rate = 0.005
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(1000):
+    for i in range(500):
         
         print("\nIteration:", i)
         if(nn.train(X,Y,L_rate,64)):
@@ -229,7 +229,7 @@ def main():
     error = nn.error(pred_y, Y, len(X))
     print("error:", error)
 
-    with open("pickled_nn_10k.txt", "wb") as pickle_file:
+    with open("pickled_nn.txt", "wb") as pickle_file:
         pickle.dump(nn, pickle_file)
 
 

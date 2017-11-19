@@ -26,17 +26,12 @@ class MyDriver(Driver):
             i += 1
         nn_output = nn.forward_propagation(nn_input)
 
-
-
-
-
-
         command.accelerator= round(nn_output[0])
         command.brake = round(nn_output[1])
         command.steering = nn_output[2]
-        
-        acceleration = command.accelerator 
-        
+
+        acceleration = command.accelerator
+
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1:
                 # off track, reduced grip:
@@ -48,11 +43,10 @@ class MyDriver(Driver):
                 command.gear = carstate.gear + 1
 
 
-
         if carstate.rpm < 4000:
             command.gear = carstate.gear - 1
 
         if not command.gear:
             command.gear = carstate.gear or 1
-            
+
         return command
