@@ -18,7 +18,7 @@ with open("pickled_nn.txt", "rb") as pickle_file:
 last_dfc = 0
 
 class MyDriver(Driver):
-    self.last_dfc = 0
+
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
         command = Command()
@@ -54,10 +54,10 @@ class MyDriver(Driver):
 
         if abs(carstate.distance_from_center) >= 1:
             command.brake = 0
-            if abs(carstate.distance_from_center) >= abs(self.last_dfc):
+            if abs(carstate.distance_from_center) >= abs(last_dfc):
                 command.steering = -1
             else:
                 command.steering = 0
-        self.last_dfc = carstate.distance_from_center
+        last_dfc = carstate.distance_from_center
 
         return command
