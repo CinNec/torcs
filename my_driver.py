@@ -56,7 +56,7 @@ class MyDriver(Driver):
             command.brake = 0
             if abs(carstate.distance_from_center) >= abs(self.last_dfc):
                 command.steering = -1
-            else 
+            else:
                 command.steering = 0
         self.last_dfc = carstate.distance_from_center
 
