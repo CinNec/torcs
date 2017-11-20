@@ -11,6 +11,7 @@ import torch
 # Set bias value
 BIAS = 1
 dtype = torch.FloatTensor
+#dtype = torch.cuda.FloatTensor # Uncomment this to run on GPU
 
 # Create layer with all weights randomly initialized between -1 and 1
 class Layer:
@@ -36,18 +37,18 @@ class NeuralNetwork:
     def forward_propagation(self, input):
         # Activations of hidden layers (sigmoid)
         for layer in self.layers[0:-1]:
-            layer.activation = self.sigmoid(input.dot(layer.weights) + layer.bias * BIAS)
+            layer.activation = self.sigmoid(input.mm(layer.weights) + layer.bias * BIAS)
 #            layer.activation = self.sigmoid(input.dot(layer.weights))
             input = layer.activation
         
         # Activation of output layer (identity activation)
-        self.layers[-1].activation = input.dot(self.layers[-1].weights) + self.layers[-1].bias * BIAS
+        self.layers[-1].activation = input.mm(self.layers[-1].weights) + self.layers[-1].bias * BIAS
         output = self.layers[-1].activation
         return output
     
     # Error function using mean squared error
     def error(self, y, t, N):
-        return 1/N * np.sum(np.square(y - t))
+        return 1/N * torch.sum(np.square(y - t))
     
     # The derivative of the error function
     def derivative_error(self, y, t):
@@ -64,24 +65,24 @@ class NeuralNetwork:
         
         # Iterate backwards through the hidden layers
         for i in reversed(range(len(self.layers) - 1)): 
-            layer_error = layer_delta.dot(self.layers[i + 1].weights.T)
+            layer_error = layer_delta.mm(torch.t(self.layers[i + 1].weights))
             layer_delta = layer_error * self.sigmoid_derivative(self.layers[i].activation)
 #           
             # Separate code for the first hidden layer after input, uses x
             # to calculate weight gradients, exit loop after.
             if i == 0:
-                self.layers[i].weights -= L_rate * x.T.dot(layer_delta)
-                self.layers[i].bias -= L_rate * np.sum(layer_delta, axis = 0)
+                self.layers[i].weights -= L_rate * torch.t(x).mm(layer_delta)
+                self.layers[i].bias -= L_rate * torch.sum(layer_delta,0)
                 break
             
             # Use delta to update weights and bias
             self.layers[i].weights -= L_rate * self.layers[i - 1].activation.T.dot(layer_delta)
-            self.layers[i].bias -= L_rate * np.sum(layer_delta, axis = 0)
+            self.layers[i].bias -= L_rate * torch.sum(layer_delta,0)
 
         
         # Update weights and bias of output layer
-        self.layers[-1].weights -= L_rate * self.layers[-2].activation.T.dot(output_delta)
-        self.layers[-1].bias -= L_rate * np.sum(output_delta, axis = 0)
+        self.layers[-1].weights -= L_rate * torch.t(self.layers[-2].activation).mm(output_delta)
+        self.layers[-1].bias -= L_rate * torch.sum(output_delta,0)
         return
     
 # Implement mini-batch training function that uses forward and back propagation to train the function      
@@ -135,6 +136,8 @@ class NeuralNetwork:
 # Each row is (x1, x2)
 Ndata = Normalize()
 X = Ndata.inputdata
+X = torch.from_numpy(X)
+X = X.float()
 
 # Normalize the inputs
 
@@ -145,6 +148,8 @@ X = Ndata.inputdata
 # Set goals
 # Each row is (y1)
 Y = Ndata.outputdata
+Y = torch.from_numpy(Y)
+Y = Y.float()
 
 #Y = np.array([
 #                [0],
