@@ -49,5 +49,6 @@ class MyDriver(Driver):
         # if not command.gear:
         #     command.gear = carstate.gear or 1
         command.accelerator = 1
+        command.brake = 0
 
         return command
