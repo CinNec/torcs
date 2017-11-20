@@ -15,8 +15,6 @@ from feedforward import Ndata
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
-last_dfc = 0
-
 class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
@@ -53,12 +51,20 @@ class MyDriver(Driver):
         if not command.gear:
             command.gear = carstate.gear or 1
 
-        # if abs(carstate.distance_from_center) >= 1:
-        #     command.brake = 0
-        #     if abs(carstate.distance_from_center) >= abs(last_dfc):
-        #         command.steering = -1
-        #     else:
-        #         command.steering = 0
-        # last_dfc = carstate.distance_from_center
+        if carstate.distance_from_center < -1:
+            if carstate.angle < -90 and carstate.angle > -30:
+                command.steering = 0
+            elif carstate.angle < -30 and carstate.angle < 90:
+                command.steering = 1
+            elif carstate.angle > 90 or carstate.angle < -90:
+                command.steering = -1
+
+        if carstate.distance_from_center > 1:
+            if carstate.angle < 90 and carstate.angle > 30:
+                command.steering = 0
+            elif carstate.angle < 30 and carstate.angle > -90:
+                command.steering = -1
+            elif carstate.angle < 90 or carstate.angle > -90:
+                command.steering = 1
 
         return command
