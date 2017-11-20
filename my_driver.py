@@ -50,6 +50,6 @@ class MyDriver(Driver):
             command.gear = carstate.gear or 1
         command.accelerator = 1
         command.brake = 0
-        command.steering = 1
+        command.steering = -1
 
         return command
