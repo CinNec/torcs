@@ -39,16 +39,17 @@ class MyDriver(Driver):
 
         #     command.accelerator = min(acceleration, 1)
 
-        # if carstate.rpm > 8000:
-        #     command.gear = carstate.gear + 1
+        if carstate.rpm > 8000:
+            command.gear = carstate.gear + 1
 
 
-        # if carstate.rpm < 4000:
-        #     command.gear = carstate.gear - 1
+        if carstate.rpm < 4000:
+            command.gear = carstate.gear - 1
 
-        # if not command.gear:
-        #     command.gear = carstate.gear or 1
+        if not command.gear:
+            command.gear = carstate.gear or 1
         command.accelerator = 1
         command.brake = 0
+        command.steering = 0
 
         return command
