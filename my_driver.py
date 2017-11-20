@@ -21,6 +21,7 @@ class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
+        print (carstate.distance_from_center)
         command = Command()
         nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:-1])
         i=0
