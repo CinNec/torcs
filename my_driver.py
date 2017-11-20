@@ -64,7 +64,7 @@ class MyDriver(Driver):
                 command.steering = 0
             elif carstate.angle < 30 and carstate.angle > -90:
                 command.steering = -1
-            elif carstate.angle < 90 or carstate.angle > -90:
+            elif carstate.angle < 90 or carstate.angle < -90:
                 command.steering = 1
 
         return command
