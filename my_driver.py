@@ -52,23 +52,23 @@ class MyDriver(Driver):
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1:
-            if carstate.angle > -90 and carstate.angle < -30:
+            if carstate.angle > -45 and carstate.angle < -30:
                 command.steering = 0
             elif carstate.angle > -30 and carstate.angle < 90:
                 # steer left
                 command.steering = 1
-            elif carstate.angle > 90 or carstate.angle < -90:
+            elif carstate.angle > 90 or carstate.angle < -45:
                 # steer right
                 command.steering = -1
 
         # the car is offtrack on the left
         if carstate.distance_from_center > 1:
-            if carstate.angle > 30 and carstate.angle < 90:
+            if carstate.angle > 30 and carstate.angle < 45:
                 command.steering = 0
             elif carstate.angle < 30 and carstate.angle > -90:
                 # steer right
                 command.steering = -1
-            elif carstate.angle < 90 or carstate.angle < -90:
+            elif carstate.angle > 45 or carstate.angle < -90:
                 # steer left
                 command.steering = 1
 
