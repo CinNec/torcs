@@ -19,7 +19,7 @@ class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
-        print (carstate.angle)
+        print (carstate.distance_from_center)
         command = Command()
         nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:-1])
         i=0
@@ -52,9 +52,9 @@ class MyDriver(Driver):
             command.gear = carstate.gear or 1
 
         if carstate.distance_from_center < -1:
-            if carstate.angle < -90 and carstate.angle > -30:
+            if carstate.angle > -90 and carstate.angle < -30:
                 command.steering = 0
-            elif carstate.angle < -30 and carstate.angle < 90:
+            elif carstate.angle > -30 and carstate.angle < 90:
                 command.steering = 1
             elif carstate.angle > 90 or carstate.angle < -90:
                 command.steering = -1
