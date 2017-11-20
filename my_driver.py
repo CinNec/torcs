@@ -21,7 +21,7 @@ class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
-        print (carstate.distance_from_center)
+        print (carstate.angle)
         command = Command()
         nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:-1])
         i=0
@@ -53,12 +53,12 @@ class MyDriver(Driver):
         if not command.gear:
             command.gear = carstate.gear or 1
 
-        if abs(carstate.distance_from_center) >= 1:
-            command.brake = 0
-            if abs(carstate.distance_from_center) >= abs(last_dfc):
-                command.steering = -1
-            else:
-                command.steering = 0
-        last_dfc = carstate.distance_from_center
+        # if abs(carstate.distance_from_center) >= 1:
+        #     command.brake = 0
+        #     if abs(carstate.distance_from_center) >= abs(last_dfc):
+        #         command.steering = -1
+        #     else:
+        #         command.steering = 0
+        # last_dfc = carstate.distance_from_center
 
         return command
