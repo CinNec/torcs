@@ -32,15 +32,15 @@ class MyDriver(Driver):
 
         acceleration = command.accelerator
 
-        if acceleration > 0:
-            if abs(carstate.distance_from_center) >= 1:
-                # off track, reduced grip:
-                acceleration = min(0.4, acceleration)
+        # if acceleration > 0:
+        #     if abs(carstate.distance_from_center) >= 1:
+        #         # off track, reduced grip:
+        #         acceleration = min(0.4, acceleration)
 
-            command.accelerator = min(acceleration, 1)
+        #     command.accelerator = min(acceleration, 1)
 
-            if carstate.rpm > 8000:
-                command.gear = carstate.gear + 1
+        if carstate.rpm > 8000:
+            command.gear = carstate.gear + 1
 
 
         if carstate.rpm < 4000:
