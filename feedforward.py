@@ -13,11 +13,11 @@ BIAS = 1
 # Create layer with all weights randomly initialized between -1 and 1
 class Layer:
     def __init__(self, neurons, inputs_per_neuron):
-        self.weights = 0.001 * (2 * np.random.random((inputs_per_neuron, neurons)) - 1)
-        self.bias = 0.001 * (2 * np.random.random((neurons)) - 1)
+        self.weights = 2 * np.random.random((inputs_per_neuron, neurons)) - 1
+        self.bias = 2 * np.random.random((neurons)) - 1
         self.activation = np.zeros(neurons)
         
-class NeuralNetwork:
+class NeuralNetwork: 
     def __init__(self):
         self.layers = []
         
@@ -43,17 +43,16 @@ class NeuralNetwork:
         output = self.layers[-1].activation
         return output
     
-    # Error function using mean squared error with weight regularization
-    def error(self, y, t, N, w_decay):
-        sum_w_sqrd = np.sum(np.square(self.layers[-1].weights))
-        return 1/(2 * N) * np.sum(np.square(y - t)) + w_decay / 2 * N * sum_w_sqrd
+    # Error function using mean squared error
+    def error(self, y, t, N):
+        return 1/N * np.sum(np.square(y - t))
     
     # The derivative of the error function
     def derivative_error(self, y, t):
         return y - t
         
     # Propagate error backwards to find gradients
-    def backward_propagation(self, x, y, t, L_rate, w_decay, N):
+    def backward_propagation(self, x, y, t, L_rate):
         # Find delta values for output layer weights
         output_error = self.derivative_error(y, t)
         output_delta = output_error
@@ -69,25 +68,22 @@ class NeuralNetwork:
             # Separate code for the first hidden layer after input, uses x
             # to calculate weight gradients, exit loop after.
             if i == 0:
-                self.layers[i].weights *= 1 - L_rate * w_decay / N
                 self.layers[i].weights -= L_rate * x.T.dot(layer_delta)
                 self.layers[i].bias -= L_rate * np.sum(layer_delta, axis = 0)
                 break
             
             # Use delta to update weights and bias
-            self.layers[i].weights *= 1 - L_rate * w_decay / N
             self.layers[i].weights -= L_rate * self.layers[i - 1].activation.T.dot(layer_delta)
             self.layers[i].bias -= L_rate * np.sum(layer_delta, axis = 0)
 
         
         # Update weights and bias of output layer
-        self.layers[-1].weights *= 1 - L_rate * w_decay / N
         self.layers[-1].weights -= L_rate * self.layers[-2].activation.T.dot(output_delta)
         self.layers[-1].bias -= L_rate * np.sum(output_delta, axis = 0)
         return
     
 # Implement mini-batch training function that uses forward and back propagation to train the function      
-    def train(self, X, Y, L_rate, w_decay, epochs):
+    def train(self, X, Y, L_rate, epochs):
         Position = 0
         PositionEnd = epochs
         while(PositionEnd < len(X)):
@@ -95,9 +91,9 @@ class NeuralNetwork:
             YBatch = Y[Position:PositionEnd]
             pred_yBatch = nn.forward_propagation(XBatch)
 
-            nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate, w_decay, len(X))
+            nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
             
-            error = nn.error(pred_yBatch, YBatch, len(XBatch), w_decay)
+            error = nn.error(pred_yBatch, YBatch, len(XBatch))
     
             #print("error:", error)
             if error < maxError:
@@ -111,9 +107,9 @@ class NeuralNetwork:
         YBatch = Y[Position:-1]
         pred_yBatch = nn.forward_propagation(XBatch)
 
-        nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate, w_decay, len(X))
+        nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
         
-        error = nn.error(pred_yBatch, YBatch, len(XBatch), w_decay)
+        error = nn.error(pred_yBatch, YBatch, len(XBatch))
 #        print("error:", error)
         
         
@@ -171,14 +167,14 @@ Y = Ndata.outputdata
 # Simple adaptive learning rate to speed up, # Gets stuck in "error went up" sometimes
 def adapt_L_rate(L_rate, pre_error, post_error):
 #    print("difference:", post_error - pre_error)
-    # Increase learning rate by a small amount5 if cost went down
+    # Increase learning rate by a small amount if cost went down
     if post_error < pre_error:
 #        print("Error went down")
-        L_rate *= 1.01
+        L_rate *= 1.005
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
 #        print("Error went up")
-        L_rate *= 0.9
+        L_rate *= 0.85
     return L_rate
  
 
@@ -189,50 +185,48 @@ def main():
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
-    layer1 = Layer(14, 21)
-    layer2 = Layer(9, 14)
-    layer3 = Layer(3, 9)
-    #
-    ## Add the layers
-    ##
-    global nn
-    nn = NeuralNetwork()
-    nn.add_layer(layer1)
-    nn.add_layer(layer2)
-    nn.add_layer(layer3)
-
-
-#     One hidden layer
-#     Create layers(number of neurons, number of inputs)
-#    layer1 = Layer(7, 21)
-#    layer2 = Layer(3, 28)
-#
+#    layer1 = Layer(30, 21)
+#    layer2 = Layer(30, 30)
+#    layer3 = Layer(3, 30)
+#    #
+#    ## Add the layers
+#    ##
 #    global nn
 #    nn = NeuralNetwork()
 #    nn.add_layer(layer1)
 #    nn.add_layer(layer2)
+#    nn.add_layer(layer3)
+
+
+#     One hidden layer
+#     Create layers(number of neurons, number of inputs)
+    layer1 = Layer(14, 21)
+    layer2 = Layer(3, 14)
+
+    global nn
+    nn = NeuralNetwork()
+    nn.add_layer(layer1)
+    nn.add_layer(layer2)
 
     global maxError
     maxError = 0.0001
     error = 1000000
     L_rate = 0.005
-    w_decay = 0.0001
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(20000):
+    for i in range(500):
         
         print("\nIteration:", i)
-        if(nn.train(X,Y,L_rate,w_decay,64)):
+        if(nn.train(X,Y,L_rate,64)):
             break
         previous_error = error
         pred_y = nn.forward_propagation(X)
-        error = nn.error(pred_y, Y, len(X), w_decay)
+        error = nn.error(pred_y, Y, len(X))
         print("error:", error)
-        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
         L_rate = adapt_L_rate(L_rate, previous_error, error)
         print("L_rate:", L_rate)
 
-    error = nn.error(pred_y, Y, len(X), w_decay)
+    error = nn.error(pred_y, Y, len(X))
     print("error:", error)
 
     with open("pickled_nn.txt", "wb") as pickle_file:
