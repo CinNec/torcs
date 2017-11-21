@@ -13,8 +13,8 @@ BIAS = 1
 # Create layer with all weights randomly initialized between -1 and 1
 class Layer:
     def __init__(self, neurons, inputs_per_neuron):
-        self.weights = 0.001 * (2 * np.random.random((inputs_per_neuron, neurons)) - 1)
-        self.bias = 0.001 * (2 * np.random.random((neurons)) - 1)
+        self.weights = 1 * (2 * np.random.random((inputs_per_neuron, neurons)) - 1)
+        self.bias = 1 * (2 * np.random.random((neurons)) - 1)
         self.activation = np.zeros(neurons)
         
 class NeuralNetwork:
@@ -131,35 +131,47 @@ class NeuralNetwork:
 #%%   
 
 ############# TEST DATASET ###############
-# from sklearn import preprocessing
+from sklearn import preprocessing
 
 # Set inputs
 # Each row is (x1, x2)
-Ndata = Normalize()
-X = Ndata.inputdata
+#Ndata = Normalize()
+#X = Ndata.inputdata
+
+X = np.array([
+            [7, 4.7],
+            [6.3, 6],
+            [6.9, 4.9],
+            [6.4, 5.3],
+            [5.8, 5.1],
+            [5.5, 4],
+            [7.1, 5.9],
+            [6.3, 5.6],
+            [6.4, 4.5],
+            [7.7, 6.7]
+            ])
+
 
 # Normalize the inputs
 
-#X = preprocessing.scale(X)
-# X = preprocessing.scale(X)
-
+X = preprocessing.scale(X)
 
 # Set goals
 # Each row is (y1)
-Y = Ndata.outputdata
+#Y = Ndata.outputdata
 
-#Y = np.array([
-#                [0],
-#                [1],
-#                [0],
-#                [1],
-#                [1],
-#                [0],
-#                [0],
-#                [1],
-#                [0],
-#                [1]
-#                ])
+Y = np.array([
+                [0.8],
+                [-0.9],
+                [0.5],
+                [1],
+                [-0.3],
+                [0.2],
+                [0],
+                [-0.4],
+                [0],
+                [-0.2]
+                ])
 
 #%%
 
@@ -189,55 +201,76 @@ def main():
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
-    layer1 = Layer(14, 21)
-    layer2 = Layer(9, 14)
-    layer3 = Layer(3, 9)
-    #
-    ## Add the layers
-    ##
-    global nn
-    nn = NeuralNetwork()
-    nn.add_layer(layer1)
-    nn.add_layer(layer2)
-    nn.add_layer(layer3)
-
-
-#     One hidden layer
-#     Create layers(number of neurons, number of inputs)
-#    layer1 = Layer(7, 21)
-#    layer2 = Layer(3, 28)
-#
+#    layer1 = Layer(14, 21)
+#    layer2 = Layer(9, 14)
+#    layer3 = Layer(3, 9)
+#    #
+#    ## Add the layers
+#    ##
 #    global nn
 #    nn = NeuralNetwork()
 #    nn.add_layer(layer1)
 #    nn.add_layer(layer2)
+#    nn.add_layer(layer3)
+
+
+#     One hidden layer
+#     Create layers(number of neurons, number of inputs)
+    layer1 = Layer(10, 2)
+    layer2 = Layer(1, 10)
+
+    global nn
+    nn = NeuralNetwork()
+    nn.add_layer(layer1)
+    nn.add_layer(layer2)
 
     global maxError
-    maxError = 0.0001
+    maxError = 0.001
     error = 1000000
-    L_rate = 0.005
-    w_decay = 0.0001
+    L_rate = 0.05
+    w_decay = 0.0
 
-    # Quick function to train a neural network until maxError is reached.
-    for i in range(20000):
+#    # Quick function to train a neural network until maxError is reached.
+#    for i in range(1000000):
+#        
+#        print("\nIteration:", i)
+#        if(nn.train(X,Y,L_rate,w_decay,10)):
+#            break
+#        previous_error = error
+#        pred_y = nn.forward_propagation(X)
+#        error = nn.error(pred_y, Y, len(X), w_decay)
+#        print("error:", error)
+#        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
+#        L_rate = adapt_L_rate(L_rate, previous_error, error)
+#        print("L_rate:", L_rate)
+#
+#    error = nn.error(pred_y, Y, len(X), w_decay)
+#    print("error:", error)
+#    print(pred_y)
+#    with open("pickled_nn.txt", "wb") as pickle_file:
+#        pickle.dump(nn, pickle_file)
         
+
+    for i in range(30000):
         print("\nIteration:", i)
-        if(nn.train(X,Y,L_rate,w_decay,64)):
-            break
-        previous_error = error
         pred_y = nn.forward_propagation(X)
+        nn.backward_propagation(X, pred_y, Y, L_rate, w_decay, len(X))
+            
+        previous_error = error
+        
         error = nn.error(pred_y, Y, len(X), w_decay)
         print("error:", error)
         print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
         L_rate = adapt_L_rate(L_rate, previous_error, error)
         print("L_rate:", L_rate)
-
-    error = nn.error(pred_y, Y, len(X), w_decay)
-    print("error:", error)
-
-    with open("pickled_nn.txt", "wb") as pickle_file:
-        pickle.dump(nn, pickle_file)
-
-
+        
+        if error < 0.019:
+            print("Predicted y:", pred_y)
+            print("Reached after %d iterations" % i)
+            break
+            
+        
     
+    
+
 
