@@ -16,7 +16,7 @@ with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
 with open("sklearn_nn.txt", "rb") as pickle_file:
-    mlp = pickle.load(pickled_file)
+    mlp = pickle.load(pickle_file)
 
 class MyDriver(Driver):
 
