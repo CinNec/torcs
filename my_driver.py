@@ -5,6 +5,8 @@ import pickle
 import feedforward
 import numpy as np
 from feedforward import Ndata
+import sklearn
+from sklearn.neural_network import MLPRegressor
 
 
 # class NeuralNetwork:
