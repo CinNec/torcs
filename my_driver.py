@@ -38,8 +38,8 @@ class MyDriver(Driver):
 
         mlp_output = mlp.predict([nn_input])[0]
         print(mlp_output)
-        command.accelerator= round(mlp_output[0])
-        command.brake = round(mlp_output[1])
+        command.accelerator= mlp_output[0]
+        command.brake = mlp_output[1]
         command.steering = mlp_output[2]
 
 
