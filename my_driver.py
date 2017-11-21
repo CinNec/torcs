@@ -31,16 +31,16 @@ class MyDriver(Driver):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
 
-        # nn_output = nn.forward_propagation(nn_input)
-        # command.accelerator= round(nn_output[0])
-        # command.brake = round(nn_output[1])
-        # command.steering = nn_output[2]
+        nn_output = nn.forward_propagation(nn_input)
+        command.accelerator= round(nn_output[0])
+        command.brake = round(nn_output[1])
+        command.steering = nn_output[2]
 
-        mlp_output = mlp.predict([nn_input])[0]
-        # print(mlp_output)
-        command.accelerator= round(mlp_output[0])
-        command.brake = round(mlp_output[1])
-        command.steering = mlp_output[2]
+        # mlp_output = mlp.predict([nn_input])[0]
+        # # print(mlp_output)
+        # command.accelerator= round(mlp_output[0])
+        # command.brake = round(mlp_output[1])
+        # command.steering = mlp_output[2]
 
 
         # GEAR HANDLER
@@ -61,6 +61,13 @@ class MyDriver(Driver):
                 # off track, reduced grip:
                 acceleration = min(0.4, acceleration)
             command.accelerator = min(acceleration, 1)
+
+        if carstate.angle > 60:
+            command.accelerator = 0.4
+            command.steering = 1
+        if carstate.angle < -60:
+            command.accelerator = 0.4
+            command.steering = -1
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1:
