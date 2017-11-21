@@ -17,8 +17,8 @@ from sklearn.neural_network import MLPRegressor
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
-with open("sklearn_nn.txt", "rb") as pickle_file:
-    mlp = pickle.load(pickle_file)
+with open("sklearn_nn.txt", "rb") as pickled:
+    mlp = pickle.load(pickled)
 
 class MyDriver(Driver):
 
@@ -35,7 +35,9 @@ class MyDriver(Driver):
         # command.accelerator= round(nn_output[0])
         # command.brake = round(nn_output[1])
         # command.steering = nn_output[2]
+        
         mlp_output = mlp.predict([nn_input])
+        print (mlp_output)
         command.accelerator= round(mlp_output[0])
         command.brake = round(mlp_output[1])
         command.steering = mlp_output[2]
