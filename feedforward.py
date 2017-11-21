@@ -13,8 +13,8 @@ BIAS = 1
 # Create layer with all weights randomly initialized between -1 and 1
 class Layer:
     def __init__(self, neurons, inputs_per_neuron):
-        self.weights = 2 * np.random.random((inputs_per_neuron, neurons)) - 1
-        self.bias = 2 * np.random.random((neurons)) - 1
+        self.weights = 0.1 * (2 * np.random.random((inputs_per_neuron, neurons)) - 1)
+        self.bias = 0.1 * (2 * np.random.random((neurons)) - 1)
         self.activation = np.zeros(neurons)
         
 class NeuralNetwork: 
@@ -86,6 +86,7 @@ class NeuralNetwork:
     def train(self, X, Y, L_rate, epochs):
         Position = 0
         PositionEnd = epochs
+#        print("len x:", len(X))
         while(PositionEnd < len(X)):
             XBatch = X[Position:PositionEnd]
             YBatch = Y[Position:PositionEnd]
@@ -96,29 +97,32 @@ class NeuralNetwork:
             error = nn.error(pred_yBatch, YBatch, len(XBatch))
     
             #print("error:", error)
-            if error < maxError:
-                print("Converged after %d iterations" % i)
-                print("Predicted Y:", pred_yBatch)
-                return True
+#            if error < maxError:
+#                print("Converged")
+#                print("Predicted Y:", pred_yBatch)
+#                return True
             
             Position += epochs
             PositionEnd += epochs
-        XBatch = X[Position:-1]
-        YBatch = Y[Position:-1]
+        XBatch = X[Position:]
+#        print("henlo", XBatch)
+        YBatch = Y[Position:]
         pred_yBatch = nn.forward_propagation(XBatch)
 
         nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
+        pred_y = nn.forward_propagation(X)
         
-        error = nn.error(pred_yBatch, YBatch, len(XBatch))
+        error = nn.error(pred_y, Y, len(X))
 #        print("error:", error)
         
         
         #print("error:", error)
         if error < maxError:
-            print("Converged after %d iterations" % i)
+            print("Converged")
             print("Predicted Y:", pred_yBatch)
             return True
         return False
+            
             
 
     
@@ -170,11 +174,11 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Increase learning rate by a small amount if cost went down
     if post_error < pre_error:
 #        print("Error went down")
-        L_rate *= 1.005
+        L_rate *= 1.01
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
 #        print("Error went up")
-        L_rate *= 0.85
+        L_rate *= 0.90
     return L_rate
  
 
@@ -185,39 +189,46 @@ def main():
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
-#    layer1 = Layer(30, 21)
-#    layer2 = Layer(30, 30)
-#    layer3 = Layer(3, 30)
-#    #
-#    ## Add the layers
-#    ##
-#    global nn
-#    nn = NeuralNetwork()
-#    nn.add_layer(layer1)
-#    nn.add_layer(layer2)
-#    nn.add_layer(layer3)
-
-
-#     One hidden layer
-#     Create layers(number of neurons, number of inputs)
     layer1 = Layer(14, 21)
-    layer2 = Layer(3, 14)
-
+    layer2 = Layer(9, 14)
+    layer3 = Layer(3, 9)
+    #
+    ## Add the layers
+    ##
     global nn
     nn = NeuralNetwork()
     nn.add_layer(layer1)
     nn.add_layer(layer2)
+    nn.add_layer(layer3)
+
+#     One hidden layer
+#     Create layers(number of neurons, number of inputs)
+#    layer1 = Layer(7, 21)
+#    layer2 = Layer(3, 7)
+
+#    global nn
+#    nn = NeuralNetwork()
+#    nn.add_layer(layer1)
+#    nn.add_layer(layer2)
 
     global maxError
     maxError = 0.0001
     error = 1000000
-    L_rate = 0.005
+    L_rate = 0.01
+    
+    global X, Y
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(500):
+    for i in range(1000):
+        # Shuffle dataset
+#        data = np.concatenate((X, Y), axis=1)
+#        np.random.shuffle(data)
+#        X = data[:, 0:21]
+#        Y = data[:, 21:]
+        
         
         print("\nIteration:", i)
-        if(nn.train(X,Y,L_rate,64)):
+        if(nn.train(X,Y,L_rate,128)):
             break
         previous_error = error
         pred_y = nn.forward_propagation(X)
@@ -231,7 +242,6 @@ def main():
 
     with open("pickled_nn.txt", "wb") as pickle_file:
         pickle.dump(nn, pickle_file)
-
-
-    
-
+#                [-0.2]
+#                ])
+#    

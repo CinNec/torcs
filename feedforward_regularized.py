@@ -25,6 +25,13 @@ class NeuralNetwork:
         self.layers.append(layer)
     
     def sigmoid(self, x):
+        a = np.amax(x)
+        print("x:", x)
+        print("max x:", a) 
+        b = 1 / (1 + np.exp(-(x - a)))
+        c = 1 / (1 + np.exp(-x))
+        print("b", b)
+        print("b", c)
         return 1 / (1 + np.exp(-x))
     
     def sigmoid_derivative(self, x):
@@ -200,7 +207,7 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 
 
 def main():
-#    np.random.seed(12)
+    np.random.seed(12)
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
@@ -228,50 +235,50 @@ def main():
     nn.add_layer(layer2)
 
     global maxError
-    maxError = 0.001
+    maxError = 0.00001
     error = 1000000
     L_rate = 0.05
     w_decay = 0.0
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(1000000):
-        
-        print("\nIteration:", i)
-        if(nn.train(X,Y,L_rate,w_decay,1)):
-            break
-        previous_error = error
-        pred_y = nn.forward_propagation(X)
-        error = nn.error(pred_y, Y, len(X), w_decay)
-        print("error:", error)
-        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
-        L_rate = adapt_L_rate(L_rate, previous_error, error)
-        print("L_rate:", L_rate)
-
-    error = nn.error(pred_y, Y, len(X), w_decay)
-    print("error:", error)
-    print(pred_y)
-    with open("pickled_nn.txt", "wb") as pickle_file:
-        pickle.dump(nn, pickle_file)
+#    for i in range(3):
 #        
-
-#    for i in range(30000):
 #        print("\nIteration:", i)
-#        pred_y = nn.forward_propagation(X)
-#        nn.backward_propagation(X, pred_y, Y, L_rate, w_decay, len(X))
-#            
+#        if(nn.train(X,Y,L_rate,w_decay,10)):
+#            break
 #        previous_error = error
-#        
+#        pred_y = nn.forward_propagation(X)
 #        error = nn.error(pred_y, Y, len(X), w_decay)
 #        print("error:", error)
 #        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
 #        L_rate = adapt_L_rate(L_rate, previous_error, error)
 #        print("L_rate:", L_rate)
-#        
-#        if error < 0.00001:
-#            print("Predicted y:", pred_y)
-#            print("Reached after %d iterations" % i)
-#            break
+#
+#    error = nn.error(pred_y, Y, len(X), w_decay)
+#    print("error:", error)
+#    print(pred_y)
+#    with open("pickled_nn.txt", "wb") as pickle_file:
+#        pickle.dump(nn, pickle_file)
+##        
+
+    for i in range(50000):        
+        print("\nIteration:", i)
+        pred_y = nn.forward_propagation(X)
+        nn.backward_propagation(X, pred_y, Y, L_rate, w_decay, len(X))
             
+        previous_error = error
+        
+        error = nn.error(pred_y, Y, len(X), w_decay)
+        print("error:", error)
+        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
+        L_rate = adapt_L_rate(L_rate, previous_error, error)
+        print("L_rate:", L_rate)
+        
+        if error < maxError:
+            print("Predicted y:", pred_y)
+            print("Reached after %d iterations" % i)
+            break
+#            
         
     
     
