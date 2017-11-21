@@ -15,6 +15,9 @@ from feedforward import Ndata
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
+with open("sklearn_nn.txt", "rb") as pickle_file:
+    mlp = pickle.load(pickled_file)
+
 class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
@@ -25,30 +28,35 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
-        nn_output = nn.forward_propagation(nn_input)
 
-        command.accelerator= round(nn_output[0])
-        command.brake = round(nn_output[1])
-        command.steering = nn_output[2]
+        # nn_output = nn.forward_propagation(nn_input)
+        # command.accelerator= round(nn_output[0])
+        # command.brake = round(nn_output[1])
+        # command.steering = nn_output[2]
+        mlp_output = mlp.predict(nn_input)
+        command.accelerator= round(mlp_output[0])
+        command.brake = round(mlp_output[1])
+        command.steering = mlp_output[2]
 
+
+        # GEAR HANDLER
+
+        if carstate.rpm > 8000:
+            command.gear = carstate.gear + 1
+        if carstate.rpm < 4000:
+            command.gear = carstate.gear - 1
+        if not command.gear:
+            command.gear = carstate.gear or 1
+
+        # OFFTRACK HANDLER
+
+        # reduce acceleration if offtrack
         acceleration = command.accelerator
-
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1:
                 # off track, reduced grip:
                 acceleration = min(0.4, acceleration)
-
             command.accelerator = min(acceleration, 1)
-
-        if carstate.rpm > 8000:
-            command.gear = carstate.gear + 1
-
-
-        if carstate.rpm < 4000:
-            command.gear = carstate.gear - 1
-
-        if not command.gear:
-            command.gear = carstate.gear or 1
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1:
