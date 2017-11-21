@@ -28,7 +28,7 @@ class MyDriver(Driver):
         nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:-1])
         i=0
         while(i <= 20):
-            nn_input[i] = nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
+            nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
 
         # nn_output = nn.forward_propagation(nn_input)
