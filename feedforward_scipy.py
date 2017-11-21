@@ -9,11 +9,17 @@ def dump_mlp():
     X = Ndata.inputdata
     Y = Ndata.outputdata
 
-    mlp = MLPRegressor(hidden_layer_sizes=(14, 9),max_iter=12000)
+    mlp = MLPRegressor(hidden_layer_sizes=(200,20),max_iter=1200, learning_rate='adaptive', activation='relu')
     mlp.fit(X,Y)
 
-    with open("sklearn_nn.txt", "wb") as pickle_file:
-        pickle.dump(mlp, pickle_file)
+    T = mlp.predict(X)
+    error = 0
+    for i, t in enumerate(T):
+        error += abs(round(t[0])-Y[i][0]) + abs(round(t[1])-Y[i][1]) + abs(t[2]-Y[i][2])
+    print (error)
+
+    with open("sklearn_nn.txt", "wb") as pickled:
+        pickle.dump(mlp, pickled)
 
 dump_mlp()
 
