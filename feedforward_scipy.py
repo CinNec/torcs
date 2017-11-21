@@ -9,7 +9,7 @@ def dump_mlp():
     X = Ndata.inputdata
     Y = Ndata.outputdata
 
-    mlp = MLPRegressor(hidden_layer_sizes=(14, 9),max_iter=1200)
+    mlp = MLPRegressor(hidden_layer_sizes=(14, 9),max_iter=12000)
     mlp.fit(X,Y)
 
     with open("sklearn_nn.txt", "wb") as pickle_file:
