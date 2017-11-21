@@ -9,7 +9,7 @@ def dump_mlp():
     X = Ndata.inputdata
     Y = Ndata.outputdata
 
-    mlp = MLPRegressor(hidden_layer_sizes=(200,20),max_iter=1200, learning_rate='adaptive', activation='relu')
+    mlp = MLPRegressor(hidden_layer_sizes=(240,20),max_iter=120000, learning_rate='adaptive')
     mlp.fit(X,Y)
 
     T = mlp.predict(X)

@@ -36,11 +36,11 @@ class MyDriver(Driver):
         # command.brake = round(nn_output[1])
         # command.steering = nn_output[2]
 
-        mlp_output = mlp.predict([nn_input])[0]
+        mlp_output = mlp.predict([nn_input])
         print(mlp_output)
-        command.accelerator= round(mlp_output[0])
-        command.brake = round(mlp_output[1])
-        command.steering = mlp_output[2]
+        # command.accelerator= round(mlp_output[0])
+        # command.brake = round(mlp_output[1])
+        # command.steering = mlp_output[2]
 
 
         # GEAR HANDLER
