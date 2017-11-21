@@ -90,6 +90,7 @@ class NeuralNetwork:
     def train(self, X, Y, L_rate, w_decay, epochs):
         Position = 0
         PositionEnd = epochs
+        print("len x:", len(X))
         while(PositionEnd < len(X)):
             XBatch = X[Position:PositionEnd]
             YBatch = Y[Position:PositionEnd]
@@ -100,26 +101,28 @@ class NeuralNetwork:
             error = nn.error(pred_yBatch, YBatch, len(XBatch), w_decay)
     
             #print("error:", error)
-            if error < maxError:
-                print("Converged after %d iterations" % i)
-                print("Predicted Y:", pred_yBatch)
-                return True
+#            if error < maxError:
+#                print("Converged")
+#                print("Predicted Y:", pred_yBatch)
+#                return True
             
             Position += epochs
             PositionEnd += epochs
-        XBatch = X[Position:-1]
-        YBatch = Y[Position:-1]
+        XBatch = X[Position:]
+        print("henlo", XBatch)
+        YBatch = Y[Position:]
         pred_yBatch = nn.forward_propagation(XBatch)
 
         nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate, w_decay, len(X))
+        pred_y = nn.forward_propagation(X)
         
-        error = nn.error(pred_yBatch, YBatch, len(XBatch), w_decay)
+        error = nn.error(pred_y, Y, len(X), w_decay)
 #        print("error:", error)
         
         
         #print("error:", error)
         if error < maxError:
-            print("Converged after %d iterations" % i)
+            print("Converged")
             print("Predicted Y:", pred_yBatch)
             return True
         return False
@@ -216,8 +219,8 @@ def main():
 
 #     One hidden layer
 #     Create layers(number of neurons, number of inputs)
-    layer1 = Layer(10, 2)
-    layer2 = Layer(1, 10)
+    layer1 = Layer(15, 2)
+    layer2 = Layer(1, 15)
 
     global nn
     nn = NeuralNetwork()
@@ -230,44 +233,44 @@ def main():
     L_rate = 0.05
     w_decay = 0.0
 
-#    # Quick function to train a neural network until maxError is reached.
-#    for i in range(1000000):
-#        
-#        print("\nIteration:", i)
-#        if(nn.train(X,Y,L_rate,w_decay,10)):
-#            break
-#        previous_error = error
-#        pred_y = nn.forward_propagation(X)
-#        error = nn.error(pred_y, Y, len(X), w_decay)
-#        print("error:", error)
-#        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
-#        L_rate = adapt_L_rate(L_rate, previous_error, error)
-#        print("L_rate:", L_rate)
-#
-#    error = nn.error(pred_y, Y, len(X), w_decay)
-#    print("error:", error)
-#    print(pred_y)
-#    with open("pickled_nn.txt", "wb") as pickle_file:
-#        pickle.dump(nn, pickle_file)
+    # Quick function to train a neural network until maxError is reached.
+    for i in range(1000000):
         
-
-    for i in range(30000):
         print("\nIteration:", i)
-        pred_y = nn.forward_propagation(X)
-        nn.backward_propagation(X, pred_y, Y, L_rate, w_decay, len(X))
-            
+        if(nn.train(X,Y,L_rate,w_decay,1)):
+            break
         previous_error = error
-        
+        pred_y = nn.forward_propagation(X)
         error = nn.error(pred_y, Y, len(X), w_decay)
         print("error:", error)
         print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
         L_rate = adapt_L_rate(L_rate, previous_error, error)
         print("L_rate:", L_rate)
-        
-        if error < 0.019:
-            print("Predicted y:", pred_y)
-            print("Reached after %d iterations" % i)
-            break
+
+    error = nn.error(pred_y, Y, len(X), w_decay)
+    print("error:", error)
+    print(pred_y)
+    with open("pickled_nn.txt", "wb") as pickle_file:
+        pickle.dump(nn, pickle_file)
+#        
+
+#    for i in range(30000):
+#        print("\nIteration:", i)
+#        pred_y = nn.forward_propagation(X)
+#        nn.backward_propagation(X, pred_y, Y, L_rate, w_decay, len(X))
+#            
+#        previous_error = error
+#        
+#        error = nn.error(pred_y, Y, len(X), w_decay)
+#        print("error:", error)
+#        print("original error:", 1/len(X) * np.sum(np.square(pred_y - Y)))
+#        L_rate = adapt_L_rate(L_rate, previous_error, error)
+#        print("L_rate:", L_rate)
+#        
+#        if error < 0.00001:
+#            print("Predicted y:", pred_y)
+#            print("Reached after %d iterations" % i)
+#            break
             
         
     
