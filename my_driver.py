@@ -20,7 +20,7 @@ with open("pickled_nn.txt", "rb") as pickle_file:
 with open("sklearn_nn.txt", "rb") as pickled:
     mlp = pickle.load(pickled)
 
-class MyDriver(Driver):
+# class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
     # def drive(self, carstate: State) -> Command:
