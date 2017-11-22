@@ -96,6 +96,7 @@ class State(Value):
         self.z = self.float_value(sensor_dict, 'z')
         for distance in self.distances_from_edge:
             print (distance)
+        print ('___________________________')
 
         self.focused_distances_from_edge = self.floats_value(
             sensor_dict,
