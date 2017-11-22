@@ -11,7 +11,7 @@ import tensorflow as tf
 # Set bias value
 BIAS = 1
 
-datype = tf.float32 # Uncomment this to run on GPU
+datype = tf.float64 # Uncomment this to run on GPU
 
 # Create layer with all weights randomly initialized between -1 and 1
 class Layer:
