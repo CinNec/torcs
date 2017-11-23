@@ -1,5 +1,5 @@
 import numpy as np
-from Normalize import Normalize
+from Normalize_reduced import Normalize
 import pickle
 
 # Build model creates a neural network with the specified number of hidden layers and neurons per layer
@@ -76,8 +76,11 @@ class NeuralNetwork:
 # Implement mini-batch training function that uses forward and back propagation to train the function      
     def train(self, X, Y, L_rate, epochs):
 #        Shuffle dataset
-#        data = np.concatenate((X, Y), axis=1)
-#        np.random.shuffle(data)
+        data = np.concatenate((X, Y), axis=1)
+        np.random.shuffle(data)
+        X = data[:, 0:X.shape[1]]
+        Y = data[:, X.shape[1]:]
+        
 #        X = data[:, 0:21]
 #        Y = data[:, 21:]
         
@@ -151,7 +154,7 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
 #        print("Error went up")
-        L_rate *= 0.80
+        L_rate *= 0.98
     return L_rate
  
 def main():
@@ -159,9 +162,9 @@ def main():
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
-    layer1 = Layer(100, 21)
-    layer2 = Layer(100, 100)
-    layer3 = Layer(3, 100)
+    layer1 = Layer(18, 21)
+    layer2 = Layer(12, 18)
+    layer3 = Layer(3, 12)
     #
     ## Add the layers
     ##
@@ -184,13 +187,13 @@ def main():
     global maxError
     maxError = 0.0001
     error = 1000000
-    L_rate = 0.005
+    L_rate = 0.01
     
 
     # Quick function to train a neural network until maxError is reached.
     for i in range(10000):
         print("\nIteration:", i)
-        nn.train(X,Y,L_rate,64)
+        nn.train(X,Y,L_rate,128)
         previous_error = error
         pred_y = nn.forward_propagation(X)
         error = nn.error(pred_y, Y, len(X))

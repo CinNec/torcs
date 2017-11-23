@@ -85,5 +85,5 @@ class Normalize:
 		npdata = np.swapaxes(npdata,0,1)
 		np.random.shuffle(npdata)
 		npdata = np.swapaxes(npdata,0,1)
-		self.inputdata = np.swapaxes(npdata[0:21],0,1)
-		self.outputdata = np.swapaxes(npdata[21:],0,1)
+		self.inputdata = np.swapaxes(np.concatenate((npdata[0:3], npdata[9:16]), axis=1),0,1)
+		self.outputdata = np.swapaxes(npdata[21:23],0,1)
