@@ -56,6 +56,7 @@ class NeuralNetwork:
         # Find delta values for output layer weights
         output_error = self.derivative_error(y, t)
         output_delta = output_error
+#       output_delta = output_error * y
         
         # Set output delta as the initial delta for the loop
         layer_delta = output_delta
@@ -84,6 +85,13 @@ class NeuralNetwork:
     
 # Implement mini-batch training function that uses forward and back propagation to train the function      
     def train(self, X, Y, L_rate, epochs):
+#                 Shuffle dataset
+        data = np.concatenate((X, Y), axis=1)
+        np.random.shuffle(data)
+        X = data[:, 0:21]
+        Y = data[:, 21:]
+#        
+        
         Position = 0
         PositionEnd = epochs
 #        print("len x:", len(X))
@@ -178,7 +186,7 @@ def adapt_L_rate(L_rate, pre_error, post_error):
     # Decrease learning rate by a large amount if cost went up
     if post_error >= pre_error:
 #        print("Error went up")
-        L_rate *= 0.90
+        L_rate *= 0.98
     return L_rate
  
 
@@ -189,9 +197,11 @@ def main():
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
-    layer1 = Layer(14, 21)
-    layer2 = Layer(9, 14)
-    layer3 = Layer(3, 9)
+    layer1 = Layer(16, 21)
+    layer2 = Layer(12, 16)
+    layer3 = Layer(7, 12)
+    layer4 = Layer(3, 7)
+#    layer5 = Layer(3, 6)
     #
     ## Add the layers
     ##
@@ -200,6 +210,8 @@ def main():
     nn.add_layer(layer1)
     nn.add_layer(layer2)
     nn.add_layer(layer3)
+    nn.add_layer(layer4)
+#    nn.add_layer(layer5)
 
 #     One hidden layer
 #     Create layers(number of neurons, number of inputs)
@@ -214,21 +226,13 @@ def main():
     global maxError
     maxError = 0.0001
     error = 1000000
-    L_rate = 0.01
+    L_rate = 0.005
     
-    global X, Y
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(1000):
-        # Shuffle dataset
-#        data = np.concatenate((X, Y), axis=1)
-#        np.random.shuffle(data)
-#        X = data[:, 0:21]
-#        Y = data[:, 21:]
-        
-        
+    for i in range(10000):
         print("\nIteration:", i)
-        if(nn.train(X,Y,L_rate,128)):
+        if(nn.train(X,Y,L_rate,32)):
             break
         previous_error = error
         pred_y = nn.forward_propagation(X)
