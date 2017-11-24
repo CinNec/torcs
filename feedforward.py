@@ -68,10 +68,10 @@ class NeuralNetwork:
                 self.layers[i].weights -= L_rate * x.T.dot(deltas[i])
                 self.layers[i].bias -= L_rate * np.sum(deltas[i], axis = 0)
                 continue
-             
+           
             self.layers[i].weights -= L_rate * self.layers[i - 1].activation.T.dot(deltas[i])
             self.layers[i].bias -= L_rate * np.sum(deltas[i], axis = 0)
-        return
+        return 
     
 # Implement mini-batch training function that uses forward and back propagation to train the function      
     def train(self, X, Y, L_rate, epochs):
@@ -159,9 +159,9 @@ def main():
 
 #    # Create layers(number of neurons, number of inputs)
 #    # Three hidden layer network
-    layer1 = Layer(100, 21)
-    layer2 = Layer(100, 100)
-    layer3 = Layer(3, 100)
+    layer1 = Layer(14, 21)
+    layer2 = Layer(9, 14)
+    layer3 = Layer(3, 9)
     #
     ## Add the layers
     ##
@@ -188,7 +188,7 @@ def main():
     
 
     # Quick function to train a neural network until maxError is reached.
-    for i in range(10000):
+    for i in range(1000):
         print("\nIteration:", i)
         nn.train(X,Y,L_rate,64)
         previous_error = error
@@ -209,4 +209,3 @@ def main():
 
     with open("pickled_nn.txt", "wb") as pickle_file:
         pickle.dump(nn, pickle_file)
-
