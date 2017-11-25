@@ -50,10 +50,10 @@ class MyDriver(Driver):
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-        nn1_out1, nn1_out2 = nn1.forward_propagation()
-        nn2_out = nn2.forward_propagation()
-        command.accelerator= round(nn1_out1)
-        command.brake = round(nn1_out2)
+        nn1_out = nn1.forward_propagation(nn_input)
+        nn2_out = nn2.forward_propagation(nn_input)
+        command.accelerator= round(nn1_out[0])
+        command.brake = round(nn1_out[1])
         command.steering = nn2_out
 
 
