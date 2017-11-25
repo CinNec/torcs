@@ -51,6 +51,7 @@ class MyDriver(Driver):
         # command.steering = mlp_output[2]
 
         nn1_out = nn1.forward_propagation(nn_input)
+        nn_input.append(nn1_out[0]).append(nn1_out[1])
         nn2_out = nn2.forward_propagation(nn_input)
         command.accelerator= round(nn1_out[0])
         command.brake = round(nn1_out[1])
