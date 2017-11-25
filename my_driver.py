@@ -21,8 +21,6 @@ with open("pickled_nn.txt", "rb") as pickle_file:
 with open("sklearn_nn.txt", "rb") as pickled:
     mlp = pickle.load(pickled)
 
-feedforward_split.train_steer()
-feedforward_split.train_accbrk()
 
 class MyDriver(Driver):
 

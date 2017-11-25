@@ -254,4 +254,8 @@ def train_steer():
     with open("pickled_nn_steering.txt", "wb") as pickle_file:
         pickle.dump(nn2, pickle_file)
     
+
+train_steer()
+train_accbrk()
+    
 #%%
