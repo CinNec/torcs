@@ -44,18 +44,18 @@ class MyDriver(Driver):
         # command.brake = round(nn_output[1])
         # command.steering = nn_output[2]
 
-        # mlp_output = mlp.predict([nn_input])[0]
-        # # print(mlp_output)
-        # command.accelerator= round(mlp_output[0])
-        # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
-        # command.steering = mlp_output[2]
+        mlp_output = mlp.predict([nn_input])[0]
+        # print(mlp_output)
+        command.accelerator= round(mlp_output[0])
+        command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
+        command.steering = mlp_output[2]
 
-        nn1_out = nn1.forward_propagation(nn_input)
-        nn_input = np.append(nn_input, nn1_out)
-        nn2_out = nn2.forward_propagation(nn_input)
-        command.accelerator= round(nn1_out[0])
-        command.brake = round(nn1_out[1])
-        command.steering = nn2_out
+        # nn1_out = nn1.forward_propagation(nn_input)
+        # nn_input = np.append(nn_input, nn1_out)
+        # nn2_out = nn2.forward_propagation(nn_input)
+        # command.accelerator= round(nn1_out[0])
+        # command.brake = round(nn1_out[1])
+        # command.steering = nn2_out
 
 
         # GEAR HANDLER
@@ -78,12 +78,12 @@ class MyDriver(Driver):
             command.accelerator = min(acceleration, 1)
 
         # manually adjust angle
-        # if carstate.angle > 45:
-        #     command.accelerator = 0.4
-        #     command.steering = 1
-        # if carstate.angle < -45:
-        #     command.accelerator = 0.4
-        #     command.steering = -1
+        if carstate.angle > 45:
+            command.accelerator = 0.4
+            command.steering = 1
+        if carstate.angle < -45:
+            command.accelerator = 0.4
+            command.steering = -1
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1:
