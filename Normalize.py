@@ -1,6 +1,7 @@
 import csv
 from os import listdir
 import numpy as np
+import math
 
 
 class Normalize:
@@ -84,7 +85,18 @@ class Normalize:
                                 ])
         npdata = np.swapaxes(npdata,0,1)
         np.random.shuffle(npdata)
+        cut = math.floor(0.9 * len(npdata))
+        train_data = npdata[:cut]
+        print (train_data[0])
+        test_data = npdata[cut:]
+        train_data = np.swapaxes(train_data,0,1)
+        test_data = np.swapaxes(test_data,0,1)
         npdata = np.swapaxes(npdata,0,1)
+
         self.data = npdata
+        self.train_data = train_data
+        self.test_data = test_data
         self.inputdata = np.swapaxes(npdata[0:21],0,1)
         self.outputdata = np.swapaxes(npdata[21:],0,1)
+
+Normalize()
