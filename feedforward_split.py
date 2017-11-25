@@ -1,5 +1,5 @@
 import numpy as np
-from Normalize_reduced import Normalize
+import Normalize
 import pickle
 
 # Build model creates a neural network with the specified number of hidden layers and neurons per layer
