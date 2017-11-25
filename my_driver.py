@@ -78,12 +78,12 @@ class MyDriver(Driver):
             command.accelerator = min(acceleration, 1)
 
         # manually adjust angle
-        if carstate.angle > 45:
-            command.accelerator = 0.4
-            command.steering = 1
-        if carstate.angle < -45:
-            command.accelerator = 0.4
-            command.steering = -1
+        # if carstate.angle > 45:
+        #     command.accelerator = 0.4
+        #     command.steering = 1
+        # if carstate.angle < -45:
+        #     command.accelerator = 0.4
+        #     command.steering = -1
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1:
