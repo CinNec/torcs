@@ -6,12 +6,13 @@ import pickle
 
 def dump_mlp():
     Ndata = Normalize()
-    X = Ndata.inputdata
+    X_raw = Ndata.inputdata
     Y = Ndata.outputdata
-    for x in X:
-        x = [x[0],x[1],x[2],x[11],x[12],x[13]]
+    X = []
+    for x in X_raw:
+        X.append([x[0],x[1],x[2],x[11],x[12],x[13]])
 
-    mlp = MLPRegressor(hidden_layer_sizes=(200,15),max_iter=1200, learning_rate='adaptive')
+    mlp = MLPRegressor(hidden_layer_sizes=(120,20),max_iter=1200, learning_rate='adaptive')
     mlp.fit(X,Y)
 
     T = mlp.predict(X)
