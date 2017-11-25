@@ -22,10 +22,10 @@ with open("sklearn_nn.txt", "rb") as pickle_file:
     mlp = pickle.load(pickle_file)
 
 with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
-    nn_accbrk = pickle.load(pickle_file)
+    nn1 = pickle.load(pickle_file)
 
 with open("pickled_nn_steering.txt", "rb") as pickle_file:
-    nn_steer = pickle.load(pickle_file)
+    nn2 = pickle.load(pickle_file)
 
 
 class MyDriver(Driver):
@@ -50,12 +50,12 @@ class MyDriver(Driver):
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-        nn_accbrk_out = nn_accbrk.forward_propagation()
-        nn_steer_out = nn_steer.forward_propagation()
-        command.accelerator= round(nn_accbrk_out[0])
-        command.brake = round(nn_accbrk_out[1])
-        command.steering = nn_steer_out
-        
+        nn1_out = nn1.forward_propagation()
+        nn2_out = nn2.forward_propagation()
+        command.accelerator= round(nn1_out[0])
+        command.brake = round(nn1_out[1])
+        command.steering = nn2_out
+
 
         # GEAR HANDLER
 
