@@ -255,7 +255,7 @@ def train_steer():
         pickle.dump(nn2, pickle_file)
     
 
-train_steer()
-train_accbrk()
+# train_steer()
+# train_accbrk()
 
 #%%
