@@ -1,5 +1,5 @@
 import numpy as np
-import Normalize
+from Normalize import Normalize
 import pickle
 
 # Build model creates a neural network with the specified number of hidden layers and neurons per layer
@@ -257,5 +257,5 @@ def train_steer():
 
 train_steer()
 train_accbrk()
-    
+
 #%%
