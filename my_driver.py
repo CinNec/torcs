@@ -44,18 +44,19 @@ class MyDriver(Driver):
         # command.brake = round(nn_output[1])
         # command.steering = nn_output[2]
 
-        mlp_output = mlp.predict([nn_input])[0]
-        # print(mlp_output)
-        command.accelerator= round(mlp_output[0])
-        command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
-        command.steering = mlp_output[2]
+        # mlp_output = mlp.predict([nn_input])[0]
+        # # print(mlp_output)
+        # command.accelerator= round(mlp_output[0])
+        # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
+        # command.steering = mlp_output[2]
 
-        # nn1_out = nn1.forward_propagation(nn_input)
-        # nn_input = np.append(nn_input, nn1_out)
-        # nn2_out = nn2.forward_propagation(nn_input)
-        # command.accelerator= round(nn1_out[0])
-        # command.brake = round(nn1_out[1])
-        # command.steering = nn2_out
+        nn1_out = nn1.forward_propagation(nn_input)
+        rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
+        nn_input = np.append(nn_input, rounded_out)
+        nn2_out = nn2.forward_propagation(nn_input)
+        command.accelerator= round(nn1_out[0])
+        command.brake = round(nn1_out[1])
+        command.steering = nn2_out
 
 
         # GEAR HANDLER
