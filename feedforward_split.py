@@ -253,8 +253,27 @@ def train_steer():
     
     with open("pickled_nn_steering.txt", "wb") as pickle_file:
         pickle.dump(nn2, pickle_file)
-    
 
+def test_nn():
+    with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
+        nn1 = pickle.load(pickle_file)
+    with open("pickled_nn_steering.txt", "rb") as pickle_file:
+        nn2 = pickle.load(pickle_file)
+    Ndata = Normalize()
+    X = Ndata.inputdata
+    Y = Ndata.outputdata
+    err1 = 0
+    err2 = 0
+    for i, x in enumerate(X):
+        round_acc = round(nn1.forward_propagation(x)[0])
+        round_brk = round(nn1.forward_propagation(x)[1])
+        rounded_out = np.array([round_acc, round_brk])
+        err1 += abs(round_acc - Y[i][0]) + abs(round_brk - Y[i][1])
+        err2 += abs(nn2.forward_propagation(np.append(x, rounded_out))[0] - Y[i][2])
+    print(err1)
+    print(err2)
+
+test_nn()
 # train_steer()
 # train_accbrk()
 
