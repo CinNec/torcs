@@ -18,8 +18,14 @@ import feedforward_split
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
-with open("sklearn_nn.txt", "rb") as pickled:
-    mlp = pickle.load(pickled)
+with open("sklearn_nn.txt", "rb") as pickle_file:
+    mlp = pickle.load(pickle_file)
+
+with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
+    nn_accbrk = pickle.load(pickle_file)
+
+with open("pickled_nn_steering.txt", "rb") as pickle_file:
+    nn_steer = pickle.load(pickle_file)
 
 
 class MyDriver(Driver):
@@ -44,7 +50,12 @@ class MyDriver(Driver):
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-
+        nn_accbrk_out = nn_accbrk.feedforward()
+        nn_steer_out = nn_steer.feedforward()
+        command.accelerator= round(nn_accbrk_out[0])
+        command.brake = round(nn_accbrk_out[1])
+        command.steering = nn_steer_out
+        
 
         # GEAR HANDLER
 
