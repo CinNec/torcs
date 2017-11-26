@@ -87,15 +87,16 @@ class Normalize:
         np.random.shuffle(npdata)
         cut = math.floor(0.9 * len(npdata))
         train_data = npdata[:cut]
-        print (train_data[0])
         test_data = npdata[cut:]
         train_data = np.swapaxes(train_data,0,1)
         test_data = np.swapaxes(test_data,0,1)
         npdata = np.swapaxes(npdata,0,1)
 
         self.data = npdata
-        self.train_data = train_data
-        self.test_data = test_data
+        self.train_data = np.swapaxes(train_data[0:21],0,1)
+        self.train_out = np.swapaxes(train_data[21:],0,1)
+        self.test_data = np.swapaxes(test_data[0:21],0,1)
+        self.test_out = np.swapaxes(test_data[21:],0,1)
         self.inputdata = np.swapaxes(npdata[0:21],0,1)
         self.outputdata = np.swapaxes(npdata[21:],0,1)
 

@@ -260,20 +260,35 @@ def test_nn():
     with open("pickled_nn_steering.txt", "rb") as pickle_file:
         nn2 = pickle.load(pickle_file)
     Ndata = Normalize()
-    X = Ndata.inputdata
-    Y = Ndata.outputdata
+    X = Ndata.test_data
+    Y = Ndata.test_out
     err1 = 0
     err2 = 0
+    counter1 = 0
+    counter2 = 0
+    prints = 5
     for i, x in enumerate(X):
         round_acc = round(nn1.forward_propagation(x)[0])
         round_brk = round(nn1.forward_propagation(x)[1])
         rounded_out = np.array([round_acc, round_brk])
+        steering = nn2.forward_propagation(np.append(x, rounded_out))[0]
+        if (round_acc != Y[i][0] or round_brk != Y[i][1]) and counter1 < prints:
+            print (x)
+            print ("Acceleration and breaking are (" + str(round_acc) + ", " + str(round_brk) + ") while they should have been (" 
+                + str(Y[i][0]) + ", " + str(Y[i][1]) + ")")
+            counter1 += 1
+        if abs(steering - Y[i][2]) > 0.2 and counter2 < prints:
+            print (x)
+            print ("Steering is " + str(steering) + " while it should have been " + str(Y[i][2]))
+            counter2 += 1       
         err1 += abs(round_acc - Y[i][0]) + abs(round_brk - Y[i][1])
-        err2 += abs(nn2.forward_propagation(np.append(x, rounded_out))[0] - Y[i][2])
+        err2 += abs(steering - Y[i][2])
+        
     print(err1)
     print(err2)
 
 test_nn()
+
 # train_steer()
 # train_accbrk()
 
