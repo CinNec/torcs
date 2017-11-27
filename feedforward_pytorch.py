@@ -1,4 +1,3 @@
-import numpy as np
 from Normalize import Normalize
 import pickle
 import tensorflow as tf
@@ -20,6 +19,7 @@ class Layer:
         self.bias = 2 * tf.cast(tf.random_uniform((1,neurons)),dtype=datype) - 1
         self.activation = tf.cast(tf.zeros(neurons),dtype=datype)
         
+        
 class NeuralNetwork: 
     def __init__(self):
         self.layers = []
@@ -37,75 +37,65 @@ class NeuralNetwork:
     def forward_propagation(self, input):
         # Activations of hidden layers (sigmoid)
         for layer in self.layers[0:-1]:
-            layer.activation = self.sigmoid(tf.matmul(input,layer.weights) + layer.bias * BIAS)
+            layer.activation = self.sigmoid(tf.tensordot(input,layer.weights,1) + layer.bias * BIAS)
 #            layer.activation = self.sigmoid(input.dot(layer.weights))
-            input = layer.activation
         
         # Activation of output layer (identity activation)
-        self.layers[-1].activation = tf.matmul(input,self.layers[-1].weights) + self.layers[-1].bias * BIAS
-        output = self.layers[-1].activation
-        return output
+        self.layers[-1].activation = tf.tensordot(layer.activation,self.layers[-1].weights,1) + self.layers[-1].bias * BIAS
+        return (self.layers[-1].activation)
+        
     
     # Error function using mean squared error
     def error(self, y, t, N):
-        return 1/N * tf.reduce_sum(np.square(y - t)).eval()
+        return (1/N * tf.reduce_sum(tf.square(y - t)).eval())
     
     # The derivative of the error function
     def derivative_error(self, y, t):
-        return y-t
+        return (tf.subtract(y,t))
         
     # Propagate error backwards to find gradients
     def backward_propagation(self, x, y, t, L_rate):
         # Find delta values for output layer weights
-        output_error = self.derivative_error(y, t)
-        output_delta = output_error
+        layer_delta = self.derivative_error(y, t)
         
         # Set output delta as the initial delta for the loop
-        layer_delta = output_delta
-        
+        output_delta = layer_delta
         # Iterate backwards through the hidden layers
         for i in reversed(range(len(self.layers) - 1)): 
-            layer_error = tf.matmul(layer_delta,tf.transpose(self.layers[i + 1].weights))
+            layer_error = tf.tensordot(layer_delta,tf.transpose(self.layers[i + 1].weights),1)
             layer_delta = layer_error * self.sigmoid_derivative(self.layers[i].activation)
 #           
             # Separate code for the first hidden layer after input, uses x
             # to calculate weight gradients, exit loop after.
             if i == 0:
-                self.layers[i].weights -= L_rate * tf.matmul(tf.transpose(x),layer_delta)
+                self.layers[i].weights -= L_rate * tf.tensordot(tf.transpose(x),layer_delta,1)
                 self.layers[i].bias -= L_rate * tf.reduce_sum(layer_delta,0)
                 break
             
             # Use delta to update weights and bias
-            self.layers[i].weights -= L_rate * tf.matmul(tf.transpose(self.layers[i - 1].activation),layer_delta)
+            self.layers[i].weights -= L_rate * tf.tensordot(tf.transpose(self.layers[i - 1].activation),layer_delta,1)
             self.layers[i].bias -= L_rate * tf.reduce_sum(layer_delta,0)
-
+            
         
         # Update weights and bias of output layer
-        self.layers[-1].weights -= L_rate * tf.matmul(tf.transpose(self.layers[-2].activation),output_delta)
+        self.layers[-1].weights -= L_rate * tf.tensordot(tf.transpose(self.layers[-2].activation),output_delta,1)
         self.layers[-1].bias -= L_rate * tf.reduce_sum(output_delta,0)
+        
         return
     
 # Implement mini-batch training function that uses forward and back propagation to train the function      
     def train(self, X, Y, L_rate, epochs):
         Position = 0
         PositionEnd = epochs
-        
+        self.sess = tf.Session()
         while(PositionEnd < X.get_shape().as_list()[0]):
-            print(X.get_shape().as_list()[0]-PositionEnd)
-            XBatch = X[Position:PositionEnd]
-            YBatch = Y[Position:PositionEnd]
-            pred_yBatch = nn.forward_propagation(XBatch)
+            print(Position)
+            self.XBatch = X[Position:PositionEnd]
+            self.YBatch = Y[Position:PositionEnd]
+            self.pred_yBatch = nn.forward_propagation(self.XBatch)
+            
+            nn.backward_propagation(self.XBatch, self.pred_yBatch, self.YBatch, L_rate)
 
-            nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
-            
-            error = nn.error(pred_yBatch, YBatch, XBatch.get_shape()[0].value)
-    
-            #print("error:", error)
-            if (error < maxError):
-                print("Converged after %d iterations" % i)
-                print("Predicted Y:", pred_yBatch)
-                return True
-            
             Position += epochs
             PositionEnd += epochs
         XBatch = X[Position:]
@@ -113,8 +103,9 @@ class NeuralNetwork:
         pred_yBatch = nn.forward_propagation(XBatch)
 
         nn.backward_propagation(XBatch, pred_yBatch, YBatch, L_rate)
-        
-        error = nn.error(pred_yBatch, YBatch, XBatch.get_shape()[0].value)
+        self.pred_y = nn.forward_propagation(X)
+        error = nn.error(self.pred_y, Y, X.get_shape()[0].value)
+        self.sess.close()
 #        print("error:", error)
         
         
@@ -188,7 +179,6 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 
 
 def main():
-    sess = tf.InteractiveSession()
 #    np.random.seed(12)
 
 #    # Create layers(number of neurons, number of inputs)
@@ -210,9 +200,10 @@ def main():
 #     Create layers(number of neurons, number of inputs)
     layer1 = Layer(14, 21)
     layer2 = Layer(3, 14)
-
+    
     global nn
-    nn = NeuralNetwork()
+    with tf.Graph().as_default():
+        nn = NeuralNetwork()
     nn.add_layer(layer1)
     nn.add_layer(layer2)
 
@@ -220,23 +211,21 @@ def main():
     maxError = 0.0001
     error = 1000000
     L_rate = 0.005
-
     # Quick function to train a neural network until maxError is reached.
     for i in range(500):
         
-        print("\nIteration:", i)
+        print("\nIteration:", i)        
         if(nn.train(X,Y,L_rate,128)):
             break
+                
         previous_error = error
         pred_y = nn.forward_propagation(X)
         error = nn.error(pred_y, Y, X.get_shape()[0].value)
         print("error:", error)
         L_rate = adapt_L_rate(L_rate, previous_error, error)
         print("L_rate:", L_rate)
-
     error = nn.error(pred_y, Y, X.get_shape()[0].value)
     print("error:", error)
-
     with open("pickled_nn.txt", "wb") as pickle_file:
         pickle.dump(nn, pickle_file)
 
