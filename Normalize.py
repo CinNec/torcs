@@ -41,7 +41,7 @@ class Normalize:
                     data[19].append( float(row["TRACK_EDGE_16"]))
                     data[20].append( float(row["TRACK_EDGE_17"]))
                     data[21].append( float(row["ACCELERATION"]))
-                    data[22].append( float(row["BRAKE"]))
+                    data[22].append( round(float(row["BRAKE"])))
                     data[23].append( float(row["STEERING"]))
         self.minarray = []
         self.maxarray = []
@@ -55,7 +55,10 @@ class Normalize:
                 data[i][j] = (data[i][j] - minv)/(maxv-minv)
                 j += 1
             i += 1
-
+        while(i < len(data[21])):
+            if (data[21][i] == data[22][i] and data[21][i] != 0):
+                data[22][i] = 0
+            i += 1
         # To get a full data matrix
         npdata = np.array([
                                 data[0],
