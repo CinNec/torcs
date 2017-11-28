@@ -5,8 +5,8 @@ import pickle
 import feedforward
 import numpy as np
 from feedforward import Ndata
-import sklearn
-from sklearn.neural_network import MLPRegressor
+#import sklearn
+#from sklearn.neural_network import MLPRegressor
 import feedforward_split
 
 
@@ -18,8 +18,8 @@ import feedforward_split
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
-with open("sklearn_nn.txt", "rb") as pickle_file:
-    mlp = pickle.load(pickle_file)
+#with open("sklearn_nn.txt", "rb") as pickle_file:
+#    mlp = pickle.load(pickle_file)
 
 with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
     nn1 = pickle.load(pickle_file)
@@ -52,22 +52,23 @@ class MyDriver(Driver):
 
         nn1_out = nn1.forward_propagation(nn_input)
         rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        nn_input = np.append(nn_input, rounded_out)
+#        a = [0, 1, 2, 11, 12, 13, 14, 10]
+        nn_input = np.array([1.7 if x> 1.7 else x if x>0 else  0  for x in nn_input])
+        print(nn_input)
         nn2_out = nn2.forward_propagation(nn_input)
         command.accelerator= round(nn1_out[0])
         command.brake = round(nn1_out[1])
-        command.steering = nn2_out
+        command.steering = nn2_out[0]
 
 
         # GEAR HANDLER
 
         if carstate.rpm > 8000:
             command.gear = carstate.gear + 1
-        if carstate.rpm < 4000:
+        if carstate.rpm < 3500:
             command.gear = carstate.gear - 1
         if not command.gear:
             command.gear = carstate.gear or 1
-
         # OFFTRACK HANDLER
 
         # reduce acceleration if offtrack
@@ -76,7 +77,7 @@ class MyDriver(Driver):
             if abs(carstate.distance_from_center) >= 1:
                 # off track, reduced grip:
                 acceleration = min(0.4, acceleration)
-            command.accelerator = min(acceleration, 1)
+            command.accelerator = min(acceleration, 1)#
 
         # manually adjust angle
         if carstate.angle > 45:
@@ -85,8 +86,7 @@ class MyDriver(Driver):
         if carstate.angle < -45:
             command.accelerator = 0.4
             command.steering = -1
-
-        # the car is offtrack on the right
+       # the car is offtrack on the right
         if carstate.distance_from_center < -1:
             if carstate.angle >= -90 and carstate.angle <= -30:
                 command.steering = 0
@@ -107,4 +107,7 @@ class MyDriver(Driver):
             elif carstate.angle > 90 or carstate.angle < -90:
                 # steer left
                 command.steering = 1
+
         return command
+
+

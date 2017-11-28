@@ -207,15 +207,15 @@ def train_steer():
     data = Ndata.data
     
     # Optional, pick sensors to train on
-#    a = [0, 1, 2, 9, 10, 11, 12, 13, 14, 15, 21, 22]
-#    X = np.swapaxes(list(data[i] for i in a),0,1)
-    global X
-    X = np.swapaxes(data[:23],0,1)
+    #a = [0, 1, 2, 11, 12, 13, 14, 10]
+    #X = np.swapaxes(list(data[i] for i in a),0,1)
+#    global X
+    X = np.swapaxes(data[:21],0,1)
     global Y
     Y = np.swapaxes(np.array([data[23]]),0,1)
 
     # Create layers(number of neurons, number of inputs)
-    layer4 = Layer(14, 23)
+    layer4 = Layer(14, 21)
     layer5 = Layer(9, 14)
     layer6 = Layer(1, 9)
     
