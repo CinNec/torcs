@@ -57,14 +57,14 @@ class MyDriver(Driver):
         # command.accelerator= round(nn1_out[0])
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
+
         alg = EvoAlg()
-        ea_output = alg.ea_output([nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering])
+        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
+        ea_output = alg.ea_output(ea_input)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
         command.steering = ea_output[2]
-
-
 
         # GEAR HANDLER
 
