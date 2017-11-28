@@ -99,10 +99,10 @@ class MyDriver(Driver):
             command.accelerator = min(acceleration, 1)
 
         # manually adjust angle
-        if carstate.angle > 45:
+        if carstate.angle > 90:
             command.accelerator = 0.4
             command.steering = 1
-        if carstate.angle < -45:
+        if carstate.angle < -90:
             command.accelerator = 0.4
             command.steering = -1
 

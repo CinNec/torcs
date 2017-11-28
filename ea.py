@@ -5,7 +5,12 @@ class EvoAlg():
     def ea_output(self, carstate):
         steering = 0
         command = []
-        c_dist = 0.3
+        c_dist = 0.35
+        print (carstate[0])
+        print (carstate[1])
+        print (carstate[2])
+        print (carstate[3])
+        print (carstate[4])
         if carstate[3] < 0:
             carstate[3] = 1
         if carstate[0] < 0.2 or carstate[3] == 1:
