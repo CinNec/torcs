@@ -14,8 +14,8 @@ class EvoAlg():
             command.append(1)
         else: command.append(0)
         if (carstate[1] < -0.35 or carstate[2] > 0.35) and carstate[4] < 1:
-            steering = carstate[4] + 0.1
+            steering = carstate[4] + 0.02
         if (carstate[1] > 0.35 or carstate[2] < -0.35) and carstate[4] > -1:
-            steering = carstate[4] - 0.1
+            steering = carstate[4] - 0.02
         command.append(steering)
         return command
