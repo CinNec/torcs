@@ -95,36 +95,36 @@ class MyDriver(Driver):
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1 and carstate.distances_from_edge[0] == -1:
                 # off track, reduced grip:
-                acceleration = min(0.4, acceleration)
+                acceleration = min(0.6, acceleration)
             command.accelerator = min(acceleration, 1)
 
         # manually adjust angle
-        if carstate.angle > 90:
-            command.accelerator = 0.4
-            command.steering = 1
-        if carstate.angle < -90:
-            command.accelerator = 0.4
-            command.steering = -1
+        if carstate.angle > 45:
+            command.accelerator = 0.6
+            command.steering = 0.5
+        if carstate.angle < -45:
+            command.accelerator = 0.6
+            command.steering = -0.5
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1 and carstate.distances_from_edge[0] == -1:
-            if carstate.angle >= -90 and carstate.angle <= -30:
+            if carstate.angle >= -45 and carstate.angle <= -30:
                 command.steering = 0
-            elif carstate.angle > -30 and carstate.angle <= 90:
+            elif carstate.angle > -30 and carstate.angle <= 135:
                 # steer left
                 command.steering = 1
-            elif carstate.angle > 90 or carstate.angle < -90:
+            elif carstate.angle > 135 or carstate.angle < -45:
                 # steer right
                 command.steering = -1
 
         # the car is offtrack on the left
         if carstate.distance_from_center > 1 and carstate.distances_from_edge[0] == -1:
-            if carstate.angle >= 30 and carstate.angle <= 90:
+            if carstate.angle >= 30 and carstate.angle <= 45:
                 command.steering = 0
-            elif carstate.angle < 30 and carstate.angle >= -90:
+            elif carstate.angle >= -135 and carstate.angle < 30:
                 # steer right
                 command.steering = -1
-            elif carstate.angle > 90 or carstate.angle < -90:
+            elif carstate.angle > 45 or carstate.angle < -135:
                 # steer left
                 command.steering = 1
 
