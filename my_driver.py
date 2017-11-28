@@ -8,7 +8,7 @@ from feedforward import Ndata
 import sklearn
 from sklearn.neural_network import MLPRegressor
 import feedforward_split
-import ea
+from ea import EvoAlg
 
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
