@@ -50,18 +50,16 @@ class MyDriver(Driver):
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-<<<<<<< HEAD
-        nn1_out = nn1.forward_propagation(nn_input)
-        rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-#        a = [0, 1, 2, 11, 12, 13, 14, 10]
-        nn_input = np.array([1.7 if x> 1.7 else x if x>0 else  0  for x in nn_input])
-        print(nn_input)
-        nn2_out = nn2.forward_propagation(nn_input)
-        command.accelerator= round(nn1_out[0])
-        command.brake = round(nn1_out[1])
-        command.steering = nn2_out[0]
+#         nn1_out = nn1.forward_propagation(nn_input)
+#         rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
+# #        a = [0, 1, 2, 11, 12, 13, 14, 10]
+#         nn_input = np.array([1.7 if x> 1.7 else x if x>0 else  0  for x in nn_input])
+#         print(nn_input)
+#         nn2_out = nn2.forward_propagation(nn_input)
+#         command.accelerator= round(nn1_out[0])
+#         command.brake = round(nn1_out[1])
+#         command.steering = nn2_out[0]
 
-=======
         # nn1_out = nn1.forward_propagation(nn_input)
         # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
         # nn_input = np.append(nn_input, rounded_out)
@@ -81,7 +79,6 @@ class MyDriver(Driver):
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
         command.steering = ea_output[2]
->>>>>>> d606518759797e1e26ddd51c31668041ddd61b02
 
         # GEAR HANDLER
 
@@ -98,13 +95,8 @@ class MyDriver(Driver):
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1 and carstate.distances_from_edge[0] == -1:
                 # off track, reduced grip:
-<<<<<<< HEAD
                 acceleration = min(0.4, acceleration)
-            command.accelerator = min(acceleration, 1)#
-=======
-                acceleration = min(0.3, acceleration)
             command.accelerator = min(acceleration, 1)
->>>>>>> d606518759797e1e26ddd51c31668041ddd61b02
 
         # manually adjust angle
         if carstate.angle > 45:
@@ -113,18 +105,12 @@ class MyDriver(Driver):
         if carstate.angle < -45:
             command.accelerator = 0.4
             command.steering = -1
-<<<<<<< HEAD
-       # the car is offtrack on the right
-        if carstate.distance_from_center < -1:
-            if carstate.angle >= -90 and carstate.angle <= -30:
-=======
 
         # the car is offtrack on the right
         if carstate.distance_from_center < -1 and carstate.distances_from_edge[0] == -1:
-            if carstate.angle >= -90 and carstate.angle <= -10:
->>>>>>> d606518759797e1e26ddd51c31668041ddd61b02
+            if carstate.angle >= -90 and carstate.angle <= -30:
                 command.steering = 0
-            elif carstate.angle > -10 and carstate.angle <= 90:
+            elif carstate.angle > -30 and carstate.angle <= 90:
                 # steer left
                 command.steering = 1
             elif carstate.angle > 90 or carstate.angle < -90:
@@ -132,21 +118,17 @@ class MyDriver(Driver):
                 command.steering = -1
 
         # the car is offtrack on the left
-        if carstate.distance_from_center > 1:
-            if carstate.angle >= 10 and carstate.angle <= 90:
+        if carstate.distance_from_center > 1 and carstate.distances_from_edge[0] == -1:
+            if carstate.angle >= 30 and carstate.angle <= 90:
                 command.steering = 0
-            elif carstate.angle < 10 and carstate.angle >= -90:
+            elif carstate.angle < 30 and carstate.angle >= -90:
                 # steer right
                 command.steering = -1
             elif carstate.angle > 90 or carstate.angle < -90:
                 # steer left
                 command.steering = 1
 
-<<<<<<< HEAD
-=======
         self.drive_step += 1
-
->>>>>>> d606518759797e1e26ddd51c31668041ddd61b02
         return command
 
 
