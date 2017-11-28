@@ -64,8 +64,12 @@ class MyDriver(Driver):
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
 
-        command = output([nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering])
-        self.steering = command[2]
+        ea_output = ea.ea_output([nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering])
+        self.steering = ea_output[2]
+        command.accelerator= ea_output[0]
+        command.brake = ea_output[1]
+        command.steering = ea_output[2]
+
 
 
         # GEAR HANDLER

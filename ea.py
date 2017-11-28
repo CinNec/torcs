@@ -2,7 +2,7 @@ class EvoAlg():
     def __init__(self):
         pop = []
 
-    def output(carstate):
+    def ea_output(carstate):
         steering = 0
         command = []
         if carstate[3] < 0:
