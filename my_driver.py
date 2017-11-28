@@ -60,6 +60,7 @@ class MyDriver(Driver):
 
         alg = EvoAlg()
         ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
+        print (ea_input)
         ea_output = alg.ea_output(ea_input)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
