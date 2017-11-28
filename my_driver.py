@@ -10,12 +10,6 @@ from sklearn.neural_network import MLPRegressor
 import feedforward_split
 import ea
 
-
-# class NeuralNetwork:
-#     def __init__():
-#         print('thing')
-
-# print(feedforward.NeuralNetwork)
 with open("pickled_nn.txt", "rb") as pickle_file:
     nn = pickle.load(pickle_file)
 
@@ -63,8 +57,8 @@ class MyDriver(Driver):
         # command.accelerator= round(nn1_out[0])
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
-
-        ea_output = ea.ea_output([nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering])
+        alg = EvoAlg()
+        ea_output = alg.ea_output([nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering])
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
