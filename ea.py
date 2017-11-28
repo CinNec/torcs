@@ -5,7 +5,7 @@ class EvoAlg():
     def ea_output(self, carstate):
         steering = 0
         command = []
-        c_dist = 0.35
+        c_dist = 0.8
         print (carstate[0])
         print (carstate[1])
         print (carstate[2])
