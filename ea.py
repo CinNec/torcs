@@ -30,7 +30,7 @@ class EvoAlg():
         if carstate[1] < 0.5 - c_dist and carstate[4] < 1:
             if carstate[4] < 0:
                 carstate[4] = 0
-            steering = carstate[4] + 0.006
+            steering = carstate[4] + 0.007
         if carstate[1] > 0.5 + c_dist and carstate[4] > -1:
             if carstate[4] > 0:
                 carstate[4] = 0
