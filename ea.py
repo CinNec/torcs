@@ -17,13 +17,13 @@ class EvoAlg():
         # print (carstate[4])
         if carstate[3] == 0:
             carstate[3] = 1
-        if carstate[0] < 0.12 or carstate[3] == 1:
+        if carstate[0] < 0.13 or carstate[3] >= 0.4:
             command.append(1)
         else: 
             command.append(0)
-        if carstate[0] > 0.12 and carstate[3] < 0.6 and carstate[4] == 0:
+        if carstate[0] > 0.13 and carstate[3] < 0.4 and carstate[4] == 0:
         # if carstate[3] < 1:
-            command.append(0.2)
+            command.append(0.3)
         else: command.append(0)
         # if (carstate[1] < -c_dist or (carstate[2] > angle and carstate[1] <= c_dist and carstate[4] >= 0)) and carstate[4] < 1:
         # if (carstate[1] > c_dist or (carstate[2] < -angle and carstate[1] >= -c_dist and carstate[4] <= 0)) and carstate[4] > -1:
