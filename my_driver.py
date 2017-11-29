@@ -111,7 +111,7 @@ class MyDriver(Driver):
             command.accelerator = min(acceleration, 1)
 
         # the car is offtrack on the right
-        if carstate.distance_from_center < -1 and carstate.distances_from_edge[0] == -1:
+        if carstate.distance_from_center < -0.5 and carstate.distances_from_edge[0] == -1:
             if carstate.angle >= -30 and carstate.angle <= -15:
                 command.steering = 0
             elif carstate.angle > -15 and carstate.angle <= 120:
@@ -122,7 +122,7 @@ class MyDriver(Driver):
                 command.steering = -0.8
 
         # the car is offtrack on the left
-        if carstate.distance_from_center > 1 and carstate.distances_from_edge[0] == -1:
+        if carstate.distance_from_center > 1.5 and carstate.distances_from_edge[0] == -1:
             if carstate.angle >= 15 and carstate.angle <= 30:
                 command.steering = 0
             elif carstate.angle >= -120 and carstate.angle < 15:
