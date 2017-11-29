@@ -7,8 +7,8 @@ class EvoAlg():
     def ea_output(self, carstate):
         steering = 0
         command = []
-        c_dist = 0.6
-        angle = 0.1
+        c_dist = 0.7
+        angle = 0.2
         carstate[2] = carstate[2] / float(180)
         print (carstate[0])
         print (carstate[1])
@@ -26,10 +26,14 @@ class EvoAlg():
         else: command.append(0)
         if (carstate[1] < -c_dist or (carstate[2] > angle and carstate[1] <= c_dist and carstate[4] >= 0)) and carstate[4] < 1:
         # if (carstate[1] < -c_dist or carstate[2] > 0.05) and carstate[4] < 1:
+            if carstate[4] < 0:
+                carstate[4] = 0
             steering = carstate[4] + 0.008
             command[0] = 0.5
-        elif (carstate[1] > c_dist or (carstate[2] < -angle and carstate[1] >= -c_dist and carstate[4] <= 0)) and carstate[4] > -1:
+        if (carstate[1] > c_dist or (carstate[2] < -angle and carstate[1] >= -c_dist and carstate[4] <= 0)) and carstate[4] > -1:
         # elif (carstate[1] > c_dist or carstate[2] < -0.05) and carstate[4] > -1:
+            if carstate[4] > 0:
+                carstate[4] = 0
             steering = carstate[4] - 0.008
             command[0] = 0.5
         command.append(steering)
