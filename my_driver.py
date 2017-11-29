@@ -143,7 +143,7 @@ class MyDriver(Driver):
         if self.stuck:
             print ('Stuck')
             command.gear = -1
-            command.steering = -command.steering
+            command.steering = 0
             self.stuck_counter += 1
             if self.stuck_counter == self.stuck_recovery:
                 self.stuck = False

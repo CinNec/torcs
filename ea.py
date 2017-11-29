@@ -10,7 +10,7 @@ class EvoAlg():
         c_dist = 0.5
         angle = 0.01
         carstate[2] = carstate[2] / float(180)
-        print (carstate[0])
+        # print (carstate[0])
         # print (carstate[1])
         # print (carstate[2])
         # print (carstate[3])
@@ -18,10 +18,10 @@ class EvoAlg():
         if carstate[3] == 0:
             carstate[3] = 1
         if carstate[0] < 0.12 or carstate[3] == 1:
-            command.append(0.8)
+            command.append(1)
         else: 
             command.append(0)
-        if carstate[0] > 0.12 and carstate[3] < 1 and carstate[4] == 0:
+        if carstate[0] > 0.12 and carstate[3] < 0.6 and carstate[4] == 0:
         # if carstate[3] < 1:
             command.append(0.5)
         else: command.append(0)
@@ -44,5 +44,5 @@ class EvoAlg():
                 carstate[4] = 0
             steering = carstate[4] - 0.008
         command.append(steering)
-        # print (command)
+        print (command)
         return command
