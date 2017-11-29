@@ -107,7 +107,7 @@ class MyDriver(Driver):
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1 and carstate.distances_from_edge[0] == -1:
                 # off track, reduced grip:
-                acceleration = min(0.3, acceleration)
+                acceleration = min(0.2, acceleration)
             command.accelerator = min(acceleration, 1)
 
         # the car is offtrack on the right
@@ -116,10 +116,10 @@ class MyDriver(Driver):
                 command.steering = 0
             elif carstate.angle > -30 and carstate.angle <= 135:
                 # steer left
-                command.steering = 0.5
+                command.steering = 0.8
             elif carstate.angle > 135 or carstate.angle < -45:
                 # steer right
-                command.steering = -0.5
+                command.steering = -0.8
 
         # the car is offtrack on the left
         if carstate.distance_from_center > 1 and carstate.distances_from_edge[0] == -1:
@@ -127,10 +127,10 @@ class MyDriver(Driver):
                 command.steering = 0
             elif carstate.angle >= -135 and carstate.angle < 30:
                 # steer right
-                command.steering = -0.5
+                command.steering = -0.8
             elif carstate.angle > 45 or carstate.angle < -135:
                 # steer left
-                command.steering = 0.5
+                command.steering = 0.8
 
         # stuck car handler
         if (nn_input[0] < 0.01 and nn_input[0] > -0.01 and command.accelerator > 0.2 and command.gear != -1 and not self.stuck):
@@ -142,7 +142,7 @@ class MyDriver(Driver):
         if self.stuck:
             print ('Stuck')
             command.gear = -1
-            command.steering = 0
+            command.steering = -command.steering
             self.stuck_counter += 1
             if self.stuck_counter == self.stuck_recovery:
                 self.stuck = False
