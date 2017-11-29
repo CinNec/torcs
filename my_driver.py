@@ -30,7 +30,7 @@ class MyDriver(Driver):
         self.steering = 0
         self.stuck_step = 0
         self.stuck_counter = 0
-        self.stuck_recovery = 100
+        self.stuck_recovery = 200
         self.stuck_period = 250
         self.stuck = False
 
