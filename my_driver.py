@@ -100,7 +100,7 @@ class MyDriver(Driver):
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1 and carstate.distances_from_edge[0] == -1:
                 # off track, reduced grip:
-                acceleration = min(0.6, acceleration)
+                acceleration = min(0.3, acceleration)
             command.accelerator = min(acceleration, 1)
 
         # manually adjust angle
