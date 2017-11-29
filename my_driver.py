@@ -93,13 +93,13 @@ class MyDriver(Driver):
         if not command.gear:
             command.gear = carstate.gear or 1
 
-        # manually adjust angle
-        if carstate.angle > 45:
-            command.accelerator = 0.6
-            command.steering = 0.5
-        if carstate.angle < -45:
-            command.accelerator = 0.6
-            command.steering = -0.5
+        # # manually adjust angle
+        # if carstate.angle > 45:
+        #     command.accelerator = 0.6
+        #     command.steering = 0.5
+        # if carstate.angle < -45:
+        #     command.accelerator = 0.6
+        #     command.steering = -0.5
 
         # OFFTRACK HANDLER
         # reduce acceleration if offtrack
