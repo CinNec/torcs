@@ -28,6 +28,10 @@ class MyDriver(Driver):
     def __init__(self):
         self.drive_step = 0
         self.steering = 0
+        self.stuck_step = 0
+        self.stuck_recovery = 200
+        self.stuck_period = 100
+        self.stuck = False
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -127,6 +131,21 @@ class MyDriver(Driver):
             elif carstate.angle > 45 or carstate.angle < -135:
                 # steer left
                 command.steering = 1
+
+        if (nn_input[0] < 0.1 and command.accelerator > 0.2):
+            self.stuck_step += 1
+            if self.stuck_step > stuck_period:
+                self.stuck = True
+        else:
+            self.stuck_step = 0
+
+        stuck_counter = 0
+        while self.stuck:
+            command.accelerator = -1
+            if stuck_counter == self.stuck_recovery:
+                self.stuck = False
+
+
 
         self.drive_step += 1
         return command
