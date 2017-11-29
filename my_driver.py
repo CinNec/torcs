@@ -134,7 +134,7 @@ class MyDriver(Driver):
                 command.steering = 1
 
         # stuck car handler
-        if (nn_input[0] < 0.1 and command.accelerator > 0.2):
+        if (nn_input[0] < 0.1 and command.accelerator > 0.2 and command.steering != 0):
             self.stuck_step += 1
             if self.stuck_step > stuck_period:
                 self.stuck = True
