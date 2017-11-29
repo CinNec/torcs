@@ -31,7 +31,7 @@ class MyDriver(Driver):
         self.stuck_step = 0
         self.stuck_counter = 0
         self.stuck_recovery = 150
-        self.stuck_period = 250
+        self.stuck_period = 300
         self.stuck = False
 
     # Override the `drive` method to create your own driver
