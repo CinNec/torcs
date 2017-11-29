@@ -24,11 +24,11 @@ class EvoAlg():
             command.append(1)
         else: command.append(0)
         # if (carstate[1] < -c_dist or (carstate[2] > 0.35 and carstate[1] <= c_dist and carstate[4] >= 0)) and carstate[4] < 1:
-        if (carstate[1] < -c_dist or carstate[2] > 0.2) and carstate[4] < 1:
+        if (carstate[1] < -c_dist or carstate[2] > 0.35) and carstate[4] < 1:
             steering = carstate[4] + 0.005
             command[0] = 0.5
         # if (carstate[1] > c_dist or (carstate[2] < -0.35 and carstate[1] >= -c_dist and carstate[4] <= 0)) and carstate[4] > -1:
-        elif (carstate[1] > c_dist or carstate[2] < -0.2) and carstate[4] > -1:
+        elif (carstate[1] > c_dist or carstate[2] < -0.35) and carstate[4] > -1:
             steering = carstate[4] - 0.005
             command[0] = 0.5
         command.append(steering)
