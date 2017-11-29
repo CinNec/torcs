@@ -17,11 +17,11 @@ class EvoAlg():
         # print (carstate[4])
         if carstate[3] == 0:
             carstate[3] = 1
-        if carstate[0] < 0.11 or carstate[3] >= 0.4:
+        if carstate[0] < 0.11 or carstate[3] >= carstate[0]/0.2:
             command.append(1)
         else: 
             command.append(0)
-        if carstate[0] > 0.11 and carstate[3] < 0.4 and carstate[4] == 0:
+        if carstate[0] > 0.11 and carstate[3] < carstate[0]/0.2 and carstate[4] == 0:
         # if carstate[3] < 1:
             command.append(carstate[0]/0.2)
         else: command.append(0)
