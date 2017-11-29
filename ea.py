@@ -10,11 +10,11 @@ class EvoAlg():
         c_dist = 0.5
         angle = 0.01
         carstate[2] = carstate[2] / float(180)
-        print (carstate[0])
-        print (carstate[1])
-        print (carstate[2])
+        # print (carstate[0])
+        # print (carstate[1])
+        # print (carstate[2])
         print (carstate[3])
-        print (carstate[4])
+        # print (carstate[4])
         if carstate[3] < 0:
             carstate[3] = 1
         if carstate[0] < 0.2 or carstate[3] == 1:
