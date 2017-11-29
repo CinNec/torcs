@@ -29,6 +29,7 @@ class MyDriver(Driver):
         self.drive_step = 0
         self.steering = 0
         self.stuck_step = 0
+        self.stuck_counter = 0
         self.stuck_recovery = 200
         self.stuck_period = 100
         self.stuck = False
@@ -132,20 +133,19 @@ class MyDriver(Driver):
                 # steer left
                 command.steering = 1
 
+        # stuck car handler
         if (nn_input[0] < 0.1 and command.accelerator > 0.2):
             self.stuck_step += 1
             if self.stuck_step > stuck_period:
                 self.stuck = True
         else:
             self.stuck_step = 0
-
-        stuck_counter = 0
-        while self.stuck:
+        if self.stuck:
             command.accelerator = -1
+            self.stuck_counter += 1
             if stuck_counter == self.stuck_recovery:
                 self.stuck = False
-
-
+                self.stuck_counter = 0
 
         self.drive_step += 1
         return command
