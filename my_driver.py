@@ -31,7 +31,7 @@ class MyDriver(Driver):
         self.stuck_step = 0
         self.stuck_counter = 0
         self.stuck_recovery = 100
-        self.stuck_period = 150
+        self.stuck_period = 250
         self.stuck = False
 
     # Override the `drive` method to create your own driver
@@ -111,27 +111,27 @@ class MyDriver(Driver):
             command.accelerator = 0.6
             command.steering = -0.5
 
-        # the car is offtrack on the right
-        if carstate.distance_from_center < -1 and carstate.distances_from_edge[0] == -1:
-            if carstate.angle >= -45 and carstate.angle <= -30:
-                command.steering = 0
-            elif carstate.angle > -30 and carstate.angle <= 135:
-                # steer left
-                command.steering = 1
-            elif carstate.angle > 135 or carstate.angle < -45:
-                # steer right
-                command.steering = -1
+        # # the car is offtrack on the right
+        # if carstate.distance_from_center < -1 and carstate.distances_from_edge[0] == -1:
+        #     if carstate.angle >= -45 and carstate.angle <= -30:
+        #         command.steering = 0
+        #     elif carstate.angle > -30 and carstate.angle <= 135:
+        #         # steer left
+        #         command.steering = 1
+        #     elif carstate.angle > 135 or carstate.angle < -45:
+        #         # steer right
+        #         command.steering = -1
 
-        # the car is offtrack on the left
-        if carstate.distance_from_center > 1 and carstate.distances_from_edge[0] == -1:
-            if carstate.angle >= 30 and carstate.angle <= 45:
-                command.steering = 0
-            elif carstate.angle >= -135 and carstate.angle < 30:
-                # steer right
-                command.steering = -1
-            elif carstate.angle > 45 or carstate.angle < -135:
-                # steer left
-                command.steering = 1
+        # # the car is offtrack on the left
+        # if carstate.distance_from_center > 1 and carstate.distances_from_edge[0] == -1:
+        #     if carstate.angle >= 30 and carstate.angle <= 45:
+        #         command.steering = 0
+        #     elif carstate.angle >= -135 and carstate.angle < 30:
+        #         # steer right
+        #         command.steering = -1
+        #     elif carstate.angle > 45 or carstate.angle < -135:
+        #         # steer left
+        #         command.steering = 1
 
         # stuck car handler
         if (nn_input[0] < 0.01 and nn_input[0] > -0.01 and command.accelerator > 0.2 and command.gear != -1 and not self.stuck):
