@@ -10,7 +10,7 @@ class EvoAlg():
         c_dist = 0.5
         angle = 0.01
         carstate[2] = carstate[2] / float(180)
-        # print (carstate[0])
+        print (carstate[0])
         # print (carstate[1])
         # print (carstate[2])
         # print (carstate[3])
@@ -44,5 +44,5 @@ class EvoAlg():
                 carstate[4] = 0
             steering = carstate[4] - 0.008
         command.append(steering)
-        print (command)
+        # print (command)
         return command
