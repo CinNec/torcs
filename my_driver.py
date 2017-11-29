@@ -141,9 +141,10 @@ class MyDriver(Driver):
         else:
             self.stuck_step = 0
         if self.stuck:
+            print ('Stuck')
             command.accelerator = -1
             self.stuck_counter += 1
-            if stuck_counter == self.stuck_recovery:
+            if self.stuck_counter == self.stuck_recovery:
                 self.stuck = False
                 self.stuck_counter = 0
 
