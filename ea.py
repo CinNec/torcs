@@ -7,8 +7,8 @@ class EvoAlg():
     def ea_output(self, carstate):
         steering = 0
         command = []
-        c_dist = 0.9
-        angle = 0.5
+        c_dist = 0.7
+        angle = 0.01
         carstate[2] = carstate[2] / float(180)
         print (carstate[0])
         print (carstate[1])
