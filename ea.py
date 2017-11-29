@@ -44,5 +44,5 @@ class EvoAlg():
                 carstate[4] = 0
             steering = carstate[4] - 0.008
         command.append(steering)
-        print (command)
+        # print (command)
         return command

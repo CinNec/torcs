@@ -43,7 +43,7 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
-
+        print (nn_input[1])
         # nn_output = nn.forward_propagation(nn_input)
         # command.accelerator= round(nn_output[0])
         # command.brake = round(nn_output[1])
@@ -108,7 +108,7 @@ class MyDriver(Driver):
         if acceleration > 0:
             if abs(carstate.distance_from_center) >= 1 and carstate.distances_from_edge[0] == -1:
                 # off track, reduced grip:
-                acceleration = min(0.4, acceleration)
+                acceleration = min(0.3, acceleration)
             command.accelerator = min(acceleration, 1)
 
         # the car is offtrack on the right
