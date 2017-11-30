@@ -50,15 +50,15 @@ class MyDriver(Driver):
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-#         nn1_out = nn1.forward_propagation(nn_input)
-#         rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-# #        a = [0, 1, 2, 11, 12, 13, 14, 10]
-#         nn_input = np.array([1.7 if x> 1.7 else x if x>0 else  0  for x in nn_input])
-#         print(nn_input)
-#         nn2_out = nn2.forward_propagation(nn_input)
-#         command.accelerator= round(nn1_out[0])
-#         command.brake = round(nn1_out[1])
-#         command.steering = nn2_out[0]
+        nn1_out = nn1.forward_propagation(nn_input)
+        rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
+        a = [0, 1, 2, 11, 12, 13, 14, 10]
+        nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
+        print(nn_input)
+        nn2_out = nn2.forward_propagation(nn_input)
+        command.accelerator= round(nn1_out[0])
+        command.brake = round(nn1_out[1])
+        command.steering = nn2_out[0]
 
         # nn1_out = nn1.forward_propagation(nn_input)
         # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
@@ -68,17 +68,17 @@ class MyDriver(Driver):
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
 
-        alg = EvoAlg()
-        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
-        print(nn_input[0])
-        print(nn_input[1])
-        print(nn_input[2])
-        print(nn_input[12])
-        ea_output = alg.ea_output(ea_input)
-        self.steering = ea_output[2]
-        command.accelerator= ea_output[0]
-        command.brake = ea_output[1]
-        command.steering = ea_output[2]
+#        alg = EvoAlg()
+#        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
+#        print(nn_input[0])
+#        print(nn_input[1])
+#        print(nn_input[2])
+#        print(nn_input[12])
+#        ea_output = alg.ea_output(ea_input)
+#        self.steering = ea_output[2]
+#        command.accelerator= ea_output[0]
+#        command.brake = ea_output[1]
+#        command.steering = ea_output[2]
 
         # GEAR HANDLER
 
