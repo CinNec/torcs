@@ -19,7 +19,7 @@ class EvoAlg():
 
         min_speed = max(very_min_speed, carstate['sensor_ahead'] / min_speed_divisor)
         breaking_speed_parameter = 0.2
-        turn_flag = 0.6
+        turn_flag = 0.25
 
         # print (carstate['speed'])
         # print (carstate['distance'])
@@ -64,5 +64,5 @@ class EvoAlg():
                 carstate['steering'] = 0
             steering = carstate['steering'] - steer_amount
         command.append(steering)
-        
+
         return command
