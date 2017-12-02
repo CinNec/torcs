@@ -37,7 +37,7 @@ class MyDriver(Driver):
         # EA variables
         self.speeds = []
         self.sensors = []
-        self.pop_size = 10
+        self.pop_size = 2
         self.drivers = []
         self.driver = -1
         self.test_step = 1000
@@ -120,7 +120,7 @@ class MyDriver(Driver):
                 self.drive_test = False
                 if len(self.evaluations) == len(self.drivers):
                     # self.drivers = EA.next_gen(self.drivers, self.evaluations)
-                    json.dump(self.drivers, open('drivers.json', 'w'))
+                    EA.save_drivers(self.drivers)
                     print("saved drivers")
         else:
             driver = {}
