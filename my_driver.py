@@ -118,6 +118,9 @@ class MyDriver(Driver):
                 self.speeds = []
                 self.sensors = []
                 self.drive_test = False
+                if len(self.evaluations) == len(self.drivers):
+                    # self.drivers = EA.next_gen(self.drivers, self.evaluations)
+                    json.dump(self.drivers, open('drivers.json', 'w'))
         else:
             driver = {}
 
