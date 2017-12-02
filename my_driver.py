@@ -43,7 +43,7 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
-            
+
         # nn_output = nn.forward_propagation(nn_input)
         # command.accelerator= round(nn_output[0])
         # command.brake = round(nn_output[1])
@@ -90,7 +90,7 @@ class MyDriver(Driver):
         # print(nn_input[1])
         # print(nn_input[2])
         # print(nn_input[12])
-        ea_output = alg.ea_output(ea_input)
+        ea_output = alg.ea_output(ea_input, 1)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
