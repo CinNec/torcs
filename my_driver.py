@@ -77,15 +77,20 @@ class MyDriver(Driver):
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
 
+        # EVOLUTIONARY ALGORITHM
+
         EA = EvoAlg()
 
         ea_input = {}
         ea_input['speed'] = nn_input[0]
         ea_input['distance'] = nn_input[1]
-        ea_input['angle'] = nn_input[2]
+        ea_input['angle'] = nn_input[2] / float(180)
         ea_input['sensor_ahead'] = nn_input[12]
         ea_input['steering'] = self.steering
-        
+        # 0 means out of the track or against a wall and it's set to 1
+        if carstate['sensor_ahead'] == 0:
+            carstate['sensor_ahead'] = 1
+
         if self.drive_step % 1000 == 0:
             print(EA.evaluate(self.speeds, self.sensors))
             self.speeds = []

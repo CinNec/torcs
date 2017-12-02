@@ -17,8 +17,8 @@ class EvoAlg():
         if len(driver) == 0:
             driver = self.default_driver
         steering = 0
+        
         command = []
-        carstate['angle'] = carstate['angle'] / float(180)
 
         min_speed_divisor = driver['min_speed_divisor']
         very_min_speed = driver['very_min_speed']
@@ -37,9 +37,6 @@ class EvoAlg():
         # print (carstate['sensor_ahead'])
         # print (carstate['steering'])
 
-        # 0 means out of the track or against a wall and it's set to 1
-        if carstate['sensor_ahead'] == 0:
-            carstate['sensor_ahead'] = 1
         # ACCELERATION
         # the car accelerates if it's current speed is less than the minimal one or the turn is enough far w.r.t. the current speed
         if carstate['speed'] < min_speed or carstate['sensor_ahead'] >= carstate['speed'] / speed_sensor_divisor:
