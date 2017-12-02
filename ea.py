@@ -1,4 +1,5 @@
 import json
+import math
 
 class EvoAlg():
     def __init__(self):
