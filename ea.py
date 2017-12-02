@@ -1,5 +1,6 @@
 import json
 import math
+import random
 
 class EvoAlg():
     def __init__(self):
@@ -7,11 +8,27 @@ class EvoAlg():
         self.default_driver['min_speed_divisor'] = 1.8
         self.default_driver['very_min_speed'] = 0.07
         self.default_driver['speed_sensor_divisor'] = 0.2
+        self.default_driver['breaking_speed_parameter'] = 0.2
         self.default_driver['angle_stop_breaking'] = 8
         self.default_driver['distance_from_center'] = 0.1
         self.default_driver['max_angle'] = 0.01
         self.default_driver['steer_step'] = 0.007
-        pop = []
+
+    def create_population(self, size):
+        population = []
+        for i in range(size):
+            driver = {}
+            driver['min_speed_divisor'] = random.uniform(1,3)
+            driver['very_min_speed'] = random.uniform(0.05,0.15)
+            driver['speed_sensor_divisor'] = random.uniform(0.15,0.25)
+            driver['breaking_speed_parameter'] = random.uniform(0.15,0.25)
+            driver['angle_stop_breaking'] = random.uniform(3,12)
+            driver['distance_from_center'] = random.uniform(0.05,0.25)
+            driver['max_angle'] = random.uniform(0.005,0.02)
+            driver['steer_step'] = random.uniform(0.003,0.012)
+            population.append(driver)
+        return population
+
 
     def ea_output(self, carstate, driver = {}):
         if len(driver) == 0:
@@ -23,13 +40,13 @@ class EvoAlg():
         min_speed_divisor = driver['min_speed_divisor']
         very_min_speed = driver['very_min_speed']
         speed_sensor_divisor = driver['speed_sensor_divisor']
+        breaking_speed_parameter = driver['breaking_speed_parameter']
         angle_stop_breaking = driver['angle_stop_breaking']
         c_dist = driver['distance_from_center']
         max_angle = driver['max_angle']
         steer_step = driver['steer_step']
 
         min_speed = max(very_min_speed, carstate['sensor_ahead'] / min_speed_divisor)
-        breaking_speed_parameter = 0.2
 
         # print (carstate['speed'])
         # print (carstate['distance'])
@@ -78,7 +95,7 @@ class EvoAlg():
         evaluation = 0
         for i, speed in enumerate(speeds):
             # evaluation += speed * (15 / math.exp(sensors[i]))
-            evaluation += speed * 10 * (-0.5 * sensors[i] + 1)
+            evaluation += 10 * speed * (-0.5 * sensors[i] + 1)
         if evaluation > 0:
             evaluation = evaluation / float(len(speeds))
         return evaluation

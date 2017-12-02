@@ -37,6 +37,14 @@ class MyDriver(Driver):
         # EA variables
         self.speeds = []
         self.sensors = []
+        self.pop_size = 10
+        self.drivers = []
+        self.driver = -1
+        self.driver_step = 1000
+        self.drive_test = False
+        self.min_speed_change = 0.1
+        self.test_length = 1000
+        self.evaluations = []
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -91,15 +99,37 @@ class MyDriver(Driver):
         if ea_input['sensor_ahead'] == 0:
             ea_input['sensor_ahead'] = 1
 
-        if self.drive_step % 1000 == 0:
-            print(EA.evaluate(self.speeds, self.sensors))
-            self.speeds = []
-            self.sensors = []
-        else:
+        if self.drive_step == 0:
+            self.drivers = EA.create_population(self.pop_size)
+
+        if ea_input['speed'] > self.min_speed_change and self.driver_step == self.test_length:
+            self.driver = (self.driver + 1) % len(self.drivers)
+            self.driver_step = 0
+            self.drive_test = True
+
+        if self.drive_test:
+            driver = self.drivers[self.driver]
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
+            self.drive_step += 1
+            if self.drive_step == self.test_length:
+                self.evaluations.append(EA.evaluate(self.speeds, self.sensors))
+                print self.evaluations[self.driver]
+                self.speeds = []
+                self.sensors = []
+                self.drive_test = False
+        else:
+            driver = {}        
 
-        ea_output = EA.ea_output(ea_input)
+        # if self.drive_step % 1000 == 0:
+        #     print(EA.evaluate(self.speeds, self.sensors))
+        #     self.speeds = []
+        #     self.sensors = []
+        # else:
+        #     self.speeds.append(ea_input['speed'])
+        #     self.sensors.append(ea_input['sensor_ahead'])
+
+        ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
