@@ -40,7 +40,7 @@ class MyDriver(Driver):
         self.pop_size = 10
         self.drivers = []
         self.driver = -1
-        self.driver_step = 1000
+        self.test_step = 1000
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_length = 1000
@@ -104,16 +104,15 @@ class MyDriver(Driver):
 
         if ea_input['speed'] > self.min_speed_change and self.driver_step == self.test_length:
             self.driver = (self.driver + 1) % len(self.drivers)
-            self.driver_step = 0
+            self.test_step = 0
             self.drive_test = True
 
         if self.drive_test:
             driver = self.drivers[self.driver]
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
-            self.drive_step += 1
-            print(self.drive_step)
-            if self.drive_step == self.test_length:
+            self.test_step += 1
+            if self.test_step == self.test_length:
                 self.evaluations.append(EA.evaluate(self.speeds, self.sensors))
                 print(self.evaluations[self.driver])
                 self.speeds = []
