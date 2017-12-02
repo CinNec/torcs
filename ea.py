@@ -16,7 +16,7 @@ class EvoAlg():
         angle_stop_steering = 10
         # print (carstate[0])
         # print (carstate[1])
-        # print (carstate[2])
+        print (carstate[2])
         # print (carstate[3])
         # print (carstate[4])
         if carstate[3] == 0:
