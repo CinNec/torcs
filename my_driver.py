@@ -112,6 +112,7 @@ class MyDriver(Driver):
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
             self.drive_step += 1
+            print(self.drive_step)
             if self.drive_step == self.test_length:
                 self.evaluations.append(EA.evaluate(self.speeds, self.sensors))
                 print(self.evaluations[self.driver])
