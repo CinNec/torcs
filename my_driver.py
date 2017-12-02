@@ -76,7 +76,8 @@ class MyDriver(Driver):
         # command.accelerator= round(nn1_out[0])
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
-
+        
+        EA = EvoAlg()
         if self.drive_step % 1000 == 0:
             print(EA.evaluate(self.speeds, self.sensors))
             self.speeds = []
@@ -92,7 +93,6 @@ class MyDriver(Driver):
         ea_input['sensor_ahead'] = nn_input[12]
         ea_input['steering'] = self.steering
 
-        EA = EvoAlg()
         ea_output = EA.ea_output(ea_input)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
