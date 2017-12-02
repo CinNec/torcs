@@ -24,7 +24,7 @@ class EvoAlg():
         # print (carstate['speed'])
         # print (carstate['distance'])
         # print (carstate['angle'])
-        # print (carstate['sensor_ahead'])
+        print (carstate['sensor_ahead'])
         # print (carstate['steering'])
 
         # 0 means out of the track or against a wall and it's set to 1
