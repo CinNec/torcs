@@ -14,7 +14,7 @@ class EvoAlg():
         min_speed_divisor = 1.8
         steer_amount = 0.007
         angle_stop_steering = 10
-        min_speed = max(0.05, carstate[3] / min_speed_divisor)
+        min_speed = max(0.07, carstate[3] / min_speed_divisor)
         # print (carstate[0])
         # print (carstate[1])
         # print (carstate[2])
