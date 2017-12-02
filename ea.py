@@ -11,7 +11,7 @@ class EvoAlg():
 
         c_dist = 0.1
         angle = 0.01
-        min_speed = 0.11
+        min_speed = carstate[3]/4
         steer_amount = 0.007
         angle_stop_steering = 10
         # print (carstate[0])
@@ -21,11 +21,11 @@ class EvoAlg():
         # print (carstate[4])
         if carstate[3] == 0:
             carstate[3] = 1
-        if carstate[0] < carstate[3]/10 or carstate[3] >= carstate[0]/0.2:
+        if carstate[0] < min_speed or carstate[3] >= carstate[0]/0.2:
             command.append(1)
         else: 
             command.append(0)
-        if carstate[0] > carstate[3]/10 and carstate[3] < carstate[0]/0.2 and abs(carstate[4]) < angle_stop_steering * steer_amount:
+        if carstate[0] > min_speed and carstate[3] < carstate[0]/0.2 and abs(carstate[4]) < angle_stop_steering * steer_amount:
         # if carstate[3] < 1:
             command.append(carstate[0]/0.2)
         else: command.append(0)
