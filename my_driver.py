@@ -37,7 +37,7 @@ class MyDriver(Driver):
         # EA variables
         self.speeds = []
         self.sensors = []
-        self.pop_size = 20
+        self.pop_size = 10
         self.drivers = []
         self.driver = -1
         self.test_step = 1000
