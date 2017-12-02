@@ -102,7 +102,7 @@ class MyDriver(Driver):
         if self.drive_step == 0:
             self.drivers = EA.create_population(self.pop_size)
 
-        if ea_input['speed'] > self.min_speed_change and self.driver_step == self.test_length:
+        if ea_input['speed'] > self.min_speed_change and self.test_step == self.test_length:
             self.driver = (self.driver + 1) % len(self.drivers)
             self.test_step = 0
             self.drive_test = True
