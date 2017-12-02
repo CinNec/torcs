@@ -77,25 +77,27 @@ class MyDriver(Driver):
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
 
-        EA = EvoAlg()
-        ea_input = {}
-        ea_input['speed'] = nn_input[0]
-        ea_input['distance'] = nn_input[1]
-        ea_input['angle'] = nn_input[2]
-        ea_input['sensor_ahead'] = nn_input[12]
-        ea_input['steering'] = self.steering
-        ea_output = EA.ea_output(ea_input)
-        self.steering = ea_output[2]
-        command.accelerator= ea_output[0]
-        command.brake = ea_output[1]
-        command.steering = ea_output[2]
-        if drive_step % 1000 == 0:
+        if self.drive_step % 1000 == 0:
             print(EA.evaluate(self.speeds, self.sensors))
             self.speeds = []
             self.sensors = []
         else:
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
+
+        ea_input = {}
+        ea_input['speed'] = nn_input[0]
+        ea_input['distance'] = nn_input[1]
+        ea_input['angle'] = nn_input[2]
+        ea_input['sensor_ahead'] = nn_input[12]
+        ea_input['steering'] = self.steering
+
+        EA = EvoAlg()
+        ea_output = EA.ea_output(ea_input)
+        self.steering = ea_output[2]
+        command.accelerator= ea_output[0]
+        command.brake = ea_output[1]
+        command.steering = ea_output[2]
 
         # GEAR HANDLER
 
