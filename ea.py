@@ -80,6 +80,7 @@ class EvoAlg():
         evaluation = 0
         for i, speed in enumerate(speeds):
             evaluation += speed * (15 / math.exp(sensors[i]))
-        evaluation = evaluation / float(len(speeds))
+        if evaluation > 0:
+            evaluation = evaluation / float(len(speeds))
         return evaluation
 
