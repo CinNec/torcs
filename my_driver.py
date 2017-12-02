@@ -121,6 +121,7 @@ class MyDriver(Driver):
                 if len(self.evaluations) == len(self.drivers):
                     # self.drivers = EA.next_gen(self.drivers, self.evaluations)
                     json.dump(self.drivers, open('drivers.json', 'w'))
+                    print("saved drivers")
         else:
             driver = {}
 
