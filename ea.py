@@ -76,10 +76,10 @@ class EvoAlg():
 
         return command
 
-        def evaluate(self, speeds, sensors):
-            evaluation = 0
-            for i, speed in enumerate(speeds):
-                evaluation += speed * (15 / math.exp(sensors[i]))
-            evaluation = evaluation / float(len(speeds))
-            return evaluation
+    def evaluate(self, speeds, sensors):
+        evaluation = 0
+        for i, speed in enumerate(speeds):
+            evaluation += speed * (15 / math.exp(sensors[i]))
+        evaluation = evaluation / float(len(speeds))
+        return evaluation
 
