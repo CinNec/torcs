@@ -12,7 +12,9 @@ class EvoAlg():
         self.default_driver['steer_step'] = 0.007
         pop = []
 
-    def ea_output(self, carstate, driver = self.default_driver):
+    def ea_output(self, carstate, driver = {}):
+        if len(driver) == 0:
+            driver = self.default_driver
         steering = 0
         command = []
         carstate['angle'] = carstate['angle'] / float(180)
@@ -74,7 +76,7 @@ class EvoAlg():
 
         return command
 
-        def evaluate(speeds, sensors):
+        def evaluate(self, speeds, sensors):
             evaluation = 0
             for i, speed in enumerate(speeds):
                 evaluation += speed * (15 / math.exp(sensors[i]))
