@@ -11,7 +11,7 @@ class EvoAlg():
 
         c_dist = 0.1
         angle = 0.01
-        min_speed = carstate[3]/4
+        min_speed = carstate[3]/2
         steer_amount = 0.007
         angle_stop_steering = 10
         # print (carstate[0])
