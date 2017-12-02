@@ -43,13 +43,13 @@ class EvoAlg():
             command.append(carstate['speed'] / breaking_speed_parameter)
         else: command.append(0)
         # STEERING (the minimal steering is always -1 and the maximal is 1)
-        # the car steers left if it's at the right of the center of the track by a certain amount and the car is not facing a turn
-        if carstate['distance'] < 0.5 - c_dist and carstate['sensor_ahead'] > turn_flag and carstate['steering'] < 1:
+        # the car steers left if it's at the right of the center of the track by a certain amount
+        if carstate['distance'] < 0.5 - c_dist and carstate['steering'] < 1:
             if carstate['steering'] < 0:
                 carstate['steering'] = 0
             steering = carstate['steering'] + steer_amount
-        # the car steers right if it's at the left of the center of the track by a certain amount and the car is not facing a turn
-        if carstate['distance'] > 0.5 + c_dist and carstate['sensor_ahead'] > turn_flag and carstate['steering'] > -1:
+        # the car steers right if it's at the left of the center of the track by a certain amount
+        if carstate['distance'] > 0.5 + c_dist and carstate['steering'] > -1:
             if carstate['steering'] > 0:
                 carstate['steering'] = 0
             steering = carstate['steering'] - steer_amount
