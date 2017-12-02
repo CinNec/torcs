@@ -88,8 +88,8 @@ class MyDriver(Driver):
         ea_input['sensor_ahead'] = nn_input[12]
         ea_input['steering'] = self.steering
         # 0 means out of the track or against a wall and it's set to 1
-        if carstate['sensor_ahead'] == 0:
-            carstate['sensor_ahead'] = 1
+        if ea_input['sensor_ahead'] == 0:
+            ea_input['sensor_ahead'] = 1
 
         if self.drive_step % 1000 == 0:
             print(EA.evaluate(self.speeds, self.sensors))
