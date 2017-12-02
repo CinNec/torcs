@@ -114,20 +114,12 @@ class MyDriver(Driver):
             self.drive_step += 1
             if self.drive_step == self.test_length:
                 self.evaluations.append(EA.evaluate(self.speeds, self.sensors))
-                print self.evaluations[self.driver]
+                print(self.evaluations[self.driver])
                 self.speeds = []
                 self.sensors = []
                 self.drive_test = False
         else:
-            driver = {}        
-
-        # if self.drive_step % 1000 == 0:
-        #     print(EA.evaluate(self.speeds, self.sensors))
-        #     self.speeds = []
-        #     self.sensors = []
-        # else:
-        #     self.speeds.append(ea_input['speed'])
-        #     self.sensors.append(ea_input['sensor_ahead'])
+            driver = {}
 
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
