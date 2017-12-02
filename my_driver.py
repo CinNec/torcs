@@ -100,8 +100,8 @@ class MyDriver(Driver):
         if ea_input['sensor_ahead'] == 0:
             ea_input['sensor_ahead'] = 1
 
-        if self.drive_step % 100 == 0:
-            print(carstate.opponents)
+        # if self.drive_step % 100 == 0:
+        #     print(carstate.opponents)
 
         if self.drive_step == 0:
             self.drivers = EA.create_population(self.pop_size)
@@ -119,6 +119,7 @@ class MyDriver(Driver):
             self.test_step += 1
             if self.test_step == self.test_length:
                 self.evaluations.append(EA.evaluate(self.speeds, self.sensors, self.steerings))
+                print(self.drivers[self.driver])
                 print(self.evaluations[self.driver])
                 self.speeds = []
                 self.sensors = []
