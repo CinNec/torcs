@@ -17,7 +17,7 @@ class EvoAlg():
         if len(driver) == 0:
             driver = self.default_driver
         steering = 0
-        
+
         command = []
 
         min_speed_divisor = driver['min_speed_divisor']
@@ -77,7 +77,8 @@ class EvoAlg():
     def evaluate(self, speeds, sensors):
         evaluation = 0
         for i, speed in enumerate(speeds):
-            evaluation += speed * (15 / math.exp(sensors[i]))
+            # evaluation += speed * (15 / math.exp(sensors[i]))
+            evaluation += speed * -5 * sensors[i] + 1
         if evaluation > 0:
             evaluation = evaluation / float(len(speeds))
         return evaluation
