@@ -99,6 +99,8 @@ class MyDriver(Driver):
         if ea_input['sensor_ahead'] == 0:
             ea_input['sensor_ahead'] = 1
 
+        print(carstate.opponents)
+
         if self.drive_step == 0:
             self.drivers = EA.create_population(self.pop_size)
 
@@ -121,7 +123,6 @@ class MyDriver(Driver):
                 if len(self.evaluations) == len(self.drivers):
                     # self.drivers = EA.next_gen(self.drivers, self.evaluations)
                     EA.save_drivers(self.drivers)
-                    print("saved drivers")
         else:
             driver = {}
 
