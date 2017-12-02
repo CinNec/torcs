@@ -37,6 +37,7 @@ class MyDriver(Driver):
         # EA variables
         self.speeds = []
         self.sensors = []
+        self.steerings = []
         self.pop_size = 10
         self.drivers = []
         self.driver = -1
@@ -114,12 +115,14 @@ class MyDriver(Driver):
             driver = self.drivers[self.driver]
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
+            self.steerings.append(self.steering)
             self.test_step += 1
             if self.test_step == self.test_length:
-                self.evaluations.append(EA.evaluate(self.speeds, self.sensors))
+                self.evaluations.append(EA.evaluate(self.speeds, self.sensors, self.steerings))
                 print(self.evaluations[self.driver])
                 self.speeds = []
                 self.sensors = []
+                self.steerings = []
                 self.drive_test = False
                 if len(self.evaluations) == len(self.drivers):
                     # self.drivers = EA.next_gen(self.drivers, self.evaluations)
