@@ -43,6 +43,7 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
+            
         # nn_output = nn.forward_propagation(nn_input)
         # command.accelerator= round(nn_output[0])
         # command.brake = round(nn_output[1])
@@ -54,15 +55,15 @@ class MyDriver(Driver):
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-        nn1_out = nn1.forward_propagation(nn_input)
-        rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        a = [0, 1, 2, 11, 12, 13, 14, 10]
-        nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
-        print(nn_input)
-        nn2_out = nn2.forward_propagation(nn_input)
-        command.accelerator= round(nn1_out[0])
-        command.brake = round(nn1_out[1])
-        command.steering = nn2_out[0]
+        # nn1_out = nn1.forward_propagation(nn_input)
+        # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
+        # a = [0, 1, 2, 11, 12, 13, 14, 10]
+        # nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
+        # print(nn_input)
+        # nn2_out = nn2.forward_propagation(nn_input)
+        # command.accelerator= round(nn1_out[0])
+        # command.brake = round(nn1_out[1])
+        # command.steering = nn2_out[0]
 
         # nn1_out = nn1.forward_propagation(nn_input)
         # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
@@ -72,7 +73,6 @@ class MyDriver(Driver):
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
 
-<<<<<<< HEAD
 #        alg = EvoAlg()
 #        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
 #        print(nn_input[0])
@@ -84,7 +84,6 @@ class MyDriver(Driver):
 #        command.accelerator= ea_output[0]
 #        command.brake = ea_output[1]
 #        command.steering = ea_output[2]
-=======
         alg = EvoAlg()
         ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
         # print(nn_input[0])
@@ -96,7 +95,6 @@ class MyDriver(Driver):
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
         command.steering = ea_output[2]
->>>>>>> 52b992f4316eb0b8ca9276637b0dd60667589ba7
 
         # GEAR HANDLER
 
