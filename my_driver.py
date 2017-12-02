@@ -99,7 +99,8 @@ class MyDriver(Driver):
         if ea_input['sensor_ahead'] == 0:
             ea_input['sensor_ahead'] = 1
 
-        print(carstate.opponents)
+        if self.drive_step % 100 == 0:
+            print(carstate.opponents)
 
         if self.drive_step == 0:
             self.drivers = EA.create_population(self.pop_size)
