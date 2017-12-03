@@ -120,7 +120,7 @@ class MyDriver(Driver):
             self.test_step += 1
             if self.test_step == self.test_length:
                 self.evaluations.append(EA.evaluate(self.speeds, self.sensors, self.steerings))
-                print(self.drivers[self.driver])
+                # print(self.drivers[self.driver])
                 print(self.evaluations[self.driver])
                 self.speeds = []
                 self.sensors = []
