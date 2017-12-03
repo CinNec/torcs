@@ -112,7 +112,8 @@ class MyDriver(Driver):
             self.drive_test = True
 
         if self.drive_test:
-            driver = self.drivers[self.driver]
+            # driver = self.drivers[self.driver]
+            driver = {}
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
             self.steerings.append(self.steering)
