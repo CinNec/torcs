@@ -42,10 +42,10 @@ class MyDriver(Driver):
         self.pop_size = 10
         self.drivers = []
         self.driver = -1
-        self.test_step = 1000
+        self.test_step = 20
+        self.test_length = 20
         self.drive_test = False
         self.min_speed_change = 0.1
-        self.test_length = 1000
         self.test_best = False
 
     # Override the `drive` method to create your own driver
@@ -133,7 +133,8 @@ class MyDriver(Driver):
                 if len(self.drivers) == self.tests:
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
-                    self.drivers = EA.next_gen(self.drivers)
+                    if self.tests <=20
+                        self.drivers = EA.next_gen()
         else:
             driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
 
