@@ -133,7 +133,7 @@ class MyDriver(Driver):
                 if len(self.drivers) == self.tests:
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
-                    if self.tests <=20
+                    if self.tests <= 20:
                         self.drivers = EA.next_gen()
         else:
             driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
