@@ -109,8 +109,8 @@ class EvoAlg():
         return offspring
 
     def generate_offspring(self, drivers):
-        k = len(drivers) / 3
-        t_number = len(drivers) / 2
+        k = int(len(drivers) / 3)
+        t_number = int(len(drivers) / 2)
         remaining_drivers = drivers[:]
         mating_pool = []
         for t in range(t_number):
