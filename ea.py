@@ -129,4 +129,5 @@ class EvoAlg():
     def save_drivers(self, drivers):
         json.dump(drivers, open('drivers.json', 'w'))
 
-next_gen()
+ea = EvoAlg()
+ea.next_gen()
