@@ -122,6 +122,9 @@ class EvoAlg():
             tournament = []
         for driver in mating_pool:
             print(driver['evaluation'])
+        print('\n')
+        for driver in drivers:
+            print(driver['evaluation'])            
 
     def load_drivers(self):
         return json.load(open('drivers.json','r'))
