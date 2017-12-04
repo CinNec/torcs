@@ -142,7 +142,7 @@ class MyDriver(Driver):
         else:
             # driver = {}
             driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
-            if drive_step == 0:
+            if self.drive_step == 0:
                 print('min_speed_divisor: ' + str(driver['min_speed_divisor']))
                 print('very_min_speed: ' + str(driver['very_min_speed']))
                 print('speed_sensor_divisor: ' + str(driver['speed_sensor_divisor']))
