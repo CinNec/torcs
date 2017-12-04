@@ -116,7 +116,7 @@ class EvoAlg():
             for i in range(k):
                 tournament.append(random.choice(t_drivers))
                 t_drivers.remove(tournament[i])
-            tournament.sort(key=lambda x: x.evaluation, reverse=True)
+            tournament.sort(key=lambda x: x['evaluation'], reverse=True)
             remaining_drivers.remove(tournament[0])
             mating_pool.append(tournament[0])
             tournament = []
