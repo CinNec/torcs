@@ -26,6 +26,7 @@ class EvoAlg():
             driver['distance_from_center'] = random.uniform(0.05,0.25)
             driver['max_angle'] = random.uniform(0.005,0.02)
             driver['steer_step'] = random.uniform(0.003,0.012)
+            driver['evaluation'] = 0
             population.append(driver)
         return population
 
@@ -99,6 +100,30 @@ class EvoAlg():
         if evaluation > 0:
             evaluation = evaluation / float(len(speeds))
         return evaluation
+
+    def next_gen(self):
+        drivers = load_drivers()
+
+    def generate_offspring(self, drivers):
+        k = len(drivers) / 3
+        t_number = len(drivers) / 2
+        remaining_drivers = drivers[:]
+        mating_pool = []
+        for t in range(t_number):
+            tournament = []
+            t_drivers = remaining_drivers[:]
+            for i in range(k):
+                tournament.append(random.choice(t_drivers))
+                t_drivers.remove(tournament[i])
+            tournament.sort(key=lambda x: x.evaluation, reverse=True)
+            remaining_drivers.remove(tournament[0])
+            mating_pool.append(tournament[0])
+            tournament = []
+        for driver in mating_pool:
+            print(driver.evaluation)
+
+    def load_drivers(self):
+        return json.load(open('drivers.json','r'))
 
     def save_drivers(self, drivers):
         json.dump(drivers, open('drivers.json', 'w'))

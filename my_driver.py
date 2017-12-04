@@ -35,6 +35,7 @@ class MyDriver(Driver):
         self.stuck = False
 
         # EA variables
+        self.tests = 0
         self.speeds = []
         self.sensors = []
         self.steerings = []
@@ -45,7 +46,6 @@ class MyDriver(Driver):
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_length = 1000
-        self.evaluations = []
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -110,23 +110,26 @@ class MyDriver(Driver):
             self.driver = (self.driver + 1) % len(self.drivers)
             self.test_step = 0
             self.drive_test = True
+            self.tests += 1
 
         if self.drive_test:
-            # driver = self.drivers[self.driver]
-            driver = {}
+            driver = self.drivers[self.driver]
+            # driver = {}
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
             self.steerings.append(self.steering)
             self.test_step += 1
             if self.test_step == self.test_length:
-                self.evaluations.append(EA.evaluate(self.speeds, self.sensors, self.steerings))
+                # self.evaluations.append(EA.evaluate(self.speeds, self.sensors, self.steerings))
                 # print(self.drivers[self.driver])
-                print(self.evaluations[self.driver])
+                evaluation = EA.evaluate(self.speeds, self.sensors, self.steerings)
+                print(evaluation)
+                self.drivers[self.driver]['evaluation'] = evaluation
                 self.speeds = []
                 self.sensors = []
                 self.steerings = []
                 self.drive_test = False
-                if len(self.evaluations) == len(self.drivers):
+                if len(self.drivers) == self.tests:
                     # self.drivers = EA.next_gen(self.drivers, self.evaluations)
                     EA.save_drivers(self.drivers)
         else:
