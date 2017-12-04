@@ -142,6 +142,16 @@ class MyDriver(Driver):
         else:
             # driver = {}
             driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
+            if drive_step == 0:
+                print('min_speed_divisor: ' + str(driver['min_speed_divisor']))
+                print('very_min_speed: ' + str(driver['very_min_speed']))
+                print('speed_sensor_divisor: ' + str(driver['speed_sensor_divisor']))
+                print('breaking_speed_parameter: ' + str(driver['breaking_speed_parameter']))
+                print('angle_stop_breaking: ' + str(driver['angle_stop_breaking']))
+                print('distance_from_center: ' + str(driver['distance_from_center']))
+                print('max_angle: ' + str(driver['max_angle']))
+                print('steer_step: ' + str(driver['steer_step']))
+                print('evaluation: ' + str(driver['evaluation']))
 
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
