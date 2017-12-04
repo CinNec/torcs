@@ -132,8 +132,15 @@ class MyDriver(Driver):
                 self.steerings = []
                 self.drive_test = False
                 if self.tests % self.pop_size == 0:
-                    print(self.drivers[self.driver]['evaluation'])
                     print(self.drivers[0]['evaluation'])
+                    print(self.drivers[1]['evaluation'])
+                    print(self.drivers[2]['evaluation'])
+                    print(self.drivers[3]['evaluation'])
+                    print(self.drivers[4]['evaluation'])
+                    print(self.drivers[5]['evaluation'])
+                    print(self.drivers[6]['evaluation'])
+                    print(self.drivers[7]['evaluation'])
+                    print(self.drivers[self.driver]['evaluation'])
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
                     # if self.tests <= 20:

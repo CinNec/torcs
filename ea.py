@@ -179,7 +179,7 @@ class EvoAlg():
         return json.load(open('drivers.json','r'))
 
     def save_drivers(self, drivers):
-        print(drivers[0]['evaluation'])
+        # print(drivers[0]['evaluation'])
         json.dump(drivers, open('drivers.json', 'w'))
 
 ea = EvoAlg()
