@@ -34,18 +34,19 @@ class MyDriver(Driver):
         self.stuck_period = 300
         self.stuck = False
 
-        # EA variables
+        # fixed EA variables
         self.tests = 0
         self.speeds = []
         self.sensors = []
         self.steerings = []
-        self.pop_size = 10 # must be 10 or more
         self.drivers = []
         self.driver = 0
         self.test_step = 0
-        self.test_length = 20
         self.drive_test = False
         self.min_speed_change = 0.1
+        # changeable EA variables
+        self.pop_size = 10 # must be 10 or more
+        self.test_length = 20
         self.test_best = False
         self.generations = 0
 
@@ -137,8 +138,9 @@ class MyDriver(Driver):
                     print('drivers saved')
                     if self.tests <= self.pop_size * self.generations:
                         self.drivers = EA.next_gen()
+        elif not self.test_best:
+            driver = {}
         else:
-            # driver = {}
             driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
             if self.drive_step == 0:
                 print('min_speed_divisor: ' + str(driver['min_speed_divisor']))
