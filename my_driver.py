@@ -126,7 +126,6 @@ class MyDriver(Driver):
                 evaluation = EA.evaluate(self.speeds, self.sensors, self.steerings)
                 print(evaluation)
                 self.drivers[self.driver]['evaluation'] = evaluation
-                print(self.drivers[self.driver]['evaluation'])
                 self.speeds = []
                 self.sensors = []
                 self.steerings = []
