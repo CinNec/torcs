@@ -39,11 +39,11 @@ class MyDriver(Driver):
         self.speeds = []
         self.sensors = []
         self.steerings = []
-        self.pop_size = 10
+        self.pop_size = 10 # must be 10 or more
         self.drivers = []
         self.driver = 0
         self.test_step = 0
-        self.test_length = 2000
+        self.test_length = 20
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_best = False
