@@ -103,6 +103,7 @@ class EvoAlg():
 
     def next_gen(self):
         drivers = load_drivers()
+        generate offsprint(drivers)
 
     def generate_offspring(self, drivers):
         k = len(drivers) / 3
@@ -128,3 +129,4 @@ class EvoAlg():
     def save_drivers(self, drivers):
         json.dump(drivers, open('drivers.json', 'w'))
 
+next_gen()
