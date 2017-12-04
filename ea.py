@@ -121,7 +121,7 @@ class EvoAlg():
             mating_pool.append(tournament[0])
         best_drivers = len(mating_pool)
         for i in range(best_drivers):
-            for j in range(i, best_drivers):
+            for j in range(i+1, best_drivers):
                 print(i,j)
 
 
