@@ -41,8 +41,8 @@ class MyDriver(Driver):
         self.steerings = []
         self.pop_size = 10
         self.drivers = []
-        self.driver = -1
-        self.test_step = 20
+        self.driver = 0
+        self.test_step = 0
         self.test_length = 20
         self.drive_test = False
         self.min_speed_change = 0.1
@@ -110,10 +110,7 @@ class MyDriver(Driver):
                 self.drivers = EA.create_population(self.pop_size)
                 print('population created')
 
-        if ea_input['speed'] > self.min_speed_change and self.test_step == self.test_length and not self.test_best:
-            self.driver = (self.driver + 1) % len(self.drivers)
-            self.test_step = 0
-            self.tests += 1
+        if ea_input['speed'] > self.min_speed_change and self.test_step == 0 and not self.test_best:
             self.drive_test = True
 
         if self.drive_test:
@@ -131,16 +128,11 @@ class MyDriver(Driver):
                 self.sensors = []
                 self.steerings = []
                 self.drive_test = False
+                self.driver = (self.driver + 1) % len(self.drivers)
+                self.test_step = 0
+                self.tests += 1
                 if self.tests % self.pop_size == 0:
                     print(self.drivers[0]['evaluation'])
-                    print(self.drivers[1]['evaluation'])
-                    print(self.drivers[2]['evaluation'])
-                    print(self.drivers[3]['evaluation'])
-                    print(self.drivers[4]['evaluation'])
-                    print(self.drivers[5]['evaluation'])
-                    print(self.drivers[6]['evaluation'])
-                    print(self.drivers[7]['evaluation'])
-                    print(self.drivers[self.driver]['evaluation'])
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
                     # if self.tests <= 20:
