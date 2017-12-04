@@ -103,7 +103,9 @@ class EvoAlg():
 
     def next_gen(self):
         drivers = self.load_drivers()
-        self.generate_offspring(drivers)
+        offspring = self.generate_offspring(drivers)
+        self.save_drivers(offspring)
+        print('offspring saved')
 
     def generate_offspring(self, drivers):
         k = len(drivers) / 3
@@ -120,16 +122,57 @@ class EvoAlg():
             remaining_drivers.remove(tournament[0])
             mating_pool.append(tournament[0])
         best_drivers = len(mating_pool)
+        couples = []
         for i in range(best_drivers):
             for j in range(i+1, best_drivers):
-                print(i,j)
-
+                couples.append((i,j))
+        offspring = []
+        for i in range(len(drivers)):
+            couple = random.choice(couples)
+            couples.remove(couple)
+            driver = self.crossover(mating_pool[couple[0]], mating_pool[couple[1]])
+            offspring.append(driver)
+        return offspring
 
         # for driver in mating_pool:
         #     print(driver['evaluation'])
         # print('\n')
         # for driver in drivers:
-        #     print(driver['evaluation'])            
+        #     print(driver['evaluation']) 
+
+    def crossover(self, driver1, driver2):
+        driver = {}
+        driver['min_speed_divisor'] = (driver1['min_speed_divisor'] + driver2['min_speed_divisor']) / float(2)
+        driver['very_min_speed'] = (driver1['very_min_speed'] + driver2['very_min_speed']) / float(2)
+        driver['speed_sensor_divisor'] = (driver1['speed_sensor_divisor'] + driver2['speed_sensor_divisor']) / float(2)
+        driver['breaking_speed_parameter'] = (driver1['breaking_speed_parameter'] + driver2['breaking_speed_parameter']) / float(2)
+        driver['angle_stop_breaking'] = (driver1['angle_stop_breaking'] + driver2['angle_stop_breaking']) / float(2)
+        driver['distance_from_center'] = (driver1['distance_from_center'] + driver2['distance_from_center']) / float(2)
+        driver['max_angle'] = (driver1['max_angle'] + driver2['max_angle']) / float(2)
+        driver['steer_step'] = (driver1['steer_step'] + driver2['steer_step']) / float(2)
+        driver['evaluation'] = 0
+        driver = self.mutation(driver)
+        return driver
+
+    def mutation(self, driver):
+        mutation_probability = 0.05
+        if random.uniform(0,1) < mutation probability:
+            driver['min_speed_divisor'] = random.uniform(1,3)
+        if random.uniform(0,1) < mutation probability:
+            driver['very_min_speed'] = random.uniform(0.05,0.15)
+        if random.uniform(0,1) < mutation probability:
+            driver['speed_sensor_divisor'] = random.uniform(0.15,0.25)
+        if random.uniform(0,1) < mutation probability:
+            driver['breaking_speed_parameter'] = random.uniform(0.15,0.25)
+        if random.uniform(0,1) < mutation probability:
+            driver['angle_stop_breaking'] = random.uniform(3,12)
+        if random.uniform(0,1) < mutation probability:
+            driver['distance_from_center'] = random.uniform(0.05,0.25)
+        if random.uniform(0,1) < mutation probability:
+            driver['max_angle'] = random.uniform(0.005,0.02)
+        if random.uniform(0,1) < mutation probability:
+            driver['steer_step'] = random.uniform(0.003,0.012)
+        return driver
 
     def load_drivers(self):
         return json.load(open('drivers.json','r'))
