@@ -106,6 +106,7 @@ class EvoAlg():
         offspring = self.generate_offspring(drivers)
         self.save_drivers(offspring)
         print('offspring saved')
+        return offspring
 
     def generate_offspring(self, drivers):
         k = len(drivers) / 3
