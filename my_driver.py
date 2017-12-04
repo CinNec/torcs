@@ -135,7 +135,7 @@ class MyDriver(Driver):
                     print('drivers saved')
                     self.drivers = EA.next_gen(self.drivers)
         else:
-            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)
+            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
 
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
