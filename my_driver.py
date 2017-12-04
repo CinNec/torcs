@@ -130,7 +130,7 @@ class MyDriver(Driver):
                 self.sensors = []
                 self.steerings = []
                 self.drive_test = False
-                if len(self.drivers) == self.tests:
+                if self.tests % self.pop_size == 0:
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
                     if self.tests <= 20:
