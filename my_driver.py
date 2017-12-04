@@ -46,7 +46,7 @@ class MyDriver(Driver):
         self.test_length = 2000
         self.drive_test = False
         self.min_speed_change = 0.1
-        self.test_best = False
+        self.test_best = True
         self.generations = 0
 
     # Override the `drive` method to create your own driver
@@ -106,7 +106,7 @@ class MyDriver(Driver):
         # if self.drive_step % 100 == 0:
         #     print(carstate.opponents)
 
-        if self.tests % self.pop_size == 0:
+        if self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best):
             self.drivers = EA.load_drivers()
             if len(self.drivers) != self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
