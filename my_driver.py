@@ -104,7 +104,7 @@ class MyDriver(Driver):
         # if self.drive_step % 100 == 0:
         #     print(carstate.opponents)
 
-        if self.tests % len(self.drivers) == 0:
+        if self.tests % self.pop_size == 0:
             self.drivers = EA.load_drivers()
             if len(self.drivers) < self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
