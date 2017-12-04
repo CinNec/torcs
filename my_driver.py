@@ -47,7 +47,7 @@ class MyDriver(Driver):
         # changeable EA variables
         self.pop_size = 10 # must be 10 or more
         self.test_length = 1000
-        self.test_best = False
+        self.test_best = True
         self.generations = 0
 
     # Override the `drive` method to create your own driver
