@@ -102,8 +102,8 @@ class EvoAlg():
         return evaluation
 
     def next_gen(self):
-        drivers = load_drivers()
-        generate_offspring(drivers)
+        drivers = self.load_drivers()
+        self.generate_offspring(drivers)
 
     def generate_offspring(self, drivers):
         k = len(drivers) / 3
