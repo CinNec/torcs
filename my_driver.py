@@ -43,7 +43,7 @@ class MyDriver(Driver):
         self.drivers = []
         self.driver = 0
         self.test_step = 0
-        self.test_length = 2000
+        self.test_length = 20
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_best = True
@@ -117,7 +117,6 @@ class MyDriver(Driver):
 
         if self.drive_test:
             driver = self.drivers[self.driver]
-            # driver = {}
             self.speeds.append(ea_input['speed'])
             self.sensors.append(ea_input['sensor_ahead'])
             self.steerings.append(self.steering)
@@ -134,7 +133,6 @@ class MyDriver(Driver):
                 self.test_step = 0
                 self.tests += 1
                 if self.tests % self.pop_size == 0:
-                    print(self.drivers[0]['evaluation'])
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
                     if self.tests <= self.pop_size * self.generations:
