@@ -103,15 +103,18 @@ class MyDriver(Driver):
         # if self.drive_step % 100 == 0:
         #     print(carstate.opponents)
 
-        if self.drive_step == 0:
-            # self.drivers = EA.create_population(self.pop_size)
+        if self.tests % len(self.drivers) == 0:
             self.drivers = EA.load_drivers()
+            if len(self.drivers) < self.pop_size:
+                self.drivers = EA.create_population(self.pop_size)
 
-        if ea_input['speed'] > self.min_speed_change and self.test_step == self.test_length:
+        self.test_best = False
+
+        if ea_input['speed'] > self.min_speed_change and self.test_step == self.test_length and not self.test_best:
             self.driver = (self.driver + 1) % len(self.drivers)
             self.test_step = 0
-            self.drive_test = True
             self.tests += 1
+            self.drive_test = True
 
         if self.drive_test:
             driver = self.drivers[self.driver]
@@ -133,7 +136,7 @@ class MyDriver(Driver):
                     print('drivers saved')
                     self.drivers = EA.next_gen(self.drivers)
         else:
-            driver = {}
+            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)
 
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
