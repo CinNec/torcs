@@ -47,6 +47,7 @@ class MyDriver(Driver):
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_best = False
+        self.generations = 10
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -135,7 +136,7 @@ class MyDriver(Driver):
                     print(self.drivers[0]['evaluation'])
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
-                    if self.tests <= 20:
+                    if self.tests <= 10 * self.generations:
                         self.drivers = EA.next_gen()
         else:
             driver = {}
