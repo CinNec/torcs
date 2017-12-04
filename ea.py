@@ -157,21 +157,21 @@ class EvoAlg():
 
     def mutation(self, driver):
         mutation_probability = 0.05
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['min_speed_divisor'] = random.uniform(1,3)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['very_min_speed'] = random.uniform(0.05,0.15)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['speed_sensor_divisor'] = random.uniform(0.15,0.25)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['breaking_speed_parameter'] = random.uniform(0.15,0.25)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['angle_stop_breaking'] = random.uniform(3,12)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['distance_from_center'] = random.uniform(0.05,0.25)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['max_angle'] = random.uniform(0.005,0.02)
-        if random.uniform(0,1) < mutation probability:
+        if random.uniform(0,1) < mutation_probability:
             driver['steer_step'] = random.uniform(0.003,0.012)
         return driver
 
