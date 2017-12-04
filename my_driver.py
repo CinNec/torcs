@@ -46,7 +46,7 @@ class MyDriver(Driver):
         self.test_length = 2000
         self.drive_test = False
         self.min_speed_change = 0.1
-        self.test_best = False
+        self.test_best = True
         self.generations = 0
 
     # Override the `drive` method to create your own driver
