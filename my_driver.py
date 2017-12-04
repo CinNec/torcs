@@ -43,7 +43,7 @@ class MyDriver(Driver):
         self.drivers = []
         self.driver = 0
         self.test_step = 0
-        self.test_length = 20
+        self.test_length = 2000
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_best = False
