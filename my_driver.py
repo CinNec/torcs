@@ -46,7 +46,7 @@ class MyDriver(Driver):
         self.test_length = 2000
         self.drive_test = False
         self.min_speed_change = 0.1
-        self.test_best = True
+        self.test_best = False
         self.generations = 0
 
     # Override the `drive` method to create your own driver
@@ -137,7 +137,7 @@ class MyDriver(Driver):
                     print(self.drivers[0]['evaluation'])
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
-                    if self.tests <= 10 * self.generations:
+                    if self.tests <= self.pop_size * self.generations:
                         self.drivers = EA.next_gen()
         else:
             # driver = {}
