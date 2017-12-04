@@ -103,7 +103,7 @@ class EvoAlg():
 
     def next_gen(self):
         drivers = load_drivers()
-        generate offsprint(drivers)
+        generate_offspring(drivers)
 
     def generate_offspring(self, drivers):
         k = len(drivers) / 3
