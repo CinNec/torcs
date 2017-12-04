@@ -108,6 +108,7 @@ class MyDriver(Driver):
             self.drivers = EA.load_drivers()
             if len(self.drivers) < self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
+                print('population created')
 
         if ea_input['speed'] > self.min_speed_change and self.test_step == self.test_length and not self.test_best:
             self.driver = (self.driver + 1) % len(self.drivers)
@@ -131,13 +132,15 @@ class MyDriver(Driver):
                 self.steerings = []
                 self.drive_test = False
                 if self.tests % self.pop_size == 0:
+                    print(self.drivers[self.driver]['evaluation'])
                     print(self.drivers[0]['evaluation'])
                     EA.save_drivers(self.drivers)
                     print('drivers saved')
-                    if self.tests <= 20:
-                        self.drivers = EA.next_gen()
+                    # if self.tests <= 20:
+                    #     self.drivers = EA.next_gen()
         else:
-            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
+            driver = {}
+            # driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
 
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
@@ -193,7 +196,7 @@ class MyDriver(Driver):
                 # steer left
                 command.steering = 0.8
 
-        # stuck car handler
+        # STUCK CAR HANDLER
         if (nn_input[0] < 0.001 and nn_input[0] > -0.001 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
             self.stuck_step += 1
             if self.stuck_step > self.stuck_period:
