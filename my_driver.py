@@ -47,7 +47,7 @@ class MyDriver(Driver):
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_best = False
-        self.generations = 10
+        self.generations = 0
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -66,6 +66,7 @@ class MyDriver(Driver):
 
         # mlp_output = mlp.predict([nn_input])[0]
         # # print(mlp_output)
+
         # command.accelerator= round(mlp_output[0])
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
@@ -107,7 +108,7 @@ class MyDriver(Driver):
 
         if self.tests % self.pop_size == 0:
             self.drivers = EA.load_drivers()
-            if len(self.drivers) < self.pop_size:
+            if len(self.drivers) != self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
                 print('population created')
 
@@ -139,8 +140,8 @@ class MyDriver(Driver):
                     if self.tests <= 10 * self.generations:
                         self.drivers = EA.next_gen()
         else:
-            driver = {}
-            # driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
+            # driver = {}
+            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
 
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
