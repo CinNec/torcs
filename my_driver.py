@@ -46,6 +46,7 @@ class MyDriver(Driver):
         self.drive_test = False
         self.min_speed_change = 0.1
         self.test_length = 1000
+        self.test_best = False
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -107,8 +108,6 @@ class MyDriver(Driver):
             self.drivers = EA.load_drivers()
             if len(self.drivers) < self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
-
-        self.test_best = False
 
         if ea_input['speed'] > self.min_speed_change and self.test_step == self.test_length and not self.test_best:
             self.driver = (self.driver + 1) % len(self.drivers)
