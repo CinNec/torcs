@@ -132,6 +132,7 @@ class MyDriver(Driver):
                 if len(self.drivers) == self.tests:
                     # self.drivers = EA.next_gen(self.drivers, self.evaluations)
                     EA.save_drivers(self.drivers)
+                    print('drivers saved')
         else:
             driver = {}
 
