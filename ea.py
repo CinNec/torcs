@@ -119,12 +119,17 @@ class EvoAlg():
             tournament = sorted(tournament, key=lambda x: x['evaluation'], reverse=True)
             remaining_drivers.remove(tournament[0])
             mating_pool.append(tournament[0])
-            tournament = []
-        for driver in mating_pool:
-            print(driver['evaluation'])
-        print('\n')
-        for driver in drivers:
-            print(driver['evaluation'])            
+        best_drivers = len(mating_pool)
+        for i in range(best_drivers):
+            for j in range(i, best_drivers):
+                print(i,j)
+
+
+        # for driver in mating_pool:
+        #     print(driver['evaluation'])
+        # print('\n')
+        # for driver in drivers:
+        #     print(driver['evaluation'])            
 
     def load_drivers(self):
         return json.load(open('drivers.json','r'))
