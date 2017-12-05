@@ -154,7 +154,6 @@ class MyDriver(Driver):
                 print('evaluation: ' + str(driver['evaluation']))
 
         ea_output = EA.ea_output(ea_input, driver)
-		print(opponents)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
