@@ -47,8 +47,8 @@ class MyDriver(Driver):
         # changeable EA variables
         self.pop_size = 10 # must be 10 or more
         self.test_length = 1000
-        self.test_best = True
-        self.generations = 0
+        self.test_best = False
+        self.generations = 15
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -212,10 +212,10 @@ class MyDriver(Driver):
             self.stuck_step += 1
             if self.stuck_step > self.stuck_period:
                 self.stuck = True
+                print ('Stuck')
         else:
             self.stuck_step = 0
         if self.stuck:
-            print ('Stuck')
             command.gear = -1
             command.steering = -command.steering
             self.stuck_counter += 1
