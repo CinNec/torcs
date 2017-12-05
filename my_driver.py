@@ -46,9 +46,9 @@ class MyDriver(Driver):
         self.min_speed_change = 0.1
         # changeable EA variables
         self.pop_size = 10 # must be 10 or more
-        self.test_length = 10
+        self.test_length = 2000
         self.test_best = False
-        self.generations = 1
+        self.generations = 10
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
