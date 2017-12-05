@@ -30,9 +30,25 @@ class MyDriver(Driver):
         self.steering = 0
         self.stuck_step = 0
         self.stuck_counter = 0
-        self.stuck_recovery = 150
+        self.stuck_recovery = 200
         self.stuck_period = 300
         self.stuck = False
+
+        # fixed EA variables
+        self.tests = 0
+        self.speeds = []
+        self.sensors = []
+        self.steerings = []
+        self.drivers = []
+        self.driver = 0
+        self.test_step = 0
+        self.drive_test = False
+        self.min_speed_change = 0.1
+        # changeable EA variables
+        self.pop_size = 10 # must be 10 or more
+        self.test_length = 1000
+        self.test_best = False
+        self.generations = 15
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -43,6 +59,7 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
+
         # nn_output = nn.forward_propagation(nn_input)
         # command.accelerator= round(nn_output[0])
         # command.brake = round(nn_output[1])
@@ -50,19 +67,21 @@ class MyDriver(Driver):
 
         # mlp_output = mlp.predict([nn_input])[0]
         # # print(mlp_output)
+
         # command.accelerator= round(mlp_output[0])
         # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
         # command.steering = mlp_output[2]
 
-        nn1_out = nn1.forward_propagation(nn_input)
-        rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        a = [0, 1, 2, 11, 12, 13, 14, 10]
-        nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
-        #print(nn_input)
-        nn2_out = nn2.forward_propagation(nn_input)
-        command.accelerator= round(nn1_out[0])
-        command.brake = round(nn1_out[1])
-        command.steering = nn2_out[0]
+
+        # nn1_out = nn1.forward_propagation(nn_input)
+        # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
+        # a = [0, 1, 2, 11, 12, 13, 14, 10]
+        # nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
+        # print(nn_input)
+        # nn2_out = nn2.forward_propagation(nn_input)
+        # command.accelerator= round(nn1_out[0])
+        # command.brake = round(nn1_out[1])
+        # command.steering = nn2_out[0]
 
         # nn1_out = nn1.forward_propagation(nn_input)
         # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
@@ -94,6 +113,75 @@ class MyDriver(Driver):
 #        command.accelerator= ea_output[0]
 #        command.brake = ea_output[1]
 #        command.steering = ea_output[2]
+        # EVOLUTIONARY ALGORITHM
+
+        EA = EvoAlg()
+
+        ea_input = {}
+        ea_input['speed'] = nn_input[0]
+        ea_input['distance'] = nn_input[1]
+        ea_input['angle'] = nn_input[2] / float(180)
+        ea_input['sensor_ahead'] = nn_input[12]
+        ea_input['steering'] = self.steering
+        # 0 means out of the track or against a wall and it's set to 1
+        if ea_input['sensor_ahead'] == 0:
+            ea_input['sensor_ahead'] = 1
+
+        # if self.drive_step % 100 == 0:
+        #     print(carstate.opponents)
+
+        if self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best):
+            self.drivers = EA.load_drivers()
+            if len(self.drivers) != self.pop_size:
+                self.drivers = EA.create_population(self.pop_size)
+                print('population created')
+
+        if ea_input['speed'] > self.min_speed_change and self.test_step == 0 and not self.test_best:
+            self.drive_test = True
+
+        if self.drive_test:
+            driver = self.drivers[self.driver]
+            self.speeds.append(ea_input['speed'])
+            self.sensors.append(ea_input['sensor_ahead'])
+            self.steerings.append(self.steering)
+            self.test_step += 1
+            if self.test_step == self.test_length:
+                evaluation = EA.evaluate(self.speeds, self.sensors, self.steerings)
+                print(evaluation)
+                self.drivers[self.driver]['evaluation'] = evaluation
+                self.speeds = []
+                self.sensors = []
+                self.steerings = []
+                self.drive_test = False
+                self.driver = (self.driver + 1) % len(self.drivers)
+                self.test_step = 0
+                self.tests += 1
+                if self.tests % self.pop_size == 0:
+                    EA.save_drivers(self.drivers)
+                    print('drivers saved')
+                    if self.tests <= self.pop_size * self.generations:
+                        self.drivers = EA.next_gen()
+        elif not self.test_best:
+            driver = {}
+        else:
+            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
+            if self.drive_step == 0:
+                print('min_speed_divisor: ' + str(driver['min_speed_divisor']))
+                print('very_min_speed: ' + str(driver['very_min_speed']))
+                print('speed_sensor_divisor: ' + str(driver['speed_sensor_divisor']))
+                print('breaking_speed_parameter: ' + str(driver['breaking_speed_parameter']))
+                print('angle_stop_breaking: ' + str(driver['angle_stop_breaking']))
+                print('distance_from_center: ' + str(driver['distance_from_center']))
+                print('max_angle: ' + str(driver['max_angle']))
+                print('steer_step: ' + str(driver['steer_step']))
+                print('evaluation: ' + str(driver['evaluation']))
+                
+        print(opponents)
+        ea_output = EA.ea_output(ea_input, driver)
+        self.steering = ea_output[2]
+        command.accelerator= ea_output[0]
+        command.brake = ea_output[1]
+        command.steering = ea_output[2]
 
         # GEAR HANDLER
 
@@ -143,15 +231,15 @@ class MyDriver(Driver):
                 # steer left
                 command.steering = 0.8
 
-        # stuck car handler
+        # STUCK CAR HANDLER
         if (nn_input[0] < 0.001 and nn_input[0] > -0.001 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
             self.stuck_step += 1
             if self.stuck_step > self.stuck_period:
                 self.stuck = True
+                print ('Stuck')
         else:
             self.stuck_step = 0
         if self.stuck:
-            print ('Stuck')
             command.gear = -1
             command.steering = -command.steering
             self.stuck_counter += 1
