@@ -46,7 +46,7 @@ class MyDriver(Driver):
         self.min_speed_change = 0.1
         # changeable EA variables
         self.pop_size = 10 # must be 10 or more
-        self.test_length = 10
+        self.test_length = 500
         self.test_best = False
         self.generations = 1
 
