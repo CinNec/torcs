@@ -52,7 +52,8 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
-            
+        
+        nn_input = np.array([1 if x > 1 else x for x in nn_input])
         nn_input.shape = (1, 1, nn_input.shape[0])
         
         accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
@@ -64,7 +65,7 @@ class MyDriver(Driver):
         print("steer:", steer)
         command.accelerator= accbrk[0, 0]
         command.brake = accbrk[0, 1]
-        command.steering = steer
+        command.steering = steer[0, 0]
         
         nn_input.shape = (nn_input.shape[2])
         

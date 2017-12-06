@@ -79,6 +79,7 @@ def train_neural_network(x):
                 print("Training accuracy:", accu)
                 with open('./model_accbrk/stats.txt', "w+") as file:
                     print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+            
 
         saver.save(sess, './model_accbrk/model_accbrk')
         
@@ -142,4 +143,6 @@ Y = data[:, [21, 22]]
 #%%
 train_neural_network(x)
 
+#%%
+#with tf.Session() as sess:
 #%

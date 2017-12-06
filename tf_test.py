@@ -73,8 +73,11 @@ print("accbrk:", accbrk)
 accbrk = np.round(accbrk)
 print("acc:", accbrk[0, 0])
 print("brk:", accbrk[0, 1])
-print("steer:", steer)
+print("steer:", steer[0, 0])
 
 nn_input.shape = (nn_input.shape[2])
 
 #%%
+
+a = [0, 1, 2, 11, 12, 13, 14, 10]
+inpu = np.swapaxes([data[:, i] for i in a], 0, 1)

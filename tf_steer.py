@@ -70,15 +70,16 @@ def train_neural_network(x):
                 iterations_per_epoch += 1
 
             
-            if epoch % 10 == 0: 
+            if epoch % 5 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
                 
-            if epoch % 500 == 0:
+            if epoch % 2501 == 0:
                 saver.save(sess, './model_steer/model_steer')
                 accu = sess.run([accuracy], feed_dict={x: X, y: Y})
                 print("Training accuracy:", accu)
                 with open('./model_steer/stats.txt', "w+") as file:
                     print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+                    
         
         saver.save(sess, './model_steer/model_steer')
         
@@ -97,11 +98,11 @@ def train_neural_network(x):
 
 # Initialize model parameters
 
-INPUT_SIZE    = 21
+INPUT_SIZE    = 14
 OUTPUT_SIZE   = 1 
 RNN_HIDDEN    = 256
 #RNN_HIDDEN    = [50, 50]
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.03
 
 EPOCHS = 10000
 BATCH_SIZE = 2048
@@ -116,7 +117,11 @@ y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE)) # (batch, time, out)
 Ndata = Normalize()
 data = Ndata.data
 
-X = data[:, :21]
+a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+X = np.swapaxes([data[:, i] for i in a], 0, 1)
+#X = data[:, :21]
+
+
 X.shape = (X.shape[0], 1, X.shape[1])
 Y = data[:, 23]
 Y.shape = (Y.shape[0], 1)
