@@ -113,7 +113,5 @@ class Normalize:
 #        self.test_data_steer  = np.swapaxes(test_data[0:21],0,1)
 #        self.test_out_steer  = np.swapaxes(np.array([test_data[23]]),0,1)
 #        
-#        self.inputdata = np.swapaxes(npdata[0:21],0,1)
-#        self.outputdata = np.swapaxes(npdata[21:],0,1)
 
 Normalize()

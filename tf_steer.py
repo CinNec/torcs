@@ -99,9 +99,9 @@ def train_neural_network(x):
 
 INPUT_SIZE    = 21
 OUTPUT_SIZE   = 1 
-RNN_HIDDEN    = 128
+RNN_HIDDEN    = 256
 #RNN_HIDDEN    = [50, 50]
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.01
 
 EPOCHS = 10000
 BATCH_SIZE = 2048
