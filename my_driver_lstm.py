@@ -53,6 +53,9 @@ class MyDriver(Driver):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
         
+        a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        nn_input = np.array([nn_input[i] for i in a])
+        
         nn_input = np.array([1 if x > 1 else x for x in nn_input])
         nn_input.shape = (1, 1, nn_input.shape[0])
         
