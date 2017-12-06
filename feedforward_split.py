@@ -206,8 +206,9 @@ def train_accbrk():
         pickle.dump(nn1, pickle_file)
         
     with open('stats_np_accbrk.txt', "w+") as file:
-        print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\nAccuracy", accuracy, "\n", file=file)
-    
+        print("\nEpoch:", epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\nAccuracy", accuracy, "\n", file=file)
+
+
 def train_steer():
 #    np.random.seed(12)
     Ndata = Normalize()
@@ -353,3 +354,5 @@ def test_nn_train():
 
 
 #%%
+train_steer()
+train_accbrk()

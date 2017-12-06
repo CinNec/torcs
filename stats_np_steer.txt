@@ -1,6 +1,0 @@
-
-Epoch: 30 
-Learning rate: 0.005471346119077113 
-Final error: 0.040841222056 
-Average error: 0.125391654807 
-
