@@ -48,7 +48,7 @@ def recurrent_neural_network(x):
 
 def train_neural_network(x):
     prediction = recurrent_neural_network(x)
-    sigmoid_prediction = tf.nn.sigmoid(prediction, name="prediction")
+    sigmoid_prediction = tf.nn.sigmoid(prediction, name="accbrk")
     error = tf.reduce_mean( tf.nn.sigmoid_cross_entropy_with_logits(logits=prediction,labels=y) )
     optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(error)         
     correct = tf.equal(tf.round(tf.nn.sigmoid(prediction)), y)
@@ -96,12 +96,12 @@ RNN_HIDDEN    = 256
 #RNN_HIDDEN    = [50, 50]
 LEARNING_RATE = 0.001
 
-EPOCHS = 20
+EPOCHS = 10
 BATCH_SIZE = 512
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 
-x = tf.placeholder(tf.float32, (None, None, INPUT_SIZE), name="x")  # (batch, time, in)
+x = tf.placeholder(tf.float32, (None, None, INPUT_SIZE), name="x_accbrk")  # (batch, time, in)
 y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE), name="y") # (batch, time, out)
 #%%
 

@@ -5,8 +5,18 @@ from Normalize import Normalize
 import tensorflow as tf
 
 Ndata = Normalize()
-saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
-saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
+
+# Initialize accbrk model and session
+with tf.Graph().as_default() as accbrk_graph:
+  saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
+sess1 = tf.Session(graph=accbrk_graph)
+saver1.restore(sess1,'./model_accbrk/model_accbrk')
+
+# Initialize smodel and session
+with tf.Graph().as_default() as steer_graph:
+  saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
+sess2 = tf.Session(graph=steer_graph)
+saver2.restore(sess2,'./model_steer/model_steer')
 
 class MyDriver(Driver):
     # Override the `drive` method to create your own driver
@@ -18,22 +28,21 @@ class MyDriver(Driver):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
             
-        nn_input.shape = (nn_input.shape[0], 1, nn_input.shape[1])
-
-        with tf.Session() as sess:
-            saver1.restore(sess,'./model_accbrk/model_accbrk')
-            accbrk = sess.run("prediction:0", feed_dict={"x:0": nn_input})
-            #    output = sess.run("prediction", feed_dict={"x:0": tf.cast(input, tf.float32)})
-            
-            saver2.restore(sess,'./model_steer/model_steer')
-            steer = sess.run("prediction:0", feed_dict={"x:0": nn_input})
-        #    output = sess.run("prediction", feed_dict={"x:0": tf.cast(input, tf.float32)})
-            print("accbrk:", accbrk)
-            accbrk = np.round(accbrk)
-            print("acc:", accbrk[0])
-            print("brk:", accbrk[1])
-            print("steer:", steer)
-
+        nn_input.shape = (1, 1, nn_input.shape[0])
+        
+        nn_input 
+        
+        accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
+        steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input})
+        print("accbrk:", accbrk)
+        accbrk = np.round(accbrk)
+        print("acc:", accbrk[0, 0])
+        print("brk:", accbrk[0, 1])
+        print("steer:", steer)
+        command.accelerator= accbrk[0, 0]
+        command.brake = accbrk[0, 1]
+        command.steering = steer
+        
         # GEAR HANDLER
 
         if carstate.rpm > 8000:

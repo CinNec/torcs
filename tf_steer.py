@@ -48,6 +48,7 @@ def recurrent_neural_network(x):
 
 def train_neural_network(x):
     prediction = recurrent_neural_network(x)
+    identity_prediction = tf.identity(prediction, name="steer")
     error = tf.reduce_mean(tf.losses.mean_squared_error(predictions=prediction,labels=y) )
     optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(error)
     accuracy = tf.reduce_mean(tf.abs(prediction - y))
@@ -95,12 +96,12 @@ RNN_HIDDEN    = 128
 #RNN_HIDDEN    = [50, 50]
 LEARNING_RATE = 0.001
 
-EPOCHS = 30
+EPOCHS = 10
 BATCH_SIZE = 1024
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 
-x = tf.placeholder(tf.float32, (None, None, INPUT_SIZE))  # (batch, time, in)
+x = tf.placeholder(tf.float32, (None, None, INPUT_SIZE), name="x_steer")  # (batch, time, in)
 y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE)) # (batch, time, out)
 #%%
 
