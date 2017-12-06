@@ -1,5 +1,0 @@
-    layer1 = Layer(14, 21)
-    layer2 = Layer(9, 14)
-    layer3 = Layer(3, 9)
-
-After 2k iterations, error: 0.0374673298241
