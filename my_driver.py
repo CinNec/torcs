@@ -176,7 +176,7 @@ class MyDriver(Driver):
                 print('steer_step: ' + str(driver['steer_step']))
                 print('evaluation: ' + str(driver['evaluation']))
                 
-        print(opponents)
+        print(carstate.opponents)
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
