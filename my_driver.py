@@ -176,15 +176,125 @@ class MyDriver(Driver):
                 print('steer_step: ' + str(driver['steer_step']))
                 print('evaluation: ' + str(driver['evaluation']))
                 
-        print(carstate.opponents)
         ea_output = EA.ea_output(ea_input, driver)
         self.steering = ea_output[2]
         command.accelerator= ea_output[0]
         command.brake = ea_output[1]
         command.steering = ea_output[2]
 
-        # GEAR HANDLER
+        #aggressive swarm    
+        if min([carstate.opponents[i] for i in [1,-1]]) <50:
+            #print("B")
+            command.accelerator = 1
+        if carstate.opponents[-18] <10:
+            print("R17",command.steering)
+            command.steering -= 0.01
+        elif carstate.opponents[-17] <10:
+            print("R16",command.steering)
+            command.steering -= 0.01
+        elif carstate.opponents[-16] <10:
+            print("R15",command.steering)
+            command.steering -= 0.01
+        elif carstate.opponents[-15] <10:
+            print("R14",command.steering)
+            command.steering += 0.05
+        elif carstate.opponents[-14] <10:
+            print("R13",command.steering)
+            command.steering += 0.05
+        elif carstate.opponents[-13] <10:
+            print("R12",command.steering)
+            command.steering += 0.1
+        elif carstate.opponents[-12] <10:
+            print("R11",command.steering)
+            command.steering += 0.1
+        elif carstate.opponents[-11] <10:
+            print("R10",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-10] <10:
+            print("R9",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-9] <10:
+            print("R8",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-8] <25:
+            print("R7",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-7] <25:
+            print("R6",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-6] <25:
+            print("R5",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-5] <25:
+            print("R4",command.steering)
+            command.steering += 0.05
+        elif carstate.opponents[-4] <25:
+            print("R3",command.steering)
+            command.steering -= 0.1
+            command.accelerator = 1
+        elif carstate.opponents[-3] <25:
+            print("R2",command.steering)
+            command.steering -= 0.1
+            command.accelerator = 1
+        elif carstate.opponents[-2] <25:
+            print("R1",command.steering)
+            command.accelerator = 1
+        if carstate.opponents[18] <10:
+            print("L17",command.steering)            
+            command.steering += 0.01
+        elif carstate.opponents[17] <10:
+            print("L16",command.steering)            
+            command.steering += 0.01
+        elif carstate.opponents[16] <10:
+            print("L15",command.steering)            
+            command.steering += 0.01
+        elif carstate.opponents[15] <10:
+            print("L14",command.steering)            
+            command.steering -= 0.05
+        elif carstate.opponents[14] <10:
+            print("L13",command.steering)            
+            command.steering -= 0.05
+        elif carstate.opponents[13] <10:
+            print("L12",command.steering)            
+            command.steering -= 0.1 
+        elif carstate.opponents[12] <10:
+            print("L11",command.steering)            
+            command.steering -= 0.1 
+        elif carstate.opponents[11] <10:
+            print("L10",command.steering)            
+            command.steering += 0.1 
+        elif carstate.opponents[10] <10:
+            print("L9",command.steering)            
+            command.steering += 0.1 
+        elif carstate.opponents[9] <10:
+            print("L8",command.steering)            
+            command.steering += 0.1
+        elif carstate.opponents[8] <25:
+            print("L7",command.steering)            
+            command.steering += 0.05       
+        elif carstate.opponents[7] <25:
+            print("L6",command.steering)            
+            command.steering += 0.1
+        elif carstate.opponents[6] <25:
+            print("L5",command.steering)
+            command.steering += 0.1
+        elif carstate.opponents[5] <25:
+            print("L4",command.steering)
+            command.steering -= 0.05
+        elif carstate.opponents[4] <25:
+            print("L3",command.steering)
+            command.steering += 0.1
+            command.accelerator = 1
+        elif carstate.opponents[3] <25:
+            print("L2",command.steering)
+            command.steering += 0.1
+            command.accelerator = 1
+        elif carstate.opponents[2] <25:
+            print("L1",command.steering)
+            command.accelerator = 1
+            command.steering += 0.1
 
+        # GEAR HANDLER        
         if carstate.rpm > 8000:
             command.gear = carstate.gear + 1
         if carstate.rpm < 3500:
