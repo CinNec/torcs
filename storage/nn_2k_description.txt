@@ -1,5 +1,0 @@
-layer1 = Layer(14, 21)
-layer2 = Layer(3, 14)
-
-After 2k iterations: error: 0.0843902213406
-	
