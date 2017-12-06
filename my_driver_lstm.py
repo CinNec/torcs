@@ -53,15 +53,16 @@ class MyDriver(Driver):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
         
-        a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-        nn_input = np.array([nn_input[i] for i in a])
-        
         nn_input = np.array([1 if x > 1 else x for x in nn_input])
+        a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        nn_input2 = np.array([nn_input[i] for i in a])
+        nn_input2.shape = (1, 1, nn_input2.shape[0])
+        
         nn_input.shape = (1, 1, nn_input.shape[0])
         
         accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
-        steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input})
-        print("accbrk:", accbrk)
+        
+        steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input2})
         accbrk = np.round(accbrk)
         print("acc:", accbrk[0, 0])
         print("brk:", accbrk[0, 1])
