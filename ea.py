@@ -23,7 +23,7 @@ class EvoAlg():
             driver['speed_sensor_divisor'] = random.uniform(0.15,0.25)
             driver['breaking_speed_parameter'] = random.uniform(0.15,0.25)
             driver['angle_stop_breaking'] = random.uniform(3,12)
-            driver['distance_from_center'] = random.uniform(0.05,0.25)
+            driver['distance_from_center'] = random.uniform(0.05,0.15)
             driver['max_angle'] = random.uniform(0.005,0.02)
             driver['steer_step'] = random.uniform(0.003,0.012)
             driver['evaluation'] = 0
