@@ -98,11 +98,11 @@ def train_neural_network(x):
 
 # Initialize model parameters
 
-INPUT_SIZE    = 14
+INPUT_SIZE    = 18
 OUTPUT_SIZE   = 1 
 RNN_HIDDEN    = 256
 #RNN_HIDDEN    = [50, 50]
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.003
 
 EPOCHS = 10000
 BATCH_SIZE = 2048
@@ -117,9 +117,10 @@ y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE)) # (batch, time, out)
 Ndata = Normalize()
 data = Ndata.data
 
-a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 X = np.swapaxes([data[:, i] for i in a], 0, 1)
-#X = data[:, :21]
+
+X = data[:, :21]
 
 
 X.shape = (X.shape[0], 1, X.shape[1])

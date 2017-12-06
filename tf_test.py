@@ -6,16 +6,17 @@ from Normalize import Normalize
 import pickle
 
 Ndata = Normalize()
+data = Ndata.data
 #
-with tf.Graph().as_default() as accbrk_graph:
-  saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
-sess1 = tf.Session(graph=accbrk_graph)
-saver1.restore(sess1,'./model_accbrk/model_accbrk')
-
-with tf.Graph().as_default() as steer_graph:
-  saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
-sess2 = tf.Session(graph=steer_graph)
-saver2.restore(sess2,'./model_steer/model_steer')
+#with tf.Graph().as_default() as accbrk_graph:
+#  saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
+#sess1 = tf.Session(graph=accbrk_graph)
+#saver1.restore(sess1,'./model_accbrk/model_accbrk')
+#
+#with tf.Graph().as_default() as steer_graph:
+#  saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
+#sess2 = tf.Session(graph=steer_graph)
+#saver2.restore(sess2,'./model_steer/model_steer')
 
 nn_input = np.array([0,	1,	4.024009678671506274e-01,	5.505602450838025658e-02,	1,	2.209881655715679322e-02,	1.243855721393034852e-02,	1.328388059701492672e-02,	1.469303482587064683e-02,	1.716248756218905630e-02,	2.231218905472636890e-02,	2.136940298507462588e-01,	1.706293532338308550e-01,	1.393412935323383173e-01,	1.146248756218905540e-01,	9.614975124378109805e-02,	1.544768429554125855e-01,	4.367189537834055835e-01,	5.277345734187532250e-02,	4.464304204231009376e-01,	4.461021254342385500e-01])
 
@@ -62,18 +63,18 @@ nn_input.shape = (1, 1, nn_input.shape[0])
 
 #with tf.Session() as sess:
 #    saver1.restore(sess,'./model_accbrk/model_accbrk')
-accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
-
-#with tf.Session() as sess2:
-#    saver2.restore(sess2,'./model_steer/model_steer')
-steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input})
+#accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
+#
+##with tf.Session() as sess2:
+##    saver2.restore(sess2,'./model_steer/model_steer')
+#steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input})
 
 #%%
-print("accbrk:", accbrk)
-accbrk = np.round(accbrk)
-print("acc:", accbrk[0, 0])
-print("brk:", accbrk[0, 1])
-print("steer:", steer[0, 0])
+#print("accbrk:", accbrk)
+#accbrk = np.round(accbrk)
+#print("acc:", accbrk[0, 0])
+#print("brk:", accbrk[0, 1])
+#print("steer:", steer[0, 0])
 
 
 #%%

@@ -152,13 +152,16 @@ def train_accbrk():
 #    a = [0, 1, 2, 9, 10, 11, 12, 13, 14, 15, 21, 22]
 #    X = np.swapaxes(list(data[i] for i in a),0,1)
 
-    X = np.swapaxes(data[:21],0,1)
-    Y = np.swapaxes(data[21:23],0,1)
+    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    X = np.swapaxes([data[:, i] for i in a], 0, 1)
+#    X = data[:, :21]
+
+    Y = data[:, [21, 22]]
     
     # Set up layers for neural network
     # Create layers(number of neurons, number of inputs)
-    layer1 = Layer(20, 21)
-    layer2 = Layer(12, 20)
+    layer1 = Layer(24, 18)
+    layer2 = Layer(12, 24)
     layer3 = Layer(2, 12)
 
     ## Add the layers
@@ -196,10 +199,14 @@ def train_accbrk():
     print("Predicted y:", pred_y)
 
     print("Number misclassified:", np.sum(abs(np.round(pred_y) - Y)))
-    print("Percentage of values misclassified:", (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100)
+    accuracy = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
+    print("Percentage of values misclassified:", accuracy)
     
     with open("pickled_nn_accbrk.txt", "wb") as pickle_file:
         pickle.dump(nn1, pickle_file)
+        
+    with open('stats_np_accbrk.txt', "w+") as file:
+        print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\nAccuracy", accuracy, "\n", file=file)
     
 def train_steer():
 #    np.random.seed(12)
@@ -210,14 +217,18 @@ def train_steer():
     #a = [0, 1, 2, 11, 12, 13, 14, 10]
     #X = np.swapaxes(list(data[i] for i in a),0,1)
 #    global X
-    X = np.swapaxes(data[:21],0,1)
-    global Y
-    Y = np.swapaxes(np.array([data[23]]),0,1)
+
+    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    X = np.swapaxes([data[:, i] for i in a], 0, 1)
+#    X = data[:, :21]
+
+    Y = data[:, 23]
+    Y.shape = (Y.shape[0], 1)
 
     # Create layers(number of neurons, number of inputs)
-    layer4 = Layer(14, 21)
-    layer5 = Layer(9, 14)
-    layer6 = Layer(1, 9)
+    layer4 = Layer(24, 18)
+    layer5 = Layer(12, 24)
+    layer6 = Layer(1, 12)
     
     ## Add the layers
     nn2 = NeuralNetworkRegressor()
@@ -229,7 +240,7 @@ def train_steer():
     maxError = 0.0001
     error = 1000000 # Just initialization for adaptable L_rate
     L_rate = 0.005
-    epochs = 1000
+    epochs = 2000
     batch_size = 32
 
     for i in range(epochs):
@@ -253,6 +264,10 @@ def train_steer():
     
     with open("pickled_nn_steering.txt", "wb") as pickle_file:
         pickle.dump(nn2, pickle_file)
+        
+    with open('stats_np_steer.txt', "w+") as file:
+                    print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\n", file=file)
+                    
 
 def test_nn():
     with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
@@ -261,7 +276,7 @@ def test_nn():
         nn2 = pickle.load(pickle_file)
     Ndata = Normalize()
     X = Ndata.test_data
-    Y = Ndata.test_out
+    
     err1 = 0
     err2 = 0
     counter1 = 0
@@ -298,8 +313,15 @@ def test_nn_train():
     with open("pickled_nn_steering.txt", "rb") as pickle_file:
         nn2 = pickle.load(pickle_file)
     Ndata = Normalize()
-    X = Ndata.train_data
-    Y = Ndata.train_out
+    data = Ndata.train_data
+    
+    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    X = np.swapaxes([data[:, i] for i in a], 0, 1)
+    X = data[:, :21]
+
+    Y = data[:, [21, 22, 23]]
+    
+    
     err1 = 0
     err2 = 0
     counter1 = 0
@@ -329,7 +351,5 @@ def test_nn_train():
     print("Average error for steering:", err2 / len(Y))
     print(len(Y))
 
-# train_steer()
-# train_accbrk()
 
 #%%

@@ -54,7 +54,7 @@ class MyDriver(Driver):
             i += 1
         
         nn_input = np.array([1 if x > 1 else x for x in nn_input])
-        a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
         nn_input2 = np.array([nn_input[i] for i in a])
         nn_input2.shape = (1, 1, nn_input2.shape[0])
         
