@@ -74,4 +74,7 @@ accbrk = np.round(accbrk)
 print("acc:", accbrk[0, 0])
 print("brk:", accbrk[0, 1])
 print("steer:", steer)
+
+nn_input.shape = (nn_input.shape[2])
+
 #%%

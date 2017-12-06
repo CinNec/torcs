@@ -70,8 +70,15 @@ def train_neural_network(x):
                 iterations_per_epoch += 1
 #                print("cost", cost)
 #                print('prediction:',prediction.eval({x:epoch_x, y:epoch_y})) 
-            if epoch % 1 == 0: 
+            if epoch % 10 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
+                
+            if epoch % 1000 == 0:
+                saver.save(sess, './model_accbrk/model_accbrk')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_accbrk/stats.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
 
         saver.save(sess, './model_accbrk/model_accbrk')
         
@@ -92,12 +99,12 @@ def train_neural_network(x):
 
 INPUT_SIZE    = 21
 OUTPUT_SIZE   = 2
-RNN_HIDDEN    = 256
+RNN_HIDDEN    = 128
 #RNN_HIDDEN    = [50, 50]
 LEARNING_RATE = 0.001
 
-EPOCHS = 10
-BATCH_SIZE = 512
+EPOCHS = 10000
+BATCH_SIZE = 2048
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 

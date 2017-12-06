@@ -19,6 +19,31 @@ sess2 = tf.Session(graph=steer_graph)
 saver2.restore(sess2,'./model_steer/model_steer')
 
 class MyDriver(Driver):
+    def __init__(self):
+        self.drive_step = 0
+        self.steering = 0
+        self.stuck_step = 0
+        self.stuck_counter = 0
+        self.stuck_recovery = 200
+        self.stuck_period = 300
+        self.stuck = False
+
+        # fixed EA variables
+        self.tests = 0
+        self.speeds = []
+        self.sensors = []
+        self.steerings = []
+        self.drivers = []
+        self.driver = 0
+        self.test_step = 0
+        self.drive_test = False
+        self.min_speed_change = 0.1
+        # changeable EA variables
+        self.pop_size = 10 # must be 10 or more
+        self.test_length = 100
+        self.test_best = False
+        self.generations = 1
+        
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
         command = Command()
@@ -30,8 +55,6 @@ class MyDriver(Driver):
             
         nn_input.shape = (1, 1, nn_input.shape[0])
         
-        nn_input 
-        
         accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
         steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input})
         print("accbrk:", accbrk)
@@ -42,6 +65,8 @@ class MyDriver(Driver):
         command.accelerator= accbrk[0, 0]
         command.brake = accbrk[0, 1]
         command.steering = steer
+        
+        nn_input.shape = (nn_input.shape[2])
         
         # GEAR HANDLER
 
