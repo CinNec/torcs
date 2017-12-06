@@ -260,13 +260,13 @@ def train_steer():
         print("L_rate:", L_rate)
 
     error = nn2.error(pred_y, Y, len(X))
-    print("Final error:", error)
-    
+    average_error = np.mean(np.abs(pred_y - Y))
+
     with open("pickled_nn_steering.txt", "wb") as pickle_file:
         pickle.dump(nn2, pickle_file)
         
     with open('stats_np_steer.txt', "w+") as file:
-                    print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\n", file=file)
+                    print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\nAverage error:", average_error, "\n", file=file)
                     
 
 def test_nn():
