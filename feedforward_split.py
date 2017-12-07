@@ -143,8 +143,6 @@ def adapt_L_rate(L_rate, pre_error, post_error):
 
 
 def train_accbrk():
-#    np.random.seed(12)
-
     Ndata = Normalize()
     data = Ndata.data
     
@@ -156,7 +154,7 @@ def train_accbrk():
     X = np.swapaxes([data[:, i] for i in a], 0, 1)
 #    X = data[:, :21]
 
-    Y = data[:, [21, 22]]
+    Y = np.array([data[:, [21, 22]]])
     
     # Set up layers for neural network
     # Create layers(number of neurons, number of inputs)
@@ -210,21 +208,14 @@ def train_accbrk():
 
 
 def train_steer():
-#    np.random.seed(12)
     Ndata = Normalize()
     data = Ndata.data
     
-    # Optional, pick sensors to train on
-    #a = [0, 1, 2, 11, 12, 13, 14, 10]
-    #X = np.swapaxes(list(data[i] for i in a),0,1)
-#    global X
-
+    Y = np.array([data[:, 23]])
+    Y.shape = (Y.shape[1], 1)
+    
     a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     X = np.swapaxes([data[:, i] for i in a], 0, 1)
-#    X = data[:, :21]
-
-    Y = data[:, 23]
-    Y.shape = (Y.shape[0], 1)
 
     # Create layers(number of neurons, number of inputs)
     layer4 = Layer(24, 18)
@@ -313,14 +304,14 @@ def test_nn_train():
         nn1 = pickle.load(pickle_file)
     with open("pickled_nn_steering.txt", "rb") as pickle_file:
         nn2 = pickle.load(pickle_file)
+        
     Ndata = Normalize()
-    data = Ndata.train_data
+    data = Ndata.data
+    
+    Y = np.array([data[:, 23]])
     
     a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     X = np.swapaxes([data[:, i] for i in a], 0, 1)
-    X = data[:, :21]
-
-    Y = data[:, [21, 22, 23]]
     
     
     err1 = 0

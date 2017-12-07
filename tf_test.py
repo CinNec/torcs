@@ -5,28 +5,26 @@ import tensorflow as tf
 from Normalize import Normalize
 import pickle
 
-Ndata = Normalize()
-data = Ndata.data
-#
+
 #with tf.Graph().as_default() as accbrk_graph:
 #  saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
 #sess1 = tf.Session(graph=accbrk_graph)
 #saver1.restore(sess1,'./model_accbrk/model_accbrk')
 #
-#with tf.Graph().as_default() as steer_graph:
-#  saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
-#sess2 = tf.Session(graph=steer_graph)
-#saver2.restore(sess2,'./model_steer/model_steer')
+with tf.Graph().as_default() as steer_graph:
+  saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
+sess2 = tf.Session(graph=steer_graph)
+saver2.restore(sess2,'./model_steer/model_steer')
 
-nn_input = np.array([0,	1,	4.024009678671506274e-01,	5.505602450838025658e-02,	1,	2.209881655715679322e-02,	1.243855721393034852e-02,	1.328388059701492672e-02,	1.469303482587064683e-02,	1.716248756218905630e-02,	2.231218905472636890e-02,	2.136940298507462588e-01,	1.706293532338308550e-01,	1.393412935323383173e-01,	1.146248756218905540e-01,	9.614975124378109805e-02,	1.544768429554125855e-01,	4.367189537834055835e-01,	5.277345734187532250e-02,	4.464304204231009376e-01,	4.461021254342385500e-01])
-
-
-i=0
-while(i <= 20):
-    nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
-    i += 1
-
-nn_input.shape = (1, 1, nn_input.shape[0])
+#nn_input = np.array([0,	1,	4.024009678671506274e-01,	5.505602450838025658e-02,	1,	2.209881655715679322e-02,	1.243855721393034852e-02,	1.328388059701492672e-02,	1.469303482587064683e-02,	1.716248756218905630e-02,	2.231218905472636890e-02,	2.136940298507462588e-01,	1.706293532338308550e-01,	1.393412935323383173e-01,	1.146248756218905540e-01,	9.614975124378109805e-02,	1.544768429554125855e-01,	4.367189537834055835e-01,	5.277345734187532250e-02,	4.464304204231009376e-01,	4.461021254342385500e-01])
+#
+#
+#i=0
+#while(i <= 20):
+#    nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
+#    i += 1
+#
+#nn_input.shape = (1, 1, nn_input.shape[0])
 
 
 
@@ -78,8 +76,18 @@ nn_input.shape = (1, 1, nn_input.shape[0])
 
 
 #%%
+# Initialize data and train and test sets
+Ndata = Normalize()
+data = Ndata.data
 
-nn_input = np.array([0,	1,	4.024009678671506274e-01,	5.505602450838025658e-02,	1,	2.209881655715679322e-02,	1.243855721393034852e-02,	1.328388059701492672e-02,	1.469303482587064683e-02,	1.716248756218905630e-02,	2.231218905472636890e-02,	2.136940298507462588e-01,	1.706293532338308550e-01,	1.393412935323383173e-01,	1.146248756218905540e-01,	9.614975124378109805e-02,	1.544768429554125855e-01,	4.367189537834055835e-01,	5.277345734187532250e-02,	4.464304204231009376e-01,	4.461021254342385500e-01])
+Y = np.array([data[:, 23]])
+Y.shape = (Y.shape[1], 1)
 
-a = [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-nn_input2 = np.array([nn_input[i] for i in a])
+a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+X = np.swapaxes([data[:, i] for i in a], 0, 1)
+
+#X = data[:, :21]
+
+
+X.shape = (X.shape[0], 1, X.shape[1])
+steer = sess2.run("steer:0", feed_dict={"x_steer:0": X})

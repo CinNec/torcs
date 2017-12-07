@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import tensorflow as tf
 
 from Normalize import Normalize
@@ -73,13 +72,34 @@ def train_neural_network(x):
             if epoch % 5 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
                 
-            if epoch % 2501 == 0:
+            if epoch == 10001:
                 saver.save(sess, './model_steer/model_steer')
                 accu = sess.run([accuracy], feed_dict={x: X, y: Y})
                 print("Training accuracy:", accu)
                 with open('./model_steer/stats.txt', "w+") as file:
                     print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+            
+            if epoch == 12001:
+                saver.save(sess, './model_steer/model_steer')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_steer/stats2.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
                     
+            if epoch == 14001:
+                saver.save(sess, './model_steer/model_steer')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_steer/stats3.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+                    
+            if epoch == 16001:
+                saver.save(sess, './model_steer/model_steer')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_steer/stats4.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+        
         
         saver.save(sess, './model_steer/model_steer')
         
@@ -100,12 +120,12 @@ def train_neural_network(x):
 
 INPUT_SIZE    = 18
 OUTPUT_SIZE   = 1 
-RNN_HIDDEN    = 256
+RNN_HIDDEN    = 192
 #RNN_HIDDEN    = [50, 50]
-LEARNING_RATE = 0.003
+LEARNING_RATE = 0.0015
 
-EPOCHS = 10000
-BATCH_SIZE = 2048
+EPOCHS = 16001
+BATCH_SIZE = 998
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 
@@ -117,17 +137,26 @@ y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE)) # (batch, time, out)
 Ndata = Normalize()
 data = Ndata.data
 
+Y = np.array([data[:, 23]])
+Y.shape = (Y.shape[1], 1)
+
 a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 X = np.swapaxes([data[:, i] for i in a], 0, 1)
 
-X = data[:, :21]
+#X = data[:, :21]
 
 
 X.shape = (X.shape[0], 1, X.shape[1])
-Y = data[:, 23]
-Y.shape = (Y.shape[0], 1)
+
 
 #%%
 train_neural_network(x)
 
 #%
+#%%
+
+for i in range(100):
+    print(Y[i])
+
+for i in range(100):
+    print(X[i, 0, 0])

@@ -1,27 +1,18 @@
 from pytocl.driver import Driver
 from pytocl.car import State, Command
 import pickle
-# from feedforward import NeuralNetwork, Layer
 import feedforward
 import numpy as np
-from feedforward import Ndata
-#import sklearn
-#from sklearn.neural_network import MLPRegressor
+from Normalize import Normalize
 import feedforward_split
-from ea import EvoAlg
 
-with open("pickled_nn.txt", "rb") as pickle_file:
-    nn = pickle.load(pickle_file)
-
-#with open("sklearn_nn.txt", "rb") as pickle_file:
-#    mlp = pickle.load(pickle_file)
+Ndata = Normalize()
 
 with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
     nn1 = pickle.load(pickle_file)
 
 with open("pickled_nn_steering.txt", "rb") as pickle_file:
     nn2 = pickle.load(pickle_file)
-
 
 class MyDriver(Driver):
     # ...
@@ -60,28 +51,15 @@ class MyDriver(Driver):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
 
-        # nn_output = nn.forward_propagation(nn_input)
-        # command.accelerator= round(nn_output[0])
-        # command.brake = round(nn_output[1])
-        # command.steering = nn_output[2]
+        nn1_out = nn1.forward_propagation(nn_input)
 
-        # mlp_output = mlp.predict([nn_input])[0]
-        # # print(mlp_output)
-
-        # command.accelerator= round(mlp_output[0])
-        # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
-        # command.steering = mlp_output[2]
-
-
-        # nn1_out = nn1.forward_propagation(nn_input)
-        # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        # a = [0, 1, 2, 11, 12, 13, 14, 10]
-        # nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
-        # print(nn_input)
-        # nn2_out = nn2.forward_propagation(nn_input)
-        # command.accelerator= round(nn1_out[0])
-        # command.brake = round(nn1_out[1])
-        # command.steering = nn2_out[0]
+        a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        nn_input = np.array([1 if x> 1 else x for x in nn_input])
+        print(nn_input)
+        nn2_out = nn2.forward_propagation(nn_input)
+        command.accelerator= round(nn1_out[0])
+        command.brake = round(nn1_out[1])
+        command.steering = nn2_out[0]
 
         # nn1_out = nn1.forward_propagation(nn_input)
         # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
@@ -91,96 +69,6 @@ class MyDriver(Driver):
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
 
-#        alg = EvoAlg()
-#        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
-#        print(nn_input[0])
-#        print(nn_input[1])
-#        print(nn_input[2])
-#        print(nn_input[12])
-#        ea_output = alg.ea_output(ea_input)
-#        self.steering = ea_output[2]
-#        command.accelerator= ea_output[0]
-#        command.brake = ea_output[1]
-#        command.steering = ea_output[2]
-#        alg = EvoAlg()
-#        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
-        # print(nn_input[0])
-        # print(nn_input[1])
-        # print(nn_input[2])
-        # print(nn_input[12])
-#        ea_output = alg.ea_output(ea_input)
-#        self.steering = ea_output[2]
-#        command.accelerator= ea_output[0]
-#        command.brake = ea_output[1]
-#        command.steering = ea_output[2]
-        # EVOLUTIONARY ALGORITHM
-
-        EA = EvoAlg()
-
-        ea_input = {}
-        ea_input['speed'] = nn_input[0]
-        ea_input['distance'] = nn_input[1]
-        ea_input['angle'] = nn_input[2] / float(180)
-        ea_input['sensor_ahead'] = nn_input[12]
-        ea_input['steering'] = self.steering
-        # 0 means out of the track or against a wall and it's set to 1
-        if ea_input['sensor_ahead'] == 0:
-            ea_input['sensor_ahead'] = 1
-
-        # if self.drive_step % 100 == 0:
-        #     print(carstate.opponents)
-
-        if self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best):
-            self.drivers = EA.load_drivers()
-            if len(self.drivers) != self.pop_size:
-                self.drivers = EA.create_population(self.pop_size)
-                print('population created')
-
-        if ea_input['speed'] > self.min_speed_change and self.test_step == 0 and not self.test_best:
-            self.drive_test = True
-
-        if self.drive_test:
-            driver = self.drivers[self.driver]
-            self.speeds.append(ea_input['speed'])
-            self.sensors.append(ea_input['sensor_ahead'])
-            self.steerings.append(self.steering)
-            self.test_step += 1
-            if self.test_step == self.test_length:
-                evaluation = EA.evaluate(self.speeds, self.sensors, self.steerings)
-                print(evaluation)
-                self.drivers[self.driver]['evaluation'] = evaluation
-                self.speeds = []
-                self.sensors = []
-                self.steerings = []
-                self.drive_test = False
-                self.driver = (self.driver + 1) % len(self.drivers)
-                self.test_step = 0
-                self.tests += 1
-                if self.tests % self.pop_size == 0:
-                    EA.save_drivers(self.drivers)
-                    print('drivers saved')
-                    if self.tests <= self.pop_size * self.generations:
-                        self.drivers = EA.next_gen()
-        elif not self.test_best:
-            driver = {}
-        else:
-            driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
-            if self.drive_step == 0:
-                print('min_speed_divisor: ' + str(driver['min_speed_divisor']))
-                print('very_min_speed: ' + str(driver['very_min_speed']))
-                print('speed_sensor_divisor: ' + str(driver['speed_sensor_divisor']))
-                print('breaking_speed_parameter: ' + str(driver['breaking_speed_parameter']))
-                print('angle_stop_breaking: ' + str(driver['angle_stop_breaking']))
-                print('distance_from_center: ' + str(driver['distance_from_center']))
-                print('max_angle: ' + str(driver['max_angle']))
-                print('steer_step: ' + str(driver['steer_step']))
-                print('evaluation: ' + str(driver['evaluation']))
-                
-        ea_output = EA.ea_output(ea_input, driver)
-        self.steering = ea_output[2]
-        command.accelerator= ea_output[0]
-        command.brake = ea_output[1]
-        command.steering = ea_output[2]
 
         #aggressive swarm    
         if min([carstate.opponents[i] for i in [1,-1]]) <50:
