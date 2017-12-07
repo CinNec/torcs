@@ -239,6 +239,7 @@ class MyDriver(Driver):
             command.accelerator = 1
         elif carstate.opponents[-2] <25:
             print("R1",command.steering)
+            command.steering -= 0.1
             command.accelerator = 1
         if carstate.opponents[18] <10:
             print("L17",command.steering)            
