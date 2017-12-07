@@ -131,7 +131,7 @@ class MyDriver(Driver):
         # if self.drive_step % 100 == 0:
         #     print(carstate.opponents)
 
-        if (self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best)) and not run_default:
+        if (self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best)) and not self.run_default:
             self.drivers = EA.load_drivers()
             if len(self.drivers) != self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
