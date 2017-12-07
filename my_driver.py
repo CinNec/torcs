@@ -49,6 +49,7 @@ class MyDriver(Driver):
         self.test_length = 100
         self.test_best = False
         self.generations = 1
+        self.run_default = True
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
@@ -130,13 +131,13 @@ class MyDriver(Driver):
         # if self.drive_step % 100 == 0:
         #     print(carstate.opponents)
 
-        if self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best):
+        if (self.drive_step == 0 or (self.tests % self.pop_size == 0 and not self.test_best)) and not run_default:
             self.drivers = EA.load_drivers()
             if len(self.drivers) != self.pop_size:
                 self.drivers = EA.create_population(self.pop_size)
                 print('population created')
 
-        if ea_input['speed'] > self.min_speed_change and self.test_step == 0 and not self.test_best:
+        if ea_input['speed'] > self.min_speed_change and self.test_step == 0 and not self.test_best and not self.run_default:
             self.drive_test = True
 
         if self.drive_test:
@@ -161,9 +162,9 @@ class MyDriver(Driver):
                     print('drivers saved')
                     if self.tests <= self.pop_size * self.generations:
                         self.drivers = EA.next_gen()
-        elif not self.test_best:
+        elif self.run_default:
             driver = {}
-        else:
+        elif self.test_best:
             driver = sorted(self.drivers, key=lambda x: x['evaluation'], reverse=True)[0]
             if self.drive_step == 0:
                 print('min_speed_divisor: ' + str(driver['min_speed_divisor']))
