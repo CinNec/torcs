@@ -22,7 +22,7 @@ class MyDriver(Driver):
         self.stuck_step = 0
         self.stuck_counter = 0
         self.stuck_recovery = 200
-        self.stuck_period = 300
+        self.stuck_period = 400
         self.stuck = False
 
         # fixed EA variables
@@ -53,13 +53,18 @@ class MyDriver(Driver):
 
         nn1_out = nn1.forward_propagation(nn_input)
 
-        a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-        nn_input = np.array([1 if x> 1 else x for x in nn_input])
-        print(nn_input)
+        #a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
+        
         nn2_out = nn2.forward_propagation(nn_input)
+        
         command.accelerator= round(nn1_out[0])
         command.brake = round(nn1_out[1])
-        command.steering = nn2_out[0]
+        if np.abs(nn2_out[0]) > 0.4:
+            command.steering = nn2_out[0] * 1.5
+        else:
+            command.steering = nn2_out[0]
+        print(carstate.angle)
 
         # nn1_out = nn1.forward_propagation(nn_input)
         # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
@@ -68,6 +73,14 @@ class MyDriver(Driver):
         # command.accelerator= round(nn1_out[0])
         # command.brake = round(nn1_out[1])
         # command.steering = nn2_out
+	
+        # manually adjust angle
+        if carstate.angle > 70:
+            command.accelerator = 0.4
+            command.steering = 1
+        if carstate.angle < -70:
+            command.accelerator = 0.4
+            command.steering = -1
 
 
         #aggressive swarm    
@@ -230,7 +243,7 @@ class MyDriver(Driver):
                 command.steering = 0.8
 
         # STUCK CAR HANDLER
-        if (nn_input[0] < 0.001 and nn_input[0] > -0.001 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
+        if (carstate.speed_x < 5 and carstate.speed_x > -5 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
             self.stuck_step += 1
             if self.stuck_step > self.stuck_period:
                 self.stuck = True
