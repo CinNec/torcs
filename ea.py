@@ -5,12 +5,20 @@ import random
 class EvoAlg():
     def __init__(self):
         self.default_driver = {}
+        # self.default_driver['min_speed_divisor'] = 1.8
+        # self.default_driver['very_min_speed'] = 0.07
+        # self.default_driver['speed_sensor_divisor'] = 0.2
+        # self.default_driver['breaking_speed_parameter'] = 0.2
+        # self.default_driver['angle_stop_breaking'] = 8
+        # self.default_driver['distance_from_center'] = 0.1
+        # self.default_driver['max_angle'] = 0.01
+        # self.default_driver['steer_step'] = 0.007
         self.default_driver['min_speed_divisor'] = 1.8
         self.default_driver['very_min_speed'] = 0.07
         self.default_driver['speed_sensor_divisor'] = 0.2
         self.default_driver['breaking_speed_parameter'] = 0.2
         self.default_driver['angle_stop_breaking'] = 8
-        self.default_driver['distance_from_center'] = 0.1
+        self.default_driver['distance_from_center'] = 0.05
         self.default_driver['max_angle'] = 0.01
         self.default_driver['steer_step'] = 0.007
 
