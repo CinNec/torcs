@@ -109,7 +109,7 @@ class NeuralNetwork:
 # Set inputs
 # Each row is (x1, x2)
 Ndata = Normalize()
-X = Ndata.inputdata
+data = Ndata.data
 
 # Normalize the inputs
 
@@ -119,7 +119,8 @@ X = Ndata.inputdata
 
 # Set goals
 # Each row is (y1)
-Y = Ndata.outputdata
+X = data[:, :21]
+Y = data[:, [21, 22, 23]]
 
 #Y = np.array([
 #                [0],

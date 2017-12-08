@@ -41,7 +41,7 @@ class Normalize:
                     data[19].append( float(row["TRACK_EDGE_16"]))
                     data[20].append( float(row["TRACK_EDGE_17"]))
                     data[21].append( float(row["ACCELERATION"]))
-                    data[22].append( round(float(row["BRAKE"])))
+                    data[22].append( float(row["BRAKE"]))
                     data[23].append( float(row["STEERING"]))
         self.minarray = []
         self.maxarray = []
@@ -55,6 +55,8 @@ class Normalize:
                 data[i][j] = (data[i][j] - minv)/(maxv-minv)
                 j += 1
             i += 1
+            
+        print(self.minarray)
         while(i < len(data[21])):
             if (data[21][i] == data[22][i] and data[21][i] != 0):
                 data[22][i] = 0
@@ -89,10 +91,9 @@ class Normalize:
         
         npdata = np.swapaxes(npdata,0,1)
         self.data = npdata
-#        np.random.shuffle(npdata)
-        cut = math.floor(0.9 * len(npdata))
-        train_data = npdata[:cut]
-        test_data = npdata[cut:]
+#        cut = math.floor(0.9 * len(npdata))
+#        train_data = npdata[:cut]
+#        test_data = npdata[cut:]
 #        train_data = np.swapaxes(train_data,0,1)
 #        test_data = np.swapaxes(test_data,0,1)
 #        npdata = np.swapaxes(npdata,0,1)
@@ -112,8 +113,6 @@ class Normalize:
 #        self.train_out_steer  = np.swapaxes(np.array([train_data[23]]),0,1)
 #        self.test_data_steer  = np.swapaxes(test_data[0:21],0,1)
 #        self.test_out_steer  = np.swapaxes(np.array([test_data[23]]),0,1)
-#        
-#        self.inputdata = np.swapaxes(npdata[0:21],0,1)
-#        self.outputdata = np.swapaxes(npdata[21:],0,1)
+#    
 
-Normalize()
+Normalize()    

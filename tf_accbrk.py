@@ -48,7 +48,7 @@ def recurrent_neural_network(x):
 
 def train_neural_network(x):
     prediction = recurrent_neural_network(x)
-    sigmoid_prediction = tf.nn.sigmoid(prediction, name="prediction")
+    sigmoid_prediction = tf.nn.sigmoid(prediction, name="accbrk")
     error = tf.reduce_mean( tf.nn.sigmoid_cross_entropy_with_logits(logits=prediction,labels=y) )
     optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(error)         
     correct = tf.equal(tf.round(tf.nn.sigmoid(prediction)), y)
@@ -70,8 +70,16 @@ def train_neural_network(x):
                 iterations_per_epoch += 1
 #                print("cost", cost)
 #                print('prediction:',prediction.eval({x:epoch_x, y:epoch_y})) 
-            if epoch % 1 == 0: 
+            if epoch % 10 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
+                
+            if epoch % 1000 == 0:
+                saver.save(sess, './model_accbrk/model_accbrk')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_accbrk/stats.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+            
 
         saver.save(sess, './model_accbrk/model_accbrk')
         
@@ -92,16 +100,16 @@ def train_neural_network(x):
 
 INPUT_SIZE    = 21
 OUTPUT_SIZE   = 2
-RNN_HIDDEN    = 256
+RNN_HIDDEN    = 128
 #RNN_HIDDEN    = [50, 50]
 LEARNING_RATE = 0.001
 
-EPOCHS = 20
-BATCH_SIZE = 512
+EPOCHS = 10000
+BATCH_SIZE = 2048
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 
-x = tf.placeholder(tf.float32, (None, None, INPUT_SIZE), name="x")  # (batch, time, in)
+x = tf.placeholder(tf.float32, (None, None, INPUT_SIZE), name="x_accbrk")  # (batch, time, in)
 y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE), name="y") # (batch, time, out)
 #%%
 
@@ -135,4 +143,6 @@ Y = data[:, [21, 22]]
 #%%
 train_neural_network(x)
 
+#%%
+#with tf.Session() as sess:
 #%

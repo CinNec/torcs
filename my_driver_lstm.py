@@ -5,10 +5,45 @@ from Normalize import Normalize
 import tensorflow as tf
 
 Ndata = Normalize()
-saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
-saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
+
+# Initialize accbrk model and session
+with tf.Graph().as_default() as accbrk_graph:
+  saver1 = tf.train.import_meta_graph("./model_accbrk/model_accbrk.meta")
+sess1 = tf.Session(graph=accbrk_graph)
+saver1.restore(sess1,'./model_accbrk/model_accbrk')
+
+# Initialize smodel and session
+with tf.Graph().as_default() as steer_graph:
+  saver2 = tf.train.import_meta_graph("./model_steer/model_steer.meta")
+sess2 = tf.Session(graph=steer_graph)
+saver2.restore(sess2,'./model_steer/model_steer')
 
 class MyDriver(Driver):
+    def __init__(self):
+        self.drive_step = 0
+        self.steering = 0
+        self.stuck_step = 0
+        self.stuck_counter = 0
+        self.stuck_recovery = 200
+        self.stuck_period = 300
+        self.stuck = False
+
+        # fixed EA variables
+        self.tests = 0
+        self.speeds = []
+        self.sensors = []
+        self.steerings = []
+        self.drivers = []
+        self.driver = 0
+        self.test_step = 0
+        self.drive_test = False
+        self.min_speed_change = 0.1
+        # changeable EA variables
+        self.pop_size = 10 # must be 10 or more
+        self.test_length = 100
+        self.test_best = False
+        self.generations = 1
+        
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
         command = Command()
@@ -17,23 +52,27 @@ class MyDriver(Driver):
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
-            
-        nn_input.shape = (nn_input.shape[0], 1, nn_input.shape[1])
-
-        with tf.Session() as sess:
-            saver1.restore(sess,'./model_accbrk/model_accbrk')
-            accbrk = sess.run("prediction:0", feed_dict={"x:0": nn_input})
-            #    output = sess.run("prediction", feed_dict={"x:0": tf.cast(input, tf.float32)})
-            
-            saver2.restore(sess,'./model_steer/model_steer')
-            steer = sess.run("prediction:0", feed_dict={"x:0": nn_input})
-        #    output = sess.run("prediction", feed_dict={"x:0": tf.cast(input, tf.float32)})
-            print("accbrk:", accbrk)
-            accbrk = np.round(accbrk)
-            print("acc:", accbrk[0])
-            print("brk:", accbrk[1])
-            print("steer:", steer)
-
+        
+        nn_input = np.array([1 if x > 1 else x for x in nn_input])
+        a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        nn_input2 = np.array([nn_input[i] for i in a])
+        nn_input2.shape = (1, 1, nn_input2.shape[0])
+        
+        nn_input.shape = (1, 1, nn_input.shape[0])
+        
+        accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
+        
+        steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input2})
+        accbrk = np.round(accbrk)
+        print("acc:", accbrk[0, 0])
+        print("brk:", accbrk[0, 1])
+        print("steer:", steer)
+        command.accelerator= accbrk[0, 0]
+        command.brake = accbrk[0, 1]
+        command.steering = steer[0, 0]
+        
+        nn_input.shape = (nn_input.shape[2])
+        
         # GEAR HANDLER
 
         if carstate.rpm > 8000:
