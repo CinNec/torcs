@@ -185,7 +185,7 @@ class MyDriver(Driver):
 
 
         #aggressive swarm
-        print(carstate.opponents)    
+        # print(carstate.opponents)    
         if min([carstate.opponents[i] for i in [1,-1]]) <50:
             #print("B")
             command.accelerator = 1
