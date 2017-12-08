@@ -95,7 +95,6 @@ class EvoAlg():
     def evaluate(self, speeds, sensors, steerings):
         evaluation = 0
         for i, speed in enumerate(speeds):
-            # evaluation += speed * (15 / math.exp(sensors[i]))
             evaluation += 10 * speed * (-0.5 * sensors[i] + 1) - 0.2 * abs(steerings[i])
         if evaluation > 0:
             evaluation = evaluation / float(len(speeds))

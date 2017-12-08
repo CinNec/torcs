@@ -30,7 +30,7 @@ class MyDriver(Driver):
         self.steering = 0
         self.stuck_step = 0
         self.stuck_counter = 0
-        self.stuck_recovery = 200
+        self.stuck_recovery = 150
         self.stuck_period = 300
         self.stuck = False
 
@@ -46,7 +46,7 @@ class MyDriver(Driver):
         self.min_speed_change = 0.1
         # changeable EA variables
         self.pop_size = 10 # must be 10 or more
-        self.test_length = 100
+        self.test_length = 1000
         self.test_best = False
         self.generations = 1
         self.run_default = True
