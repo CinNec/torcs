@@ -43,19 +43,16 @@ class MyDriver(Driver):
 
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
-
         command = Command()
-        nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:-1])
+        nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:])
         i=0
-        while(i <= 20):
+        while(i <= 21):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
-
-        nn1_out = nn1.forward_propagation(nn_input)
-
-        #a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        
         nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
         
+        nn1_out = nn1.forward_propagation(nn_input)
         nn2_out = nn2.forward_propagation(nn_input)
         
         command.accelerator= round(nn1_out[0])
@@ -64,24 +61,6 @@ class MyDriver(Driver):
             command.steering = nn2_out[0] * 1.5
         else:
             command.steering = nn2_out[0]
-        print(carstate.angle)
-
-        # nn1_out = nn1.forward_propagation(nn_input)
-        # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        # nn_input = np.append(nn_input, rounded_out)
-        # nn2_out = nn2.forward_propagation(nn_input)
-        # command.accelerator= round(nn1_out[0])
-        # command.brake = round(nn1_out[1])
-        # command.steering = nn2_out
-	
-        # manually adjust angle
-        if carstate.angle > 70:
-            command.accelerator = 0.4
-            command.steering = 1
-        if carstate.angle < -70:
-            command.accelerator = 0.4
-            command.steering = -1
-
 
         #aggressive swarm    
         if min([carstate.opponents[i] for i in [1,-1]]) <50:
@@ -203,13 +182,13 @@ class MyDriver(Driver):
         if not command.gear:
             command.gear = carstate.gear or 1
 
-        # # manually adjust angle
-        # if carstate.angle > 45:
-        #     command.accelerator = 0.6
-        #     command.steering = 0.5
-        # if carstate.angle < -45:
-        #     command.accelerator = 0.6
-        #     command.steering = -0.5
+        # manually adjust angle
+        if carstate.angle > 70:
+            command.accelerator = 0.6
+            command.steering = 0.5
+        if carstate.angle < -70:
+            command.accelerator = 0.6
+            command.steering = -0.5
 
         # OFFTRACK HANDLER
         # reduce acceleration if offtrack

@@ -54,8 +54,6 @@ class Normalize:
                 data[i][j] = (data[i][j] - minv)/(maxv-minv)
                 j += 1
             i += 1
-        print("min:", self.minarray)
-        print("max:", self.maxarray)
         
         while(i < len(data[21])):
             if (data[22][i] == data[23][i] and data[22][i] != 0):

@@ -47,21 +47,19 @@ class MyDriver(Driver):
     # Override the `drive` method to create your own driver
     def drive(self, carstate: State) -> Command:
         command = Command()
-        nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:-1])
+        nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:])
         i=0
-        while(i <= 20):
+        while(i <= 21):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
         
-        nn_input = np.array([1 if x > 1 else x for x in nn_input])
-        a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-        nn_input2 = np.array([nn_input[i] for i in a])
+        nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
+        nn_input2 = np.array([nn_input])
         nn_input2.shape = (1, 1, nn_input2.shape[0])
         
         nn_input.shape = (1, 1, nn_input.shape[0])
         
         accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
-        
         steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input2})
         accbrk = np.round(accbrk)
         print("acc:", accbrk[0, 0])
@@ -72,9 +70,120 @@ class MyDriver(Driver):
         command.steering = steer[0, 0]
         
         nn_input.shape = (nn_input.shape[2])
-        
-        # GEAR HANDLER
 
+        #aggressive swarm    
+        if min([carstate.opponents[i] for i in [1,-1]]) <50:
+            #print("B")
+            command.accelerator = 1
+        if carstate.opponents[-18] <10:
+            print("R17",command.steering)
+            command.steering -= 0.01
+        elif carstate.opponents[-17] <10:
+            print("R16",command.steering)
+            command.steering -= 0.01
+        elif carstate.opponents[-16] <10:
+            print("R15",command.steering)
+            command.steering -= 0.01
+        elif carstate.opponents[-15] <10:
+            print("R14",command.steering)
+            command.steering += 0.05
+        elif carstate.opponents[-14] <10:
+            print("R13",command.steering)
+            command.steering += 0.05
+        elif carstate.opponents[-13] <10:
+            print("R12",command.steering)
+            command.steering += 0.1
+        elif carstate.opponents[-12] <10:
+            print("R11",command.steering)
+            command.steering += 0.1
+        elif carstate.opponents[-11] <10:
+            print("R10",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-10] <10:
+            print("R9",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-9] <10:
+            print("R8",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-8] <25:
+            print("R7",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-7] <25:
+            print("R6",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-6] <25:
+            print("R5",command.steering)
+            command.steering -= 0.1
+        elif carstate.opponents[-5] <25:
+            print("R4",command.steering)
+            command.steering += 0.05
+        elif carstate.opponents[-4] <25:
+            print("R3",command.steering)
+            command.steering -= 0.1
+            command.accelerator = 1
+        elif carstate.opponents[-3] <25:
+            print("R2",command.steering)
+            command.steering -= 0.1
+            command.accelerator = 1
+        elif carstate.opponents[-2] <25:
+            print("R1",command.steering)
+            command.accelerator = 1
+        if carstate.opponents[18] <10:
+            print("L17",command.steering)            
+            command.steering += 0.01
+        elif carstate.opponents[17] <10:
+            print("L16",command.steering)            
+            command.steering += 0.01
+        elif carstate.opponents[16] <10:
+            print("L15",command.steering)            
+            command.steering += 0.01
+        elif carstate.opponents[15] <10:
+            print("L14",command.steering)            
+            command.steering -= 0.05
+        elif carstate.opponents[14] <10:
+            print("L13",command.steering)            
+            command.steering -= 0.05
+        elif carstate.opponents[13] <10:
+            print("L12",command.steering)            
+            command.steering -= 0.1 
+        elif carstate.opponents[12] <10:
+            print("L11",command.steering)            
+            command.steering -= 0.1 
+        elif carstate.opponents[11] <10:
+            print("L10",command.steering)            
+            command.steering += 0.1 
+        elif carstate.opponents[10] <10:
+            print("L9",command.steering)            
+            command.steering += 0.1 
+        elif carstate.opponents[9] <10:
+            print("L8",command.steering)            
+            command.steering += 0.1
+        elif carstate.opponents[8] <25:
+            print("L7",command.steering)            
+            command.steering += 0.05       
+        elif carstate.opponents[7] <25:
+            print("L6",command.steering)            
+            command.steering += 0.1
+        elif carstate.opponents[6] <25:
+            print("L5",command.steering)
+            command.steering += 0.1
+        elif carstate.opponents[5] <25:
+            print("L4",command.steering)
+            command.steering -= 0.05
+        elif carstate.opponents[4] <25:
+            print("L3",command.steering)
+            command.steering += 0.1
+            command.accelerator = 1
+        elif carstate.opponents[3] <25:
+            print("L2",command.steering)
+            command.steering += 0.1
+            command.accelerator = 1
+        elif carstate.opponents[2] <25:
+            print("L1",command.steering)
+            command.accelerator = 1
+            command.steering += 0.1
+
+        # GEAR HANDLER        
         if carstate.rpm > 8000:
             command.gear = carstate.gear + 1
         if carstate.rpm < 3500:
@@ -83,12 +192,12 @@ class MyDriver(Driver):
             command.gear = carstate.gear or 1
 
         # # manually adjust angle
-        # if carstate.angle > 45:
-        #     command.accelerator = 0.6
-        #     command.steering = 0.5
-        # if carstate.angle < -45:
-        #     command.accelerator = 0.6
-        #     command.steering = -0.5
+        if carstate.angle > 70:
+            command.accelerator = 0.6
+            command.steering = 0.5
+        if carstate.angle < -70:
+            command.accelerator = 0.6
+            command.steering = -0.5
 
         # OFFTRACK HANDLER
         # reduce acceleration if offtrack
@@ -122,7 +231,7 @@ class MyDriver(Driver):
                 command.steering = 0.8
 
         # STUCK CAR HANDLER
-        if (nn_input[0] < 0.001 and nn_input[0] > -0.001 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
+        if (carstate.speed_x < 5 and carstate.speed_x > -5 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
             self.stuck_step += 1
             if self.stuck_step > self.stuck_period:
                 self.stuck = True
@@ -140,5 +249,3 @@ class MyDriver(Driver):
 
         self.drive_step += 1
         return command
-
-
