@@ -1,7 +1,8 @@
 import numpy as np
+import random
 import tensorflow as tf
 
-from Normalize import Normalize
+from Normalize_clean import Normalize
 import pickle
 
 from tensorflow.python.ops import rnn, rnn_cell
@@ -24,7 +25,7 @@ def generate_batch(data, batch_size, time_steps, position):
         
     batch = np.array(batch)
     x = batch[:, :, :INPUT_SIZE]
-    y = batch[:, time_steps - 1,  23]
+    y = batch[:, time_steps - 1,  OUTPUT]
     y.shape = (len(y), 1)
     return x, y, position
 
@@ -48,7 +49,7 @@ def recurrent_neural_network(x):
 def train_neural_network(x):
     prediction = recurrent_neural_network(x)
     identity_prediction = tf.identity(prediction, name="steer")
-    error = tf.reduce_mean(tf.losses.mean_squared_error(predictions=prediction,labels=y) )
+    error = tf.reduce_mean(tf.losses.mean_squared_error(predictions=prediction,labels=y))
     optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(error)
     accuracy = tf.reduce_mean(tf.abs(prediction - y))
     saver = tf.train.Saver()
@@ -56,21 +57,27 @@ def train_neural_network(x):
         sess.run(tf.global_variables_initializer())
 
         for epoch in range(EPOCHS):
-            np.random.shuffle(data)
             epoch_error = 0
             accura = 0
             iterations_per_epoch = 0
             POSITION = TIME_STEPS - 1
             while POSITION - 1 + BATCH_SIZE < len(data):
                 epoch_x, epoch_y, POSITION = generate_batch(data, BATCH_SIZE, TIME_STEPS, position=POSITION)
-                _, cost, accu = sess.run([optimizer, error, accuracy], feed_dict={x: epoch_x, y: epoch_y})
+                _, cost, accu, pred = sess.run([optimizer, error, accuracy, prediction], feed_dict={x: epoch_x, y: epoch_y})
                 epoch_error += cost
                 accura += accu
                 iterations_per_epoch += 1
-
+                
+#                print("\nprediction", pred)
+#                print("epoch_y", epoch_y)
+#                print("accuracy", accu)
+#                print("cost", cost)
+#                print('prediction:',prediction.eval({x:epoch_x, y:epoch_y})) 
             
             if epoch % 5 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
+                training_accuracy = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", training_accuracy)
                 
             if epoch == 10001:
                 saver.save(sess, './model_steer/model_steer')
@@ -118,14 +125,14 @@ def train_neural_network(x):
 
 # Initialize model parameters
 
-INPUT_SIZE    = 18
-OUTPUT_SIZE   = 1 
-RNN_HIDDEN    = 192
+INPUT_SIZE    = 22
+OUTPUT_SIZE   = 1
+OUTPUT = 24
+RNN_HIDDEN    = 512
 #RNN_HIDDEN    = [50, 50]
-LEARNING_RATE = 0.0015
-
-EPOCHS = 16001
-BATCH_SIZE = 998
+LEARNING_RATE = 0.001
+EPOCHS = 16002
+BATCH_SIZE = 2064
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 
@@ -137,16 +144,18 @@ y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE)) # (batch, time, out)
 Ndata = Normalize()
 data = Ndata.data
 
-Y = np.array([data[:, 23]])
-Y.shape = (Y.shape[1], 1)
-
-a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-X = np.swapaxes([data[:, i] for i in a], 0, 1)
-
-#X = data[:, :21]
-
+X = data[:, :22]
+#a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+#X = np.swapaxes([data[:, i] for i in a], 0, 1)
 
 X.shape = (X.shape[0], 1, X.shape[1])
+
+Y = np.array([data[:, 24]])
+Y.shape = (Y.shape[1], 1)
+
+
+
+
 
 
 #%%
@@ -154,9 +163,3 @@ train_neural_network(x)
 
 #%
 #%%
-
-for i in range(100):
-    print(Y[i])
-
-for i in range(100):
-    print(X[i, 0, 0])

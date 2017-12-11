@@ -2,7 +2,7 @@ import numpy as np
 import random
 import tensorflow as tf
 
-from Normalize import Normalize
+from Normalize_clean import Normalize
 import pickle
 
 from tensorflow.python.ops import rnn, rnn_cell
@@ -25,7 +25,7 @@ def generate_batch(data, batch_size, time_steps, position):
         
     batch = np.array(batch)
     x = batch[:, :, :INPUT_SIZE]
-    y = batch[:, time_steps - 1,  [21 , 22]]
+    y = batch[:, time_steps - 1,  OUTPUT]
     return x, y, position
 
 
@@ -64,23 +64,49 @@ def train_neural_network(x):
             POSITION = TIME_STEPS - 1
             while POSITION - 1 + BATCH_SIZE < len(data):
                 epoch_x, epoch_y, POSITION = generate_batch(data, BATCH_SIZE, TIME_STEPS, position=POSITION)
-                _, cost, accu = sess.run([optimizer, error, accuracy], feed_dict={x: epoch_x, y: epoch_y})
+                _, cost, accu, pred, cor = sess.run([optimizer, error, accuracy, sigmoid_prediction, correct], feed_dict={x: epoch_x, y: epoch_y})
                 epoch_error += cost
                 accura += accu
                 iterations_per_epoch += 1
+#                print("\nprediction", pred)
+#                print("epoch_y", epoch_y)
+#                print("correct", cor)
+#                print("accuracy", accu)
 #                print("cost", cost)
 #                print('prediction:',prediction.eval({x:epoch_x, y:epoch_y})) 
             if epoch % 10 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
                 
-            if epoch % 1000 == 0:
+            if epoch % 10001 == 0:
+                saver.save(sess, './model_accbrk/model_accbrk')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_accbrk/stats.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+                    
+            if epoch % 12001 == 0:
                 saver.save(sess, './model_accbrk/model_accbrk')
                 accu = sess.run([accuracy], feed_dict={x: X, y: Y})
                 print("Training accuracy:", accu)
                 with open('./model_accbrk/stats.txt', "w+") as file:
                     print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
             
-
+            if epoch % 14001 == 0:
+                saver.save(sess, './model_accbrk/model_accbrk')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_accbrk/stats.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+            
+            if epoch % 16001 == 0:
+                saver.save(sess, './model_accbrk/model_accbrk')
+                accu = sess.run([accuracy], feed_dict={x: X, y: Y})
+                print("Training accuracy:", accu)
+                with open('./model_accbrk/stats.txt', "w+") as file:
+                    print("Input size:", INPUT_SIZE, '\nEpoch:', epoch, "\nBatch size:", BATCH_SIZE, "\nLayer size:", RNN_HIDDEN, "\nLearning rate:", LEARNING_RATE, "\naccuracy:", accu, "\n", file=file)
+            
         saver.save(sess, './model_accbrk/model_accbrk')
         
         accu = sess.run([accuracy], feed_dict={x: X, y: Y})
@@ -98,14 +124,15 @@ def train_neural_network(x):
 
 # Initialize model parameters
 
-INPUT_SIZE    = 21
+INPUT_SIZE    = 22
 OUTPUT_SIZE   = 2
-RNN_HIDDEN    = 128
+OUTPUT = [22, 23]
+RNN_HIDDEN    = 192
 #RNN_HIDDEN    = [50, 50]
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.002
 
-EPOCHS = 10000
-BATCH_SIZE = 2048
+EPOCHS = 16000
+BATCH_SIZE = 2064
 TIME_STEPS = 1
 POSITION = TIME_STEPS - 1 # Should be 1 less than timesteps
 
@@ -117,9 +144,9 @@ y = tf.placeholder(tf.float32, (None, OUTPUT_SIZE), name="y") # (batch, time, ou
 Ndata = Normalize()
 data = Ndata.data
 
-X = data[:, :21]
+X = data[:, :22]
 X.shape = (X.shape[0], 1, X.shape[1])
-Y = data[:, [21, 22]]
+Y = data[:, [22, 23]]
 #data = np.swapaxes(Ndata.data, 0, 1)
 #
 #x_all = data[:, 0:21]
@@ -146,3 +173,6 @@ train_neural_network(x)
 #%%
 #with tf.Session() as sess:
 #%
+
+print("X", X)
+print("Y", Y)

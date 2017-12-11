@@ -1,11 +1,6 @@
 import numpy as np
-from Normalize import Normalize
+from Normalize_clean import Normalize
 import pickle
-
-# Build model creates a neural network with the specified number of hidden layers and neurons per layer
-
-# Create a weight matrix for a hidden layer
-
 
 # Set bias value
 BIAS = 1
@@ -146,19 +141,15 @@ def train_accbrk():
     Ndata = Normalize()
     data = Ndata.data
 
-    # Optional, pick sensors to train on
-#    a = [0, 1, 2, 9, 10, 11, 12, 13, 14, 15, 21, 22]
-#    X = np.swapaxes(list(data[i] for i in a),0,1)
+#    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+#    X = np.swapaxes([data[:, i] for i in a], 0, 1)
+    X = np.array(data[:, 0 : 22])
 
-    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    X = np.swapaxes([data[:, i] for i in a], 0, 1)
-#    X = data[:, :21]
-
-    Y = np.array(data[:, [21, 22]])
+    Y = np.array(data[:, [22, 23]])
 
     # Set up layers for neural network
     # Create layers(number of neurons, number of inputs)
-    layer1 = Layer(24, 18)
+    layer1 = Layer(24, 22)
     layer2 = Layer(12, 24)
     layer3 = Layer(2, 12)
 
@@ -173,11 +164,10 @@ def train_accbrk():
     maxError = 0.0001
     error = 1000000 # Just initialization for adaptable L_rate
     L_rate = 0.005
-    epochs = 2000
-    batch_size = 32
+    epochs = 3000
+    batch_size = 64
 
     for i in range(epochs):
-        print("\nIteration:", i)
         nn1.train(X,Y,L_rate,batch_size)
         previous_error = error
         pred_y = nn1.forward_propagation(X)
@@ -187,10 +177,14 @@ def train_accbrk():
             print("Converged after %d iterations" % i)
             print("Predicted Y:", pred_y)
             break
-
-        print("error:", error)
+        
+        correct = np.equal(np.around(pred_y), Y)
+        accuracy = np.mean(correct)
+        
         L_rate = adapt_L_rate(L_rate, previous_error, error)
-        print("L_rate:", L_rate)
+        
+        if i % 10 == 0:
+            print('\nEpoch:', i, "\nLearning rate:", L_rate, "\nTotal error:", error, "\nAccuracy:", accuracy, "\n")
 
     error = nn1.error(pred_y, Y, len(X))
     print("Final error:", error)
@@ -198,7 +192,11 @@ def train_accbrk():
 
     print("Number misclassified:", np.sum(abs(np.round(pred_y) - Y)))
     accuracy = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
+    accuracy_acc = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
+    accuracy_brk = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
     print("Percentage of values misclassified:", accuracy)
+    print("Percentage of acceleration values misclassified:", accuracy_acc)
+    print("Percentage of braking values misclassified:", accuracy_brk)
 
     with open("pickled_nn_accbrk.txt", "wb") as pickle_file:
         pickle.dump(nn1, pickle_file)
@@ -210,15 +208,16 @@ def train_accbrk():
 def train_steer():
     Ndata = Normalize()
     data = Ndata.data
-
-    Y = np.array([data[:, 23]])
+    
+    X = np.array(data[:, 0 : 22])
+    Y = np.array([data[:, 24]])
     Y.shape = (Y.shape[1], 1)
-
-    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    X = np.swapaxes([data[:, i] for i in a], 0, 1)
+#
+#    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+#    X = np.swapaxes([data[:, i] for i in a], 0, 1)
 
     # Create layers(number of neurons, number of inputs)
-    layer4 = Layer(24, 18)
+    layer4 = Layer(24, 22)
     layer5 = Layer(12, 24)
     layer6 = Layer(1, 12)
 
@@ -232,11 +231,10 @@ def train_steer():
     maxError = 0.0001
     error = 1000000 # Just initialization for adaptable L_rate
     L_rate = 0.005
-    epochs = 2000
-    batch_size = 32
+    epochs = 3000
+    batch_size = 64
 
     for i in range(epochs):
-        print("\nIteration:", i)
         nn2.train(X,Y,L_rate,batch_size)
         previous_error = error
         pred_y = nn2.forward_propagation(X)
@@ -247,101 +245,19 @@ def train_steer():
             print("Predicted Y:", pred_y)
             break
 
-        print("error:", error)
+        average_error = np.mean(np.abs(pred_y - Y))
+        
         L_rate = adapt_L_rate(L_rate, previous_error, error)
-        print("L_rate:", L_rate)
-
-    error = nn2.error(pred_y, Y, len(X))
-    average_error = np.mean(np.abs(pred_y - Y))
+        
+        if i % 10 == 0:
+            print('\nEpoch:', i, "\nLearning rate:", L_rate, "\nTotal error:", error, "\nAverage error:", average_error, "\n")
 
     with open("pickled_nn_steering.txt", "wb") as pickle_file:
         pickle.dump(nn2, pickle_file)
 
     with open('stats_np_steer.txt', "w+") as file:
-                    print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\nAverage error:", average_error, "\n", file=file)
+        print('\nEpoch:', epochs, "\nLearning rate:", L_rate, "\nFinal error:", error, "\nAverage error:", average_error, "\n", file=file)
 
-
-def test_nn():
-    with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
-        nn1 = pickle.load(pickle_file)
-    with open("pickled_nn_steering.txt", "rb") as pickle_file:
-        nn2 = pickle.load(pickle_file)
-    Ndata = Normalize()
-    X = Ndata.test_data
-
-    err1 = 0
-    err2 = 0
-    counter1 = 0
-    counter2 = 0
-    prints1 = 10
-    prints2 = 10
-    for i, x in enumerate(X):
-        round_acc = round(nn1.forward_propagation(x)[0])
-        round_brk = round(nn1.forward_propagation(x)[1])
-        rounded_out = np.array([round_acc, round_brk])
-        steering = nn2.forward_propagation(np.append(x, rounded_out))[0]
-        if (round_acc != Y[i][0] or round_brk != Y[i][1]) and counter1 < prints1:
-#            print (x)
-            print ("Acceleration and breaking are (" + str(round_acc) + ", " + str(round_brk) + ") while they should have been ("
-                + str(Y[i][0]) + ", " + str(Y[i][1]) + ")\n")
-            counter1 += 1
-        if abs(steering - Y[i][2]) > 0.5 and counter2 < prints2:
-#            print (x)
-            print ("Steering is " + str(steering) + " while it should have been " + str(Y[i][2]) + "\n")
-            counter2 += 1
-        err1 += abs(round_acc - Y[i][0]) + abs(round_brk - Y[i][1])
-        err2 += abs(steering - Y[i][2])
-
-    print("Total error for accelerating:" ,err1)
-    print("Percentage of mismatches:" , err1 / (len(Y) / 2) * 100)
-    print("Total error for steering:", err2)
-    print("Average error for steering:", err2 / len(Y))
-    print(len(Y))
-
-
-def test_nn_train():
-    with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
-        nn1 = pickle.load(pickle_file)
-    with open("pickled_nn_steering.txt", "rb") as pickle_file:
-        nn2 = pickle.load(pickle_file)
-
-    Ndata = Normalize()
-    data = Ndata.data
-
-    Y = np.array([data[:, 23]])
-
-    a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    X = np.swapaxes([data[:, i] for i in a], 0, 1)
-
-
-    err1 = 0
-    err2 = 0
-    counter1 = 0
-    counter2 = 0
-    prints1 = 10
-    prints2 = 10
-    for i, x in enumerate(X):
-        round_acc = round(nn1.forward_propagation(x)[0])
-        round_brk = round(nn1.forward_propagation(x)[1])
-        rounded_out = np.array([round_acc, round_brk])
-        steering = nn2.forward_propagation(np.append(x, rounded_out))[0]
-        if (round_acc != Y[i][0] or round_brk != Y[i][1]) and counter1 < prints1:
-#            print (x)
-            print ("Acceleration and breaking are (" + str(round_acc) + ", " + str(round_brk) + ") while they should have been ("
-                + str(Y[i][0]) + ", " + str(Y[i][1]) + ")\n")
-            counter1 += 1
-        if abs(steering - Y[i][2]) > 0.5 and counter2 < prints2:
-#            print (x)
-            print ("Steering is " + str(steering) + " while it should have been " + str(Y[i][2]) + "\n")
-            counter2 += 1
-        err1 += abs(round_acc - Y[i][0]) + abs(round_brk - Y[i][1])
-        err2 += abs(steering - Y[i][2])
-
-    print("Total error for accelerating:" ,err1)
-    print("Percentage of mismatches:" , err1 / (len(Y) / 2) * 100)
-    print("Total error for steering:", err2)
-    print("Average error for steering:", err2 / len(Y))
-    print(len(Y))
 
 
 #%%

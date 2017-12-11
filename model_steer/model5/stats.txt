@@ -1,0 +1,7 @@
+Input size: 22 
+Epoch: 10001 
+Batch size: 2064 
+Layer size: 192 
+Learning rate: 0.01 
+accuracy: [0.054806739] 
+
