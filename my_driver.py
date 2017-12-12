@@ -1,27 +1,11 @@
 from pytocl.driver import Driver
 from pytocl.car import State, Command
 import pickle
-# from feedforward import NeuralNetwork, Layer
-import feedforward
 import numpy as np
-from feedforward import Ndata
-#import sklearn
-#from sklearn.neural_network import MLPRegressor
-import feedforward_split
 from ea import EvoAlg
+from Normalize_clean import Normalize
 
-with open("pickled_nn.txt", "rb") as pickle_file:
-    nn = pickle.load(pickle_file)
-
-#with open("sklearn_nn.txt", "rb") as pickle_file:
-#    mlp = pickle.load(pickle_file)
-
-with open("pickled_nn_accbrk.txt", "rb") as pickle_file:
-    nn1 = pickle.load(pickle_file)
-
-with open("pickled_nn_steering.txt", "rb") as pickle_file:
-    nn2 = pickle.load(pickle_file)
-
+Ndata = Normalize()
 
 class MyDriver(Driver):
     # ...
@@ -30,8 +14,8 @@ class MyDriver(Driver):
         self.steering = 0
         self.stuck_step = 0
         self.stuck_counter = 0
-        self.stuck_recovery = 150
-        self.stuck_period = 300
+        self.stuck_recovery = 140
+        self.stuck_period = 250
         self.stuck = False
 
         # fixed EA variables
@@ -59,62 +43,7 @@ class MyDriver(Driver):
         i=0
         while(i <= 20):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
-            i += 1
-
-        # nn_output = nn.forward_propagation(nn_input)
-        # command.accelerator= round(nn_output[0])
-        # command.brake = round(nn_output[1])
-        # command.steering = nn_output[2]
-
-        # mlp_output = mlp.predict([nn_input])[0]
-        # # print(mlp_output)
-
-        # command.accelerator= round(mlp_output[0])
-        # command.brake = round(mlp_output[1]) if mlp_output[1] > 0.95 else 0
-        # command.steering = mlp_output[2]
-
-
-        # nn1_out = nn1.forward_propagation(nn_input)
-        # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        # a = [0, 1, 2, 11, 12, 13, 14, 10]
-        # nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
-        # print(nn_input)
-        # nn2_out = nn2.forward_propagation(nn_input)
-        # command.accelerator= round(nn1_out[0])
-        # command.brake = round(nn1_out[1])
-        # command.steering = nn2_out[0]
-
-        # nn1_out = nn1.forward_propagation(nn_input)
-        # rounded_out = np.array([round(nn1_out[0]), round(nn1_out[1])])
-        # nn_input = np.append(nn_input, rounded_out)
-        # nn2_out = nn2.forward_propagation(nn_input)
-        # command.accelerator= round(nn1_out[0])
-        # command.brake = round(nn1_out[1])
-        # command.steering = nn2_out
-
-#        alg = EvoAlg()
-#        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
-#        print(nn_input[0])
-#        print(nn_input[1])
-#        print(nn_input[2])
-#        print(nn_input[12])
-#        ea_output = alg.ea_output(ea_input)
-#        self.steering = ea_output[2]
-#        command.accelerator= ea_output[0]
-#        command.brake = ea_output[1]
-#        command.steering = ea_output[2]
-#        alg = EvoAlg()
-#        ea_input = [nn_input[0], nn_input[1], nn_input[2], nn_input[12], self.steering]
-        # print(nn_input[0])
-        # print(nn_input[1])
-        # print(nn_input[2])
-        # print(nn_input[12])
-#        ea_output = alg.ea_output(ea_input)
-#        self.steering = ea_output[2]
-#        command.accelerator= ea_output[0]
-#        command.brake = ea_output[1]
-#        command.steering = ea_output[2]
-        # EVOLUTIONARY ALGORITHM
+            i += 1 
 
         EA = EvoAlg()
 
@@ -300,18 +229,22 @@ class MyDriver(Driver):
         # GEAR HANDLER        
         if carstate.rpm > 8000:
             command.gear = carstate.gear + 1
-        if carstate.rpm < 3500:
-            command.gear = carstate.gear - 1
+        if carstate.gear < 3:
+            if carstate.rpm < 3000:
+                command.gear = carstate.gear - 1
+        else:
+            if carstate.rpm < 4300:
+                command.gear = carstate.gear - 1
         if not command.gear:
             command.gear = carstate.gear or 1
 
-        # # manually adjust angle
-        # if carstate.angle > 45:
-        #     command.accelerator = 0.6
-        #     command.steering = 0.5
-        # if carstate.angle < -45:
-        #     command.accelerator = 0.6
-        #     command.steering = -0.5
+        # manually adjust angle
+        if carstate.angle > 80:
+            command.accelerator = 0.5
+            command.steering = 1
+        if carstate.angle < -80:
+            command.accelerator = 0.5
+            command.steering = -1
 
         # OFFTRACK HANDLER
         # reduce acceleration if offtrack
@@ -345,7 +278,7 @@ class MyDriver(Driver):
                 command.steering = 0.8
 
         # STUCK CAR HANDLER
-        if (nn_input[0] < 0.001 and nn_input[0] > -0.001 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
+        if (carstate.speed_x < 5 and carstate.speed_x > -5 and command.accelerator > 0.05 and command.gear != -1 and not self.stuck):
             self.stuck_step += 1
             if self.stuck_step > self.stuck_period:
                 self.stuck = True

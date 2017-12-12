@@ -1,9 +1,8 @@
 from pytocl.driver import Driver
 from pytocl.car import State, Command
 import pickle
-import feedforward
 import numpy as np
-from Normalize import Normalize
+from Normalize_clean import Normalize
 import feedforward_split
 
 Ndata = Normalize()

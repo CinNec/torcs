@@ -1,7 +1,7 @@
 from pytocl.driver import Driver
 from pytocl.car import State, Command
 import numpy as np
-from Normalize import Normalize
+from Normalize_clean import Normalize
 import tensorflow as tf
 
 Ndata = Normalize()
@@ -49,19 +49,21 @@ class MyDriver(Driver):
         command = Command()
         nn_input = np.array([carstate.speed_x, carstate.distance_from_center, carstate.angle]+list(carstate.distances_from_edge)[0:])
         i=0
+        print(len(nn_input))
         while(i <= 21):
             nn_input[i] = (nn_input[i] - Ndata.minarray[i])/(Ndata.maxarray[i]-Ndata.minarray[i])
             i += 1
         
         nn_input = np.array([1 if x> 1 else x if x>0 else  0  for x in nn_input])
-        nn_input2 = np.array([nn_input])
-        nn_input2.shape = (1, 1, nn_input2.shape[0])
-        
+        print(nn_input.shape)
         nn_input.shape = (1, 1, nn_input.shape[0])
         
         accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
-        steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input2})
+        steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input})
         accbrk = np.round(accbrk)
+        print("acc:", accbrk[0, 0])
+        print("brk:", accbrk[0, 1])
+        print("steer:", steer)
         command.accelerator= accbrk[0, 0]
         command.brake = accbrk[0, 1]
         command.steering = steer[0, 0]
