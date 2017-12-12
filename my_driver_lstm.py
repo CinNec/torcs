@@ -62,9 +62,6 @@ class MyDriver(Driver):
         accbrk = sess1.run("accbrk:0", feed_dict={"x_accbrk:0": nn_input})
         steer = sess2.run("steer:0", feed_dict={"x_steer:0": nn_input2})
         accbrk = np.round(accbrk)
-        print("acc:", accbrk[0, 0])
-        print("brk:", accbrk[0, 1])
-        print("steer:", steer)
         command.accelerator= accbrk[0, 0]
         command.brake = accbrk[0, 1]
         command.steering = steer[0, 0]

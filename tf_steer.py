@@ -67,12 +67,6 @@ def train_neural_network(x):
                 epoch_error += cost
                 accura += accu
                 iterations_per_epoch += 1
-                
-#                print("\nprediction", pred)
-#                print("epoch_y", epoch_y)
-#                print("accuracy", accu)
-#                print("cost", cost)
-#                print('prediction:',prediction.eval({x:epoch_x, y:epoch_y})) 
             
             if epoch % 5 == 0: 
                 print('Epoch', epoch, 'completed out of',EPOCHS,'error:',epoch_error / iterations_per_epoch, "accuracy:", accura / iterations_per_epoch)
@@ -112,13 +106,6 @@ def train_neural_network(x):
         
         accu = sess.run([accuracy], feed_dict={x: X, y: Y})
         print("Training accuracy:", accu)
-#                correct = tf.equal(tf.round(prediction), y)
-#                accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
-#                print('prediction:', prediction.eval({x:x_small, y:y_small}))
-#                print('tf.round(prediction):', tf.round(prediction).eval({x:x_small, y:y_small}))
-#                print('correct:',  correct.eval({x:x_small, y:y_small}))
-#                print('y:', y.eval({x:x_small, y:y_small}))
-#                print('Accuracy on test set:', accuracy.eval({x:x_small, y:y_small}))
 
 
 #%%
@@ -145,21 +132,11 @@ Ndata = Normalize()
 data = Ndata.data
 
 X = data[:, :22]
-#a = [0, 1, 2, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-#X = np.swapaxes([data[:, i] for i in a], 0, 1)
-
 X.shape = (X.shape[0], 1, X.shape[1])
 
 Y = np.array([data[:, 24]])
 Y.shape = (Y.shape[1], 1)
 
 
-
-
-
-
 #%%
 train_neural_network(x)
-
-#%
-#%%

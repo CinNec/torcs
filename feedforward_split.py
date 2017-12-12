@@ -186,18 +186,6 @@ def train_accbrk():
         if i % 10 == 0:
             print('\nEpoch:', i, "\nLearning rate:", L_rate, "\nTotal error:", error, "\nAccuracy:", accuracy, "\n")
 
-    error = nn1.error(pred_y, Y, len(X))
-    print("Final error:", error)
-    print("Predicted y:", pred_y)
-
-    print("Number misclassified:", np.sum(abs(np.round(pred_y) - Y)))
-    accuracy = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
-    accuracy_acc = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
-    accuracy_brk = (np.sum(abs(np.round(pred_y) - Y)) / (2 * len(Y))) * 100
-    print("Percentage of values misclassified:", accuracy)
-    print("Percentage of acceleration values misclassified:", accuracy_acc)
-    print("Percentage of braking values misclassified:", accuracy_brk)
-
     with open("pickled_nn_accbrk.txt", "wb") as pickle_file:
         pickle.dump(nn1, pickle_file)
 
@@ -262,4 +250,4 @@ def train_steer():
 
 #%%
 #train_steer()
-# train_accbrk()
+#train_accbrk()
