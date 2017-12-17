@@ -1,0 +1,35 @@
+Your driver does not run properly. Tested on Sun Dec 17 22:01:23 CET 2017
+You can update the driver for a new test
+****** torcs output:
+****** server output:
+INFO:root:Racing: 'testee'
+INFO:root:Starting TORCS...
+INFO:root:Starting players...
+ERROR:root:An error occurred, trying to stop gracefully...
+INFO:root:Terminating psutil.Popen(pid=24079, name='torcs')
+INFO:root:Terminating psutil.Process(pid=24092, name='torcs-bin')
+INFO:root:Closed all files and processes!
+INFO:root:Starting Dropbox...
+INFO:root:Dropbox says:
+Dropbox is already running!
+
+Traceback (most recent call last):
+  File "/root/torcs-server/torcs_tournament.py", line 1211, in <module>
+    controller.race_and_save(simulate=args.simulate)
+  File "/root/torcs-server/torcs_tournament.py", line 536, in race_and_save
+    self.race(simulate=simulate)
+  File "/root/torcs-server/torcs_tournament.py", line 1076, in race
+    **kwargs
+  File "/root/torcs-server/torcs_tournament.py", line 561, in race
+    self.race_once(players, simulate=simulate)
+  File "/root/torcs-server/torcs_tournament.py", line 663, in race_once
+    self.start_player(player, driver, simulate=simulate)
+  File "/root/torcs-server/torcs_tournament.py", line 510, in start_player
+    env=self.get_player_env(player)
+  File "/opt/anaconda3/lib/python3.6/site-packages/psutil/__init__.py", line 1370, in __init__
+    self.__subproc = subprocess.Popen(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.6/subprocess.py", line 707, in __init__
+    restore_signals, start_new_session)
+  File "/opt/anaconda3/lib/python3.6/subprocess.py", line 1333, in _execute_child
+    raise child_exception_type(errno_num, err_msg)
+OSError: [Errno 8] Exec format error
